@@ -73,11 +73,15 @@ public class AuthRestAPIs {
                     HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByUserid(signUpRequest.getEmail())) {
+        if(userRepository.existsByUserid(signUpRequest.getUserid())) {
             return new ResponseEntity<String>("Fail -> Email is already in use!",
                     HttpStatus.BAD_REQUEST);
         }
 
+        System.out.println(signUpRequest.getUserid());
+        System.out.println(signUpRequest.getNickname());
+        System.out.println(signUpRequest.getPassword());
+        
         // Creating user's account
         User user = new User(signUpRequest.getUserid(), signUpRequest.getNickname(),signUpRequest.getEmail(),
         		signUpRequest.getSex(), encoder.encode(signUpRequest.getPassword()));
@@ -85,6 +89,9 @@ public class AuthRestAPIs {
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
+        System.out.println(strRoles);
+      
+        
         strRoles.forEach(role -> {
         	switch(role) {
 	    		case "admin":
