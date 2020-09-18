@@ -1,0 +1,49 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'study.share.com'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	//BCRYPT
+    implementation 'org.mindrot:jbcrypt:0.4'
+	//jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	 //devtools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    //mariadb
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+    //lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1
+	compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+	    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.9'
+	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+	compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+	//spring-security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // https://mvnrepository.com/artifact/javax.validation/validation-api
+	compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    
+}
+
+test {
+	useJUnitPlatform()
+}

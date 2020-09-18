@@ -1,0 +1,25 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+
+  datasource:
+      #driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      url: "jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/studyshare"
+      username: csj2702
+      password: tjdwns2702
+  jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+                format_sql: true
+
+                     
+server:
+    port: 8080
+
+      
