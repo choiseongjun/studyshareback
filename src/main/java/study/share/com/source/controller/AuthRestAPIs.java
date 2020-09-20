@@ -53,69 +53,75 @@ public class AuthRestAPIs {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
-    	Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUserid(),
-                        loginRequest.getPassword()
-                )
-        );
-       
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    	try {
+    		Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUserid(),
+                            loginRequest.getPassword()
+                    )
+            );
+           
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = jwtProvider.generateJwtToken(authentication);
-        return ResponseEntity.ok(new JwtResponse(jwt));
+            String jwt = jwtProvider.generateJwtToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(jwt));
+    	}catch(Exception e) {
+    		//e.printStackTrace();
+    		return new ResponseEntity<>("아이디나 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+    	
     }
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+    	System.out.println(signUpRequest.getNickname());
         if(userRepository.existsByNickname(signUpRequest.getNickname())) {
-            return new ResponseEntity<String>("Fail -> Username is already taken!",
+            return new ResponseEntity<String>("닉네임이 이미 존재합니다!",
                     HttpStatus.BAD_REQUEST);
         }
 
         if(userRepository.existsByUserid(signUpRequest.getUserid())) {
-            return new ResponseEntity<String>("Fail -> Email is already in use!",
+            return new ResponseEntity<String>("아이디가 이미 존재합니다!",
                     HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(signUpRequest.getUserid());
-        System.out.println(signUpRequest.getNickname());
-        System.out.println(signUpRequest.getPassword());
-        
-        // Creating user's account
-        User user = new User(signUpRequest.getUserid(), signUpRequest.getNickname(),signUpRequest.getEmail(),
-        		signUpRequest.getSex(), encoder.encode(signUpRequest.getPassword()));
+        try {
+        	// Creating user's account
+            User user = new User(signUpRequest.getUserid(), signUpRequest.getNickname(),signUpRequest.getEmail(),
+            		signUpRequest.getSex(), encoder.encode(signUpRequest.getPassword()));
 
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
+            Set<String> strRoles = signUpRequest.getRole();
+            Set<Role> roles = new HashSet<>();
 
-        System.out.println(strRoles);
-      
+            strRoles.forEach(role -> {
+            	switch(role) {
+    	    		case "admin":
+    	    			Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+    	                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+    	    			roles.add(adminRole);
+    	    			
+    	    			break;
+    	    		case "manager":
+    	            	Role managerRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
+    	                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+    	            	roles.add(managerRole);
+    	            	
+    	    			break;
+    	    		default:
+    	        		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+    	                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+    	        		roles.add(userRole);        			
+            	}
+            });
+            
+            user.setRoles(roles);
+            userRepository.save(user);
+            return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
+        }catch(Exception e) {
+        	e.printStackTrace();
+			return new ResponseEntity<>("서버 오류..다시 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         
-        strRoles.forEach(role -> {
-        	switch(role) {
-	    		case "admin":
-	    			Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-	                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-	    			roles.add(adminRole);
-	    			
-	    			break;
-	    		case "manager":
-	            	Role managerRole = roleRepository.findByName(RoleName.ROLE_MANAGER)
-	                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-	            	roles.add(managerRole);
-	            	
-	    			break;
-	    		default:
-	        		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-	                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-	        		roles.add(userRole);        			
-        	}
-        });
         
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok().body("User registered successfully!");
     }
 }
