@@ -1,7 +1,8 @@
 package study.share.com.source.controller;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -51,7 +52,7 @@ public class AuthRestAPIs {
     JwtProvider jwtProvider;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+    public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
     	try {
     		Authentication authentication = authenticationManager.authenticate(
@@ -62,9 +63,13 @@ public class AuthRestAPIs {
             );
            
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String ROLE=auth.getAuthorities().toString();
             String jwt = jwtProvider.generateJwtToken(authentication);
-            return ResponseEntity.ok(new JwtResponse(jwt));
+            Map<String, String> map =new HashMap<String, String>();
+            map.put("ROLE", ROLE);
+    		map.put("jwt", jwt);
+            return ResponseEntity.ok(map);
     	}catch(Exception e) {
     		//e.printStackTrace();
     		return new ResponseEntity<>("아이디나 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
