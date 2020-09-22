@@ -1,0 +1,13 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: 
+      secretKey: 
+    s3:
+      bucket: studyshareimagestorage
+    region:
+      static: seoul
+    stack:
+      auto: false
+
+      

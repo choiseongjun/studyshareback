@@ -149,3 +149,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/git,java,maven,windows,eclipse
+.gradle/4.6/fileChanges/last-build.bin
+.gradle/4.6/fileHashes/fileHashes.bin
+.gradle/4.6/fileHashes/fileHashes.lock
+.gradle/vcsWorkingDirs/gc.properties

@@ -41,7 +41,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // https://mvnrepository.com/artifact/javax.validation/validation-api
 	compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-    
+     // AWS S3
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-aws', version: '2.2.1.RELEASE', ext: 'pom'
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.853'
+	    
 }
 
 test {
