@@ -1,6 +1,8 @@
 package study.share.com.source.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -46,7 +48,10 @@ public class S3Service {
 
     public String upload(MultipartFile file) throws IOException {
     	UUID uid2 = UUID.randomUUID();
-        String fileName = uid2.toString();
+    	SimpleDateFormat format1 = new SimpleDateFormat ("yyyy-MM-dd");
+		Date time = new Date();
+		String filesavedtime = format1.format(time);
+        String fileName = uid2.toString()+filesavedtime;
 
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));

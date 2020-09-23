@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import study.share.com.source.model.FeedList;
 import study.share.com.source.model.User;
 import study.share.com.source.repository.UserRepository;
 
@@ -19,5 +20,7 @@ public class UserService {
 		return user;
 		
 	}
+
+
 
 }
