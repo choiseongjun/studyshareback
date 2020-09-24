@@ -29,18 +29,23 @@ public class FeedList extends DateAudit{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+	@Column(name = "content")
 	private String content;
+	@Column(name = "total_like")
+	private long totallike;
 	@Column(name = "delete_yn",columnDefinition = "char(1) default 'N'")
 	private char deleteyn;
 	@Column(name = "ip_address")
 	private String ipaddress;
 	
-	@ManyToOne(optional = false,fetch = FetchType.LAZY)
+
+	
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
 	private User user;
-	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "feedlist",cascade=CascadeType.ALL)
+	@OneToMany(orphanRemoval=true,mappedBy = "feedlist",cascade=CascadeType.ALL)
 	private List<UploadFile> uploadfile=new ArrayList<UploadFile>();
+	@OneToMany(orphanRemoval=true,mappedBy = "feedlist",cascade=CascadeType.ALL)
+	private List<FeedLike> feedlike;
 	
 }

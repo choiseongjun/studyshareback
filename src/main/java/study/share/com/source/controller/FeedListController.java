@@ -2,20 +2,25 @@ package study.share.com.source.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import study.share.com.source.model.FeedList;
+import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.service.FeedListService;
@@ -53,12 +58,60 @@ public class FeedListController {
 			List<FeedList> feedlist = feedListService.listfeed();
 			return new ResponseEntity<>(feedlist,HttpStatus.OK);
 		}catch(Exception e) {
-			return new ResponseEntity<>("실패하였습니다.새로고침후 시도해주세요",HttpStatus.BAD_REQUEST);	
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
-	@GetMapping("/testfeed")
-	public ResponseEntity<?> test(){ 
-		Optional<FeedList> feedlist= feedListRepository.findById(17L);
-		return new ResponseEntity<>(feedlist.get(),HttpStatus.OK);
+	@GetMapping("/gallary")
+	public ResponseEntity<?> listgallary(){
+		
+		try {
+			List<UploadFile> gallarylist = feedListService.listgallary();
+			return new ResponseEntity<>(gallarylist,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
 	}
+	@PatchMapping("/feed/{id}")
+	public ResponseEntity<?> updatefeed(@PathVariable long id,@RequestBody Map<String, String> data){
+		try {
+			String content = data.get("content");
+			Optional<FeedList> feedlist = feedListService.updatefeed(id,content); 
+			return new ResponseEntity<>(feedlist,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	
+	@DeleteMapping("/feed/{id}")
+	public ResponseEntity<?> deletefeed(@PathVariable long id){
+		try {
+			feedListService.deletefeed(id); 
+			return new ResponseEntity<>(id,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	@PostMapping("/likefeed/{id}")
+	public ResponseEntity<?> likefeed(@PathVariable long id,Principal principal){
+		
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<FeedList> feedList = feedListService.likefeed(user,id);
+			return new ResponseEntity<>(feedList,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	@DeleteMapping("/likefeed/{id}")
+	public ResponseEntity<?> dislikefeed(@PathVariable long id,Principal principal){
+		
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<FeedList> feedList = feedListService.dislikefeed(user,id);
+			return new ResponseEntity<>(feedList,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	
 }

@@ -35,7 +35,7 @@ public class UploadFileService {
 		uploadFile.setImageExtension(fileExtension2);
 		uploadFile.setFilename(savedName2+filesavedtime);
 		uploadFile.setRealname(originalFileName2);
-		uploadFile.setFilepath(imgPath);
+		uploadFile.setSrc(imgPath);
 		uploadFile.setFilesize(filelists.getSize());
 		
 		uploadfileRepository.save(uploadFile);

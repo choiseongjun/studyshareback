@@ -38,11 +38,11 @@ public class UploadFile extends DateAudit{
 	@JsonIgnore
 	private long filesize;
 
-	private String filepath;
+	private String src;
 	@JsonIgnore
 	private String ImageExtension;
 
-	@ManyToOne(optional = true,fetch = FetchType.LAZY)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "feedlist_id")
 	@JsonIgnore
 	private FeedList feedlist;
@@ -51,10 +51,10 @@ public class UploadFile extends DateAudit{
 	}
 	
 	@Builder
-    public UploadFile(Long id, String filename, String filepath) {
+    public UploadFile(Long id, String filename, String src) {
        this.id = id;
        this.filename=filename;
-       this.filepath = filepath;
+       this.src = src;
    }
 
 	

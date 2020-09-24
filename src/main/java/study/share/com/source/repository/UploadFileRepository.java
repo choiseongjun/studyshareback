@@ -8,6 +8,6 @@ import study.share.com.source.model.UploadFile;
 
 public interface UploadFileRepository extends JpaRepository<UploadFile, Long>{
 
-	UploadFile findByFilepath(String imgPath);
+	UploadFile findBySrc(String imgPath);
 
 }
