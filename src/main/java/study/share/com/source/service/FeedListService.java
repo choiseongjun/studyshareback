@@ -98,13 +98,14 @@ public class FeedListService {
 		FeedLike feedLike= new FeedLike();
 		feedLike.setUser(user.get());
 		feedLike.setFeedlist(feedList);
+		feedLike.setUserkey(user.get().getId());
 		feedLikeRepository.save(feedLike);
-		
+		 
 		Optional<FeedList> feed = feedListRepository.findById(id);
-		feed.ifPresent(selectList -> {
-			selectList.setTotallike(feed.get().getTotallike()+1);
-			feedListRepository.save(selectList);
-		});
+//		feed.ifPresent(selectList -> {
+//			selectList.setTotallike(feed.get().getTotallike()+1);
+//			feedListRepository.save(selectList);
+//		});
 		return feed;
 	}
 

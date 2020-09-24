@@ -2,7 +2,6 @@ package study.share.com.source.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,12 +25,15 @@ public class FeedLike extends DateAudit{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private long id;
+	@Column(name = "userkey")
+	private long userkey;
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "feedlist_id")
 	@JsonIgnore
 	private FeedList feedlist;
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "users_id")
+	@ManyToOne(optional = false)  
+	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
+	
 }

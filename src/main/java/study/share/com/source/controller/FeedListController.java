@@ -108,7 +108,7 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.dislikefeed(user,id);
-			return new ResponseEntity<>(feedList,HttpStatus.OK);
+			return new ResponseEntity<>(feedList.get(),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
