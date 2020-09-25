@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,4 +40,6 @@ public class FeedReply extends DateAudit{
 	@ManyToOne(optional = false,fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	@Transient//댓글 추가할때 상태변화로 바로 넣을수있도록 임시조치
+	private long feedlistkey;
 }

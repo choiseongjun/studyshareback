@@ -104,6 +104,7 @@ public class FeedListController {
 		}
 	}
 	/*좋아요 취소*/
+	/* 좋아요 감소하는거 로직 문제있음..*/
 	@DeleteMapping("/likefeed/{id}")
 	public ResponseEntity<?> dislikefeed(@PathVariable long id,Principal principal){
 		

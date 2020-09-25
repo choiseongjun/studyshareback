@@ -20,7 +20,7 @@ public class FeedReplyService {
 	@Autowired
 	FeedReplyRepository feedReplyRepository;
 	
-	public FeedList addfeedcomment(long id, Optional<User> user, String content) {
+	public FeedReply addfeedcomment(long id, Optional<User> user, String content) {
 		
 		FeedList feedList=new FeedList();
 		feedList.setId(id);
@@ -31,11 +31,13 @@ public class FeedReplyService {
 		feedReply.setFeedlist(feedList);
 		feedReply.setDeleteyn('N');
 		
-		feedReplyRepository.save(feedReply);
-		
+		long feedreplyId = feedReplyRepository.save(feedReply).getId();
 		FeedList feedreplylist=feedListRepository.findById(id).get();
 		
-		return feedreplylist;
+		Optional<FeedReply> feedReplyonelist=feedReplyRepository.findById(feedreplyId);
+		feedReplyonelist.get().setFeedlistkey(id);
+		
+		return feedReplyonelist.get();
 	}
 
 	public List<FeedReply> getfeedreply(long id) {
@@ -54,6 +56,21 @@ public class FeedReplyService {
 	public User checkusercomment(long id) {
 		User replyuser = feedReplyRepository.findById(id).get().getUser();
 		return replyuser;
+	}
+
+	public long findPostId(long id) {
+		return feedReplyRepository.findById(id).get().getFeedlist().getId();
+	}
+
+	public FeedReply updatefeedcomment(long id, Optional<User> user, String content) {
+		Optional<FeedReply> feedreply=feedReplyRepository.findById(id);
+		feedreply.ifPresent(selectList -> {
+			selectList.setContent(content);
+			feedReplyRepository.save(selectList);
+		});
+		long feedreplyId = feedreply.get().getFeedlist().getId();
+		feedreply.get().setFeedlistkey(feedreplyId);
+		return feedreply.get();
 	}
 
 }
