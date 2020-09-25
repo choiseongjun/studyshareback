@@ -16,6 +16,7 @@ import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
 import study.share.com.source.repository.FeedLikeRepository;
 import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.FeedReplyRepository;
 import study.share.com.source.repository.UploadFileRepository;
 
 @Service
@@ -28,6 +29,8 @@ public class FeedListService {
 	UploadFileRepository uploadFileRepository;
 	@Autowired
 	FeedLikeRepository feedLikeRepository;
+	@Autowired
+	FeedReplyRepository feedReplyRepository;
 	
 	/*2020-09-24 리턴값으로 사진 리스트 받는거 해결안되고있음*/
 	public Optional<FeedList> saveFeed(Optional<User> user, String content, String file) {

@@ -53,7 +53,7 @@ public class FeedListController {
 	}
 	@GetMapping("/feed")
 	public ResponseEntity<?> listfeed(){
-		
+		 
 		try {
 			List<FeedList> feedlist = feedListService.listfeed();
 			return new ResponseEntity<>(feedlist,HttpStatus.OK);
@@ -91,6 +91,7 @@ public class FeedListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
+	/*좋아요 */
 	@PostMapping("/likefeed/{id}")
 	public ResponseEntity<?> likefeed(@PathVariable long id,Principal principal){
 		
@@ -102,6 +103,7 @@ public class FeedListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
+	/*좋아요 취소*/
 	@DeleteMapping("/likefeed/{id}")
 	public ResponseEntity<?> dislikefeed(@PathVariable long id,Principal principal){
 		

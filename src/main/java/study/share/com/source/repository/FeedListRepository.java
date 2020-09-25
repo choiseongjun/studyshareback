@@ -19,6 +19,5 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 	List<FeedList> findAllByDeleteynOrderByIdDesc(char c);
 	@Query("SELECT IFNULL(MAX(totallike),0)+1 FROM FeedList")
 	long selectmaxtotalLiekid();
-	
 
 }
