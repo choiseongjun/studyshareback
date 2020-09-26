@@ -85,7 +85,7 @@ public class FeedListService {
 	public Optional<FeedList> updatefeed(long id, String content) {
 		Optional<FeedList> feedlist=feedListRepository.findById(id);
 		feedlist.ifPresent(selectList -> {
-			selectList.setContent(content);;
+			selectList.setContent(content);
 			feedListRepository.save(selectList);
 		});
 		
@@ -120,10 +120,10 @@ public class FeedListService {
 		feedLikeRepository.deleteById(feedlikeno);
 
 		Optional<FeedList> feed = feedListRepository.findById(id);
-		feed.ifPresent(selectList -> {
-			selectList.setTotallike(feed.get().getTotallike()-1);
-			feedListRepository.save(selectList);
-		});
+//		feed.ifPresent(selectList -> {
+//			selectList.setTotallike(feed.get().getTotallike()-1);
+//			feedListRepository.save(selectList);
+//		});
 		return feed;
 	}
 

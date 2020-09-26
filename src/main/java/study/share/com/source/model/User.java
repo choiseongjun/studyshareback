@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -75,6 +76,7 @@ public class User{
     private Set<Role> roles = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<FeedLike> feedlike;
+    
     public User(String userid,String nickname, String email,String sex,String password) {
         this.userid = userid;
         this.nickname = nickname;
