@@ -76,7 +76,8 @@ public class User{
     private Set<Role> roles = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<FeedLike> feedlike;
-    
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
+	private List<TodoList> todolist;
     public User(String userid,String nickname, String email,String sex,String password) {
         this.userid = userid;
         this.nickname = nickname;
