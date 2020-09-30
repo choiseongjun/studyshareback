@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import study.share.com.source.message.response.UserProfileResponse;
+import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
 import study.share.com.source.service.UserService;
@@ -28,8 +30,15 @@ public class UserController {
 		
 		try {			
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			return ResponseEntity.ok(user.get());
+			if(user.get().getUserProfileImage()==null) {
+				System.out.println("image notfount");
+				return ResponseEntity.ok(new UserResponse(user.get()));//유저 프로필이미지가 없는 경우  
+			}else {
+				System.out.println("image found");
+				return ResponseEntity.ok(new UserProfileResponse(user.get()));	//유저 프로필이미지가 있는경우
+			}
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}
 	}

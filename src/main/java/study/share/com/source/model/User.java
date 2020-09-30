@@ -80,7 +80,7 @@ public class User{
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<TodoList> todolist;
     
-    @OneToOne(mappedBy="user", orphanRemoval = true)
+    @OneToOne(mappedBy="user", orphanRemoval = true,fetch = FetchType.LAZY)
 	private UserProfileImage userProfileImage;
     
     public User(String userid,String nickname, String email,String sex,String password) {

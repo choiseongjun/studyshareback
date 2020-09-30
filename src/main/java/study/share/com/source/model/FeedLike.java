@@ -25,8 +25,6 @@ public class FeedLike extends DateAudit{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private long id;
-	@Column(name = "userkey")
-	private long userkey;
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "feedlist_id")
 	@JsonIgnore
@@ -35,5 +33,7 @@ public class FeedLike extends DateAudit{
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
+	
+	private long userkey;
 	
 }

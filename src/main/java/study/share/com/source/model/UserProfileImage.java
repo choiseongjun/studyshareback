@@ -30,7 +30,8 @@ public class UserProfileImage {
 	private String src;
 	@JsonIgnore
 	private String ImageExtension;
-	
+	@JsonIgnore
+	private String ipaddress;
 	@OneToOne
 	private User user;
 }

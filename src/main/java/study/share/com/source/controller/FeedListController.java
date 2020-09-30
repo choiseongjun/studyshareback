@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
+import study.share.com.source.model.DTO.FeedListDTO;
+import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
@@ -55,8 +57,10 @@ public class FeedListController {
 	public ResponseEntity<?> listfeed(){
 		 
 		try {
-			List<FeedList> feedlist = feedListService.listfeed();
-			return new ResponseEntity<>(feedlist,HttpStatus.OK);
+			List<FeedList> feedlist = feedListService.listfeed(); 
+			//new FeedListLikeDTO(feedList.get()
+			//return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
+			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
@@ -98,8 +102,9 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.likefeed(user,id);
-			return new ResponseEntity<>(feedList,HttpStatus.OK);
+			return new ResponseEntity<>(new FeedListLikeDTO(feedList.get()),HttpStatus.OK);
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
@@ -111,8 +116,9 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.dislikefeed(user,id);
-			return new ResponseEntity<>(feedList.get(),HttpStatus.OK);
+			return new ResponseEntity<>(new FeedListLikeDTO(feedList.get()),HttpStatus.OK);
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}

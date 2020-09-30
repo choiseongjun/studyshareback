@@ -1,5 +1,6 @@
 package study.share.com.source.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,23 +16,26 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import study.share.com.source.message.request.LoginForm;
 import study.share.com.source.message.request.SignUpForm;
-import study.share.com.source.message.response.JwtResponse;
 import study.share.com.source.model.Role;
 import study.share.com.source.model.RoleName;
 import study.share.com.source.model.User;
 import study.share.com.source.repository.RoleRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.security.jwt.JwtProvider;
+import study.share.com.source.service.S3Service;
+import study.share.com.source.service.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -47,7 +51,10 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
-
+    @Autowired
+    UserService userService;
+    @Autowired
+	S3Service s3Service;
     @Autowired
     JwtProvider jwtProvider;
 
@@ -77,9 +84,11 @@ public class AuthController {
     	
     }
 
+    @Transactional
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
-    	System.out.println(signUpRequest.getNickname());
+    	
+    	
         if(userRepository.existsByNickname(signUpRequest.getNickname())) {
             return new ResponseEntity<String>("닉네임이 이미 존재합니다!",
                     HttpStatus.BAD_REQUEST);
@@ -118,15 +127,33 @@ public class AuthController {
     	        		roles.add(userRole);        			
             	}
             });
-            
+
+            //long id = userRepository.selectusermaxid();
             user.setRoles(roles);
-            userRepository.save(user);
+            long id = userRepository.save(user).getId();
+            if(signUpRequest.getProfileimagePaths()!=null) {
+            	userService.updateProfileImage(signUpRequest.getProfileimagePaths(),id);
+            }
             return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
         }catch(Exception e) {
         	e.printStackTrace();
-			return new ResponseEntity<>("서버 오류..다시 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
         
     }
+    @PostMapping("/profileimage")
+	public ResponseEntity<?> saveProfileimage(@RequestPart(name = "images", required = false) MultipartFile file) throws IOException {
+    	try {
+    		String imgPath="";
+        	imgPath = s3Service.upload(file);
+        	String ImgName = userService.saveProfileimage(file,imgPath);
+        	System.out.println(ImgName);
+        	return new ResponseEntity<>(ImgName, HttpStatus.OK);
+    	}catch(Exception e) { 
+    		e.printStackTrace();
+    		return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+	}
+
 }
