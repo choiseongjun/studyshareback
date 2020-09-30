@@ -4,6 +4,10 @@ plugins {
 	id 'java'
 }
 
+ext {
+	javaVersion='1.8'
+}
+
 group = 'study.share.com'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -48,9 +52,15 @@ dependencies {
 
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+}
 
-
-	    
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+sourceSets {
+	main {
+		resources {
+			srcDirs "src/main/resources", "src/main/resources-${profile}"
+		}
+	}
 }
 
 test {
