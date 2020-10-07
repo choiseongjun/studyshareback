@@ -153,3 +153,4 @@ $RECYCLE.BIN/
 .gradle/4.6/fileHashes/fileHashes.bin
 .gradle/4.6/fileHashes/fileHashes.lock
 .gradle/vcsWorkingDirs/gc.properties
+.gradle
