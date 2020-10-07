@@ -17,22 +17,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import study.share.com.source.message.request.LoginForm;
 import study.share.com.source.message.request.SignUpForm;
+import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.model.Role;
 import study.share.com.source.model.RoleName;
 import study.share.com.source.model.User;
 import study.share.com.source.repository.RoleRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.security.jwt.JwtProvider;
+import study.share.com.source.security.services.UserPrinciple;
+import study.share.com.source.service.AuthTokenService;
 import study.share.com.source.service.S3Service;
 import study.share.com.source.service.UserService;
 
@@ -58,6 +56,9 @@ public class AuthController {
     @Autowired
     JwtProvider jwtProvider;
 
+    @Autowired
+    AuthTokenService authTokenService;
+
     @PostMapping("/signin")
     public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
@@ -72,10 +73,15 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String ROLE=auth.getAuthorities().toString();
+
+            UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
+            AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
             String jwt = jwtProvider.generateJwtToken(authentication);
             Map<String, String> map =new HashMap<String, String>();
             map.put("ROLE", ROLE);
-    		map.put("jwt", jwt);
+            map.put("accessToken", authTokenDTO.getAccessToken());
+            map.put("jwt", authTokenDTO.getAccessToken());
+            map.put("refreshToken", authTokenDTO.getAccessToken());
             return ResponseEntity.ok(map);
     	}catch(Exception e) {
     		//e.printStackTrace();
@@ -155,5 +161,19 @@ public class AuthController {
     		return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
     	}
 	}
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestParam(name = "refresh_token") String refreshToken) throws IOException {
+        try {
+            AuthTokenDTO authTokenDTO = authTokenService.refresh(refreshToken);
+            Map<String, String> map =new HashMap<String, String>();
+            map.put("accessToken", authTokenDTO.getAccessToken());
+            map.put("jwt", authTokenDTO.getAccessToken());
+            map.put("refreshToken", authTokenDTO.getRefreshToken());
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        }catch(Exception e) {
+            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
