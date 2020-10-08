@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -171,6 +172,18 @@ public class AuthController {
             map.put("jwt", authTokenDTO.getAccessToken());
             map.put("refreshToken", authTokenDTO.getRefreshToken());
             return new ResponseEntity<>(map, HttpStatus.OK);
+        }catch(Exception e) {
+            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization") String token) throws IOException {
+
+        try {
+            String tokenValue = StringUtils.split(token, " ")[1];
+            authTokenService.logout(tokenValue);
+            return new ResponseEntity<>("success", HttpStatus.OK);
         }catch(Exception e) {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

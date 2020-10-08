@@ -66,4 +66,9 @@ public class AuthTokenService {
         authTokenDTO.setRefreshToken(updateRefreshToken);
         return authTokenDTO;
     }
+
+    public void logout(String tokenValue) {
+        Long id = jwtProvider.getTokenId(tokenValue);
+        authTokenRepository.deleteById(id);
+    }
 }
