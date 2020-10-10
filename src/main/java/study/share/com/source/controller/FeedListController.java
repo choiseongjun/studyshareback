@@ -45,7 +45,7 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedlist=feedListService.saveFeed(user,content,file);
-			
+			 
 			return new ResponseEntity<>(feedlist.get(),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
