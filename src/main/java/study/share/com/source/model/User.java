@@ -80,6 +80,7 @@ public class User{
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<TodoList> todolist;
     
+    @JsonIgnore
     @OneToOne(mappedBy="user", orphanRemoval = true,fetch = FetchType.LAZY)
 	private UserProfileImage userProfileImage;
     

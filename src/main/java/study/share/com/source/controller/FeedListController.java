@@ -46,7 +46,7 @@ public class FeedListController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedlist=feedListService.saveFeed(user,content,file);
 			 
-			return new ResponseEntity<>(feedlist.get(),HttpStatus.OK);
+			return new ResponseEntity<>(new FeedListDTO(feedlist.get()),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 시도해주세요",HttpStatus.BAD_REQUEST);
@@ -58,10 +58,8 @@ public class FeedListController {
 		 
 		try {
 			List<FeedList> feedlist = feedListService.listfeed(); 
-			//new FeedListLikeDTO(feedList.get()
-			//return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
-		}catch(Exception e) {
+		}catch(Exception e) { 
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}

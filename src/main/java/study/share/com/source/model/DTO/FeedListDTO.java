@@ -10,6 +10,7 @@ import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
 import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
+import study.share.com.source.model.UserProfileImage;
 
 
 @Data
@@ -25,6 +26,8 @@ public class FeedListDTO {
 	
 	private User user;
 	
+	private UserProfileImage userProfileImage;
+	
 	private List<UploadFile> uploadfile;
 	
 	private List<FeedLike> feedlike;
@@ -38,6 +41,7 @@ public class FeedListDTO {
 		this.setTotallike(feedlist.getFeedlike().size());
 		this.setUploadfile(feedlist.getUploadfile());
 		this.setUser(feedlist.getUser());
+		this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
 		this.setFeedreply(feedlist.getFeedreply());
 		this.setFeedlike(feedlist.getFeedlike());
 //		for(int i=0;i<feedlist.getFeedlike().size();i++) {

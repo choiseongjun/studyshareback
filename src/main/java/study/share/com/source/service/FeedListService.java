@@ -46,8 +46,9 @@ public class FeedListService {
 		
 		feedListRepository.save(feedList);
 		
+		String FileSrc = "";
 		
-		Optional<FeedList> feedlist = feedListRepository.findById(feedid);
+		
 		List<UploadFile> list=new ArrayList<UploadFile>();
 		if(file!=null) {//파일이 있는경우
 			String[] f= file.split(",");
@@ -55,14 +56,14 @@ public class FeedListService {
 			for(int i=0;i<f.length;i++) {
 				UploadFile fileone =uploadFileRepository.findBySrc(f[i]);
 				fileone.setFeedlist(feedList);
-				uploadFileRepository.save(fileone);
+				FileSrc = uploadFileRepository.save(fileone).getSrc();
 //				UploadFile uploadfilelist=new UploadFile();
 //				uploadfilelist.setFilepath(f[i]);
 //				list.add(uploadfilelist);		
 			}
 			 
 		}
-		
+		Optional<FeedList> feedlist = feedListRepository.findById(feedid);
 		return feedlist;
 	}
 
