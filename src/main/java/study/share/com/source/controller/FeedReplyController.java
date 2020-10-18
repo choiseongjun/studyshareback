@@ -1,7 +1,9 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,16 +93,26 @@ public class FeedReplyController {
 		}
 	}
 	
-	/*choiseongjun 일단 안씀 피드리스트에서 한번에 조회해서 들고오기때문에 그걸로 조회중..*/
-//	@GetMapping("feed/reply/{id}")
-//	public ResponseEntity<?> getfeedreply(@PathVariable long id){
-//		try {
-//			
-//			List<FeedReply> feedReplylist=feedReplyService.getfeedreply(id);
-//			return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-//		}
-//	}
+	@GetMapping("feed/reply/{id}")
+	public ResponseEntity<?> getfeedreply(@PathVariable long id){
+		try {
+			
+			List<FeedReply> feedReplylist=feedReplyService.getfeedreply(id);
+			feedReplylist.sort(new Comparator<FeedReply>() {//내림차순 로직
+				@Override
+				public int compare(FeedReply o1, FeedReply o2) {
+					long id1 = o1.getId();
+					long id2 = o2.getId();
+					if(id2>id1)
+						return 1;
+					else
+						return -1;
+				}
+			});
+			return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
 }
