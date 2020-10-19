@@ -32,8 +32,11 @@ public class FeedListService {
 	@Autowired
 	FeedReplyRepository feedReplyRepository;
 	
-	/*2020-09-24 리턴값으로 사진 리스트 받는거 해결안되고있음*/
-	public Optional<FeedList> saveFeed(Optional<User> user, String content, String file) {
+	/*2020-10-20 리턴값으로 사진 리스트 받는거 해결
+	 *  addAll을 하여 방금 넣은 이미지를 리스트형식으로 하여 담아준다.
+	 *  그러면 리턴할떄 방금 넣은이미지가 그대로 뿌려진다.
+	 * */
+	public FeedList saveFeed(Optional<User> user, String content, String file) {
 		
 		long feedid = feedListRepository.selectmaxid();
 		
@@ -44,27 +47,25 @@ public class FeedListService {
 		feedList.setDeleteyn('N');
 		feedList.setTotallike(0);
 		
-		feedListRepository.save(feedList);
-		
-		String FileSrc = "";
+		FeedList feed = feedListRepository.save(feedList);
 		
 		
-		List<UploadFile> list=new ArrayList<UploadFile>();
+		
+		List<UploadFile> filelist = new ArrayList<UploadFile>();
+		//Optional<FeedList> feedlist = feedListRepository.findById(feedid);
 		if(file!=null) {//파일이 있는경우
 			String[] f= file.split(",");
-		//	List<UploadFile> lists= new ArrayList<UploadFile>();	
 			for(int i=0;i<f.length;i++) {
 				UploadFile fileone =uploadFileRepository.findBySrc(f[i]);
 				fileone.setFeedlist(feedList);
-				FileSrc = uploadFileRepository.save(fileone).getSrc();
-//				UploadFile uploadfilelist=new UploadFile();
-//				uploadfilelist.setFilepath(f[i]);
-//				list.add(uploadfilelist);		
+				uploadFileRepository.save(fileone);
+				filelist.add(fileone);				
 			}
-			 
+				
+			feed.getUploadfile().addAll(filelist);	
 		}
-		Optional<FeedList> feedlist = feedListRepository.findById(feedid);
-		return feedlist;
+
+		return feed;
 	}
 
 	public List<FeedList> listfeed() {
@@ -126,6 +127,10 @@ public class FeedListService {
 //			feedListRepository.save(selectList);
 //		});
 		return feed;
+	}
+
+	public Optional<FeedList> selectOne(long feedid) {
+		return feedListRepository.findById(feedid);
 	}
 
 	

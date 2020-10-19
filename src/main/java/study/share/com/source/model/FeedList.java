@@ -39,13 +39,13 @@ public class FeedList extends DateAudit{
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;
-	@OneToMany(orphanRemoval=true,mappedBy = "feedlist",cascade=CascadeType.ALL)
+	@OneToMany(orphanRemoval=true,mappedBy = "feedlist")
 	private List<UploadFile> uploadfile=new ArrayList<UploadFile>();
 	@OneToMany(orphanRemoval=true,mappedBy = "feedlist")
 	private List<FeedLike> feedlike=new ArrayList<FeedLike>();
 	@OneToMany(orphanRemoval=true,mappedBy = "feedlist")
 	private List<FeedReply> feedreply=new ArrayList<FeedReply>();
-	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "feedlist")
+	@OneToMany(orphanRemoval=true,mappedBy = "feedlist")
 	private List<FeedTag> feedtag;
 	
 }
