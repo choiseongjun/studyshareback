@@ -27,6 +27,7 @@ import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
+import study.share.com.source.utils.HashTagExtract;
 
 @RestController
 public class FeedListController {
@@ -37,6 +38,8 @@ public class FeedListController {
 	FeedListService feedListService;
 	@Autowired
 	FeedListRepository feedListRepository;
+	@Autowired
+	HashTagExtract hashTagExtract;
 	
 	@PostMapping("/feed")
 	public ResponseEntity<?> savefeed(@RequestParam(name = "images", required = false) String file
@@ -51,6 +54,18 @@ public class FeedListController {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
+		
+	}
+	@PostMapping("/testfeed")
+	public void savetestfeed(@RequestPart(name = "content", required = false) String content) {
+		System.out.println(content);
+		List<String> result = hashTagExtract.extractHashTagTest(content);
+		if(!result.isEmpty()) {//해시태그가 있다면..
+			for(int i=0;i<result.size();i++) {
+				System.out.println(result.get(i));
+			}
+		}
+		
 		
 	}
 	@GetMapping("/feed")

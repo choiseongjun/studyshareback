@@ -54,11 +54,13 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	
 	// https://mvnrepository.com/artifact/commons-codec/commons-codec
-compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
+	compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
 
 	// https://mvnrepository.com/artifact/commons-io/commons-io
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'
-		
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+			
 	
 }
 
