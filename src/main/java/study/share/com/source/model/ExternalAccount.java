@@ -20,7 +20,7 @@ public class ExternalAccount extends DateAudit {
     private String userId;
 
     @Id
-    @Convert(converter = AccountTypeConverter.class)
+    @Enumerated(EnumType.STRING)
     @Column(name="account_type")
     private AccountType accountType;
 
