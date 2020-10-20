@@ -50,7 +50,7 @@ public class ExternalAccountService {
     public User authentcateUser(AccountType accountType, String accessToken) {
         
         String accountId = getId(accountType, accessToken);
-        String userId = externalAccountRepository.findUserIdByAccountTypeAndAccountId(accountType, accountId);
+        String userId = externalAccountRepository.findUserIdByAccountTypeAndAccountId(accountType.name(), accountId);
         if (StringUtils.isEmpty(userId)) {
             throw new GeneralErrorException();
         }
@@ -86,7 +86,7 @@ public class ExternalAccountService {
     public void connect(User user, AccountType accountType, String accessToken) {
 
         String accountId = getId(accountType, accessToken);
-        String userId = externalAccountRepository.findUserIdByAccountTypeAndAccountId(accountType, accountId);
+        String userId = externalAccountRepository.findUserIdByAccountTypeAndAccountId(accountType.name(), accountId);
         if (!StringUtils.isEmpty(userId)) {
             throw new GeneralErrorException();
         }
