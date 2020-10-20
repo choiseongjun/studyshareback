@@ -18,6 +18,18 @@ spring:
                 dialect: org.hibernate.dialect.MySQL5InnoDBDialect
                 format_sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 731014591837-ej91nk0hfgf42hfssm12j4uop6ig9hce.apps.googleusercontent.com
+            client-secret: DVfYfbX49F_Hz7gzzYuVJrna
+            redirect_uri: http://localhost:8080/login/oauth2/code/google
+            scope:
+              - profile
+              - email
+
                      
 server:
     port: 8080
@@ -35,3 +47,6 @@ cloud:
       auto: false
 
       
+
+
+
