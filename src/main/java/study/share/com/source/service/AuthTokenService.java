@@ -49,6 +49,7 @@ public class AuthTokenService {
 
         Long id = jwtProvider.getTokenId(refreshToken);
         AuthTokenType authTokenType = jwtProvider.getTokenType(refreshToken);
+
         if (AuthTokenType.refreshToken == authTokenType) {
             throw new GeneralErrorException();
         }

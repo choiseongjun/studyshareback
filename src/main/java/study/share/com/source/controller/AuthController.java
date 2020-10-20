@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import study.share.com.source.message.request.LoginForm;
 import study.share.com.source.message.request.SignUpForm;
+import study.share.com.source.model.AccountType;
 import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.model.Role;
 import study.share.com.source.model.RoleName;
@@ -32,6 +33,7 @@ import study.share.com.source.repository.UserRepository;
 import study.share.com.source.security.jwt.JwtProvider;
 import study.share.com.source.security.services.UserPrinciple;
 import study.share.com.source.service.AuthTokenService;
+import study.share.com.source.service.ExternalAccountService;
 import study.share.com.source.service.S3Service;
 import study.share.com.source.service.UserService;
 
@@ -59,6 +61,9 @@ public class AuthController {
 
     @Autowired
     AuthTokenService authTokenService;
+
+    @Autowired
+    ExternalAccountService externalAccountService;
 
     @PostMapping("/signin")
     public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
@@ -89,6 +94,21 @@ public class AuthController {
     		return new ResponseEntity<>("아이디나 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
     	}
     	
+    }
+
+
+    @PostMapping("/signin_by_external")
+    public ResponseEntity<?> signInByExternal(
+            @RequestParam("account_type") AccountType accountType,
+            @RequestParam("token") String token) {
+        User user = externalAccountService.authentcateUser(accountType, token);
+        AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(user.getUserid());
+        Map<String, String> map =new HashMap<String, String>();
+        map.put("accessToken", authTokenDTO.getAccessToken());
+        map.put("jwt", authTokenDTO.getAccessToken());
+        map.put("refreshToken", authTokenDTO.getAccessToken());
+        map.put("ROLE", "ROLE_USER");
+        return ResponseEntity.ok(map);
     }
 
     @Transactional

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import study.share.com.source.config.BASE64DecodedMultipartFile;
-import study.share.com.source.model.DTO.MobileImage;
+//import study.share.com.source.model.DTO.MobileImage;
 import study.share.com.source.service.S3Service;
 import study.share.com.source.service.UploadFileService;
 
