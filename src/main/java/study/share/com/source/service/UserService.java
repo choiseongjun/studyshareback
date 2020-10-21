@@ -87,7 +87,6 @@ public class UserService {
 
 	public void updateProfileImage(String profileimagePaths, long id) {
 		UserProfileImage userProfileImage=userProfileImageRepository.findByFilename(profileimagePaths);
-		System.out.println(userProfileImage.getFilename());
 		User user = new User();
 		user.setId(id);
 		userProfileImage.setUser(user);

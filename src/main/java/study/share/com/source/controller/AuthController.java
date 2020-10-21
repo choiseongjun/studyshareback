@@ -25,6 +25,7 @@ import study.share.com.source.message.request.LoginForm;
 import study.share.com.source.message.request.SignUpForm;
 import study.share.com.source.model.AccountType;
 import study.share.com.source.model.DTO.AuthTokenDTO;
+import study.share.com.source.model.exception.GeneralErrorException;
 import study.share.com.source.model.Role;
 import study.share.com.source.model.RoleName;
 import study.share.com.source.model.User;
@@ -157,9 +158,12 @@ public class AuthController {
 
             //long id = userRepository.selectusermaxid();
             user.setRoles(roles);
-            long id = userRepository.save(user).getId();
-            if(signUpRequest.getProfileimagePaths()!=null) {
-            	userService.updateProfileImage(signUpRequest.getProfileimagePaths(),id);
+            User userone = userRepository.save(user);
+            if(!signUpRequest.getProfileimagePaths().equals("undefiend")) {
+            	userService.updateProfileImage(signUpRequest.getProfileimagePaths(),userone.getId());
+            }
+            if(signUpRequest.getGtoken()!=null) {
+            	externalAccountService.connect(userone.getUserid(), signUpRequest.getAccountType(), signUpRequest.getGtoken());
             }
             return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
         }catch(Exception e) {

@@ -83,16 +83,16 @@ public class ExternalAccountService {
         return id;
     }
 
-    public void connect(User user, AccountType accountType, String accessToken) {
+    public void connect(String userid, AccountType accountType, String accessToken) {
 
         String accountId = getId(accountType, accessToken);
-        String userId = externalAccountRepository.findUserIdByAccountTypeAndAccountId(accountType.name(), accountId);
-        if (!StringUtils.isEmpty(userId)) {
-            throw new GeneralErrorException();
-        }
+//        String userId = externalAccountRepository.findUserIdByAccountTypeAndAccountId(accountType.name(), accountId);
+//        if (!StringUtils.isEmpty(userId)) {
+//            throw new GeneralErrorException();
+//        }
 
         ExternalAccount externalAccount = new ExternalAccount();
-        externalAccount.setUserId(user.getUserid());
+        externalAccount.setUserId(userid);
         externalAccount.setAccountType(accountType);
         externalAccount.setAccountId(accountId);
 

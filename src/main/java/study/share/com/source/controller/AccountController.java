@@ -28,16 +28,16 @@ public class AccountController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/connect_by_external")
-    public ResponseEntity<?> connectByExternal(
-            @RequestParam("account_type") AccountType accountType,
-            @RequestParam("token") String token, Principal principal) {
-
-        User user = userService.findUserNickname(principal.getName()).orElseThrow(() -> new GeneralErrorException());
-
-        externalAccountService.connect(user, accountType, token);
-        return ResponseEntity.ok("success");
-    }
+//    @PostMapping("/connect_by_external")
+//    public ResponseEntity<?> connectByExternal(
+//            @RequestParam("account_type") AccountType accountType,
+//            @RequestParam("token") String token, Principal principal) {
+//
+//        User user = userService.findUserNickname(principal.getName()).orElseThrow(() -> new GeneralErrorException());
+//
+//        externalAccountService.connect(user, accountType, token);
+//        return ResponseEntity.ok("success");
+//    }
 
     @PostMapping("/disconnect_by_external")
     public ResponseEntity<?> disconnectByExternal(
