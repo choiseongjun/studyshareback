@@ -75,7 +75,7 @@ public class FeedListController {
 		try {
 			List<FeedList> feedlist = feedListService.listfeed(); 
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
-		}catch(Exception e) { 
+		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
@@ -106,6 +106,7 @@ public class FeedListController {
 			feedListService.deletefeed(id); 
 			return new ResponseEntity<>(id,HttpStatus.OK);
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
@@ -116,7 +117,9 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.likefeed(user,id);
-			return new ResponseEntity<>(new FeedListLikeDTO(feedList.get()),HttpStatus.OK);
+			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
+			feedListLike.setUserKey(user.get().getId());
+			return new ResponseEntity<>(feedListLike,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -130,7 +133,9 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.dislikefeed(user,id);
-			return new ResponseEntity<>(new FeedListLikeDTO(feedList.get()),HttpStatus.OK);
+			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
+			feedListLike.setUserKey(user.get().getId());
+			return new ResponseEntity<>(feedListLike,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

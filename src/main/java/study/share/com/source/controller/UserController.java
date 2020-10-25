@@ -30,11 +30,9 @@ public class UserController {
 		
 		try {			
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			if(user.get().getUserProfileImage()==null) {
-				System.out.println("image notfount");
+			if(user.get().getUserProfileImage()==null) {//image notfound
 				return ResponseEntity.ok(new UserResponse(user.get()));//유저 프로필이미지가 없는 경우  
 			}else {
-				System.out.println("image found");
 				return ResponseEntity.ok(new UserProfileResponse(user.get()));	//유저 프로필이미지가 있는경우
 			}
 		}catch(Exception e) {

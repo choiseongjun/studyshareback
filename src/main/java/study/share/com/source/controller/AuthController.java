@@ -114,9 +114,9 @@ public class AuthController {
 
     @Transactional
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+    public ResponseEntity<String> registerUser(@RequestBody SignUpForm signUpRequest) {
     	
-    	
+    	System.out.println(signUpRequest);
         if(userRepository.existsByNickname(signUpRequest.getNickname())) {
             return new ResponseEntity<String>("닉네임이 이미 존재합니다!",
                     HttpStatus.BAD_REQUEST);
@@ -159,12 +159,13 @@ public class AuthController {
             //long id = userRepository.selectusermaxid();
             user.setRoles(roles);
             User userone = userRepository.save(user);
+            System.out.println(signUpRequest.getProfileimagePaths());
             if(!signUpRequest.getProfileimagePaths().equals("undefiend")) {
             	userService.updateProfileImage(signUpRequest.getProfileimagePaths(),userone.getId());
             }
-            if(signUpRequest.getGtoken()!=null) {
-            	externalAccountService.connect(userone.getUserid(), signUpRequest.getAccountType(), signUpRequest.getGtoken());
-            }
+//            if(!(signUpRequest.getGtoken().equals(""))) {
+//            	externalAccountService.connect(userone.getUserid(), signUpRequest.getAccountType(), signUpRequest.getGtoken());
+//            }
             return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
         }catch(Exception e) {
         	e.printStackTrace();

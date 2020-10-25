@@ -32,7 +32,7 @@ public class FeedListDTO {
 	
 	private List<FeedLike> feedlike;
 	
-	private List<FeedReply> feedreply;
+	private long feedreplysize;
 	
 	
 	public FeedListDTO(FeedList feedlist) {
@@ -42,7 +42,7 @@ public class FeedListDTO {
 		this.setUploadfile(feedlist.getUploadfile());
 		this.setUser(feedlist.getUser());
 		this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
-		this.setFeedreply(feedlist.getFeedreply());
+		this.setFeedreplysize(feedlist.getFeedreply().size());
 		this.setFeedlike(feedlist.getFeedlike());
 //		for(int i=0;i<feedlist.getFeedlike().size();i++) {
 //			this.setFeedlikeuser(feedlist.getFeedlike().get(i).getUser());	

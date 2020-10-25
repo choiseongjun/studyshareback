@@ -26,7 +26,6 @@ public class FeedListLikeDTO {
 	
 	public FeedListLikeDTO(FeedList feedlist) {
 		this.setId(feedlist.getId());
-		this.setUserKey(feedlist.getUser().getId());
 		this.setContent(feedlist.getContent());
 		this.setTotallike(feedlist.getFeedlike().size());
 		this.setFeedlike(feedlist.getFeedlike());

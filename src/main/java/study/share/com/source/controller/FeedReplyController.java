@@ -67,7 +67,7 @@ public class FeedReplyController {
 	}
 	
 	@DeleteMapping("feed/reply/{id}")
-	public ResponseEntity<?> removefeedcomment(@PathVariable long id,Principal principal){
+	public ResponseEntity<?> removefeedcomment(@PathVariable("id") long id,Principal principal){
 		
 		try {
 			if(principal==null) {
