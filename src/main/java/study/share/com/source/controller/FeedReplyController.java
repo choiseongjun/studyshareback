@@ -1,11 +1,10 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
 import study.share.com.source.model.User;
 import study.share.com.source.service.FeedReplyService;
@@ -96,20 +96,13 @@ public class FeedReplyController {
 	@GetMapping("feed/reply/{id}")
 	public ResponseEntity<?> getfeedreply(@PathVariable long id){
 		try {
-			
-			List<FeedReply> feedReplylist=feedReplyService.getfeedreply(id);
-			feedReplylist.sort(new Comparator<FeedReply>() {//내림차순 로직
-				@Override
-				public int compare(FeedReply o1, FeedReply o2) {
-					long id1 = o1.getId();
-					long id2 = o2.getId();
-					if(id2>id1)
-						return 1;
-					else
-						return -1;
-				}
-			});
-			return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
+			Map<String, Object> map =new HashMap<String, Object>();
+			FeedList feedlist=new FeedList();
+			feedlist.setId(id);
+			Stream<FeedReply> feedReplylist=feedReplyService.getfeedreply(id);
+			map.put("feedReplylist", feedReplylist);
+			map.put("feedlist",feedlist);
+			return new ResponseEntity<>(map,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

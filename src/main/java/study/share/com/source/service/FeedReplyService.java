@@ -1,7 +1,9 @@
 package study.share.com.source.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -41,9 +43,19 @@ public class FeedReplyService {
 		return feedReplyonelist.get();
 	}
 
-	public List<FeedReply> getfeedreply(long id) {
+	public Stream<FeedReply> getfeedreply(long id) {
 		List<FeedReply> feedreplylist=feedListRepository.findById(id).get().getFeedreply();
-		return feedreplylist;
+		return feedreplylist.stream().filter(t->t.getDeleteyn()=='N').sorted(new Comparator<FeedReply>() {
+			@Override
+			public int compare(FeedReply o1, FeedReply o2) {
+				long id1 = o1.getId();
+				long id2 = o2.getId();
+				if(id2>id1)
+					return 1;
+				else
+					return -1;
+			}
+		});
 	}
 
 	public void removefeedcomment(long id, Optional<User> user) {

@@ -32,6 +32,8 @@ public class FeedListDTO {
 	
 	private List<FeedLike> feedlike;
 	
+	private List<FeedReply> feedreply=new ArrayList<FeedReply>();
+	
 	private long feedreplysize;
 	
 	
@@ -42,8 +44,9 @@ public class FeedListDTO {
 		this.setUploadfile(feedlist.getUploadfile());
 		this.setUser(feedlist.getUser());
 		this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
-		this.setFeedreplysize(feedlist.getFeedreply().size());
+		this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
 		this.setFeedlike(feedlist.getFeedlike());
+		this.setFeedreply(feedreply);
 //		for(int i=0;i<feedlist.getFeedlike().size();i++) {
 //			this.setFeedlikeuser(feedlist.getFeedlike().get(i).getUser());	
 //		}
