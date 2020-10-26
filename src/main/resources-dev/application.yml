@@ -37,8 +37,8 @@ server:
 cloud:
   aws:
     credentials:
-      accessKey: AKIA3MGT2LL6AHRE6VTK
-      secretKey: 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
+      accessKey: 
+      secretKey: 
     s3:
       bucket: studyshareimagestorage
     region:
