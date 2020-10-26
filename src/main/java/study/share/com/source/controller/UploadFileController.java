@@ -42,6 +42,7 @@ public class UploadFileController {
 		
 		return ResponseEntity.ok(Images);
 	}
+
 //	@PostMapping("/mobile/feed/upload")
 //	public ResponseEntity<?> mobilefeedupload(@RequestParam(name="fileName",required = false) String fileName
 //											,@RequestParam(name="type",required = false) String type

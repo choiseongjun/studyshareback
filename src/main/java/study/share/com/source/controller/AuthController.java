@@ -1,9 +1,11 @@
 package study.share.com.source.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -175,19 +177,22 @@ public class AuthController {
         
     }
     @PostMapping("/profileimage")
-	public ResponseEntity<?> saveProfileimage(@RequestPart(name = "images", required = false) MultipartFile file) throws IOException {
+	public ResponseEntity<?> saveProfileimage(@RequestPart(name = "images", required = false) MultipartFile file,Principal principal) throws IOException {
     	try {
+    		
+    		Optional<User> user = userService.findUserNickname(principal.getName());
+    		
     		String imgPath="";
         	imgPath = s3Service.upload(file);
-        	String ImgName = userService.saveProfileimage(file,imgPath);
-        	System.out.println(ImgName);
-        	return new ResponseEntity<>(ImgName, HttpStatus.OK);
+        	userService.saveProfileimage(file,imgPath,user.get());
+        	
+        	return new ResponseEntity<>(imgPath, HttpStatus.OK);
     	}catch(Exception e) { 
     		e.printStackTrace();
     		return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
     	}
 	}
-
+ 
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestParam(name = "refresh_token") String refreshToken) throws IOException {
         try {

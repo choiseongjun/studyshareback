@@ -61,7 +61,11 @@ public class UserService {
 		return followlist;
 	}
 
-	public String saveProfileimage(MultipartFile file, String imgPath) {
+	public String saveProfileimage(MultipartFile file, String imgPath, User user) {
+
+		boolean userProfile = userProfileImageRepository.existsByUser(user);
+		
+		
 		SimpleDateFormat format1 = new SimpleDateFormat ("yyyy-MM-dd");
 		
 		Date time = new Date();
@@ -75,6 +79,11 @@ public class UserService {
 		//String imageNAME2 = filelists.getName();
 		String savedName2 = uid2.toString();// 랜덤아이디
 		
+		if(userProfile==true) {
+			long profileid = userProfileImageRepository.selectProfileId(user);
+			userProfileImageRepository.deleteById(profileid);
+		}
+		uploadFile.setUser(user);
 		uploadFile.setImageExtension(fileExtension2);
 		uploadFile.setFilename(savedName2+filesavedtime);
 		uploadFile.setRealname(originalFileName2);
@@ -91,6 +100,11 @@ public class UserService {
 		user.setId(id);
 		userProfileImage.setUser(user);
 		userProfileImageRepository.save(userProfileImage);
+	}
+
+	public void findUserProfile(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

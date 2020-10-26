@@ -5,9 +5,9 @@ spring:
 
   datasource:
       driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: "jdbc:log4jdbc:mariadb://moimdev.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/studyshare"
+      url: "jdbc:log4jdbc:mariadb://clouddb.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/studyshare"
       username: csj2702
-      password:
+      password: tjdwns2702!
   jpa:
         show-sql: false
         hibernate:
@@ -25,7 +25,7 @@ spring:
           google:
             client-id: 731014591837-ej91nk0hfgf42hfssm12j4uop6ig9hce.apps.googleusercontent.com
             client-secret: DVfYfbX49F_Hz7gzzYuVJrna
-            redirect_uri: http://localhost:8080/login/oauth2/code/google
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope:
               - profile
               - email
@@ -37,8 +37,8 @@ server:
 cloud:
   aws:
     credentials:
-      accessKey: 
-      secretKey: 
+      accessKey: AKIA3MGT2LL6AHRE6VTK
+      secretKey: 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
     s3:
       bucket: studyshareimagestorage
     region:
