@@ -21,8 +21,7 @@ import study.share.com.source.model.common.DateAudit;
 
 @Entity
 @Table(name = "feedlist")
-@Getter
-@Setter
+@Getter@Setter
 public class FeedList extends DateAudit{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

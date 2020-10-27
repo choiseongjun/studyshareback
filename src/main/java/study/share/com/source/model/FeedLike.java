@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,12 +27,12 @@ public class FeedLike extends DateAudit{
 	@Column(name = "ID")
 	private long id;
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "feedlist_id")
+	@JoinColumn(name = "feedlistId")
 	@JsonIgnore
 	private FeedList feedlist;
 	@ManyToOne(optional = false)  
-	@JoinColumn(name = "user_id")
-	@JsonIgnore
+	@JoinColumn(name = "userId")
+	@JsonIgnoreProperties({"feedlike"})	
 	private User user;
 	
 	private long userkey;

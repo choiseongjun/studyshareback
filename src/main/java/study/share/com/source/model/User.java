@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -80,7 +81,7 @@ public class User{
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<TodoList> todolist;
     
-    @JsonIgnore
+    @JsonIgnoreProperties({"user"})	
     @OneToOne(mappedBy="user", orphanRemoval = true,fetch = FetchType.LAZY)
 	private UserProfileImage userProfileImage;
     

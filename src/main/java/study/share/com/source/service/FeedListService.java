@@ -133,6 +133,11 @@ public class FeedListService {
 		return feedListRepository.findById(feedid);
 	}
 
+	public List<FeedLike> selectFeedlikelist(long id) {
+		List<FeedLike> feedlike=feedLikeRepository.findByfeedlistId(id);
+		return feedlike;
+	}
+
 	
 
 }

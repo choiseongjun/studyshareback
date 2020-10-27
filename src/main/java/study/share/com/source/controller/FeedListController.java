@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
+import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
+import study.share.com.source.model.DTO.FeedLikeDTO;
+import study.share.com.source.model.DTO.FeedLikeListDTO;
 import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
+import study.share.com.source.repository.FeedLikeRepository;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
@@ -126,7 +130,6 @@ public class FeedListController {
 		}
 	}
 	/*좋아요 취소*/
-	/* 좋아요 감소하는거 로직 문제있음..*/
 	@DeleteMapping("/likefeed/{id}")
 	public ResponseEntity<?> dislikefeed(@PathVariable long id,Principal principal){
 		
@@ -141,5 +144,18 @@ public class FeedListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
-	
+	/*게시글별 좋아요리스트 조회*/
+	@GetMapping("/feed/likefeedlist/{id}")
+	public ResponseEntity<?> likefeedlist(@PathVariable long id){
+		//List<FeedLike> feedlike=feedLikeRepository.findByfeedlistId(id);
+		try {
+			//FeedList feedlikelist=feedListRepository.findById(id).get();
+			List<FeedLike> feedlike=feedListService.selectFeedlikelist(id);
+			
+			return new ResponseEntity<Object>(feedlike,HttpStatus.OK);
+			///return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
 }
