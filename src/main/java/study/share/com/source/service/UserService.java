@@ -56,8 +56,12 @@ public class UserService {
 		followRepository.deleteByFromUserIdAndToUserId(user.get().getId(),touser.get().getId());
 	}
 
-	public List<Follow> followlist(Optional<User> user) {
+	public List<Follow> followerlist(Optional<User> user) {
 		List<Follow> followlist=followRepository.findAllByToUserId(user.get().getId());
+		return followlist;
+	}
+	public List<Follow> followlist(Optional<User> user) {
+		List<Follow> followlist=followRepository.findAllByFromUserId(user.get().getId());
 		return followlist;
 	}
 
@@ -102,10 +106,7 @@ public class UserService {
 		userProfileImageRepository.save(userProfileImage);
 	}
 
-	public void findUserProfile(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	
 

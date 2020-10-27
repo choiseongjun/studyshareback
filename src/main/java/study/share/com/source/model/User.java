@@ -64,6 +64,8 @@ public class User{
     private String email;
     
     private String sex;
+    
+    private long age;
 
     @NotBlank
     @Size(min=6, max = 100)
@@ -80,7 +82,7 @@ public class User{
 	private List<FeedLike> feedlike;
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<TodoList> todolist;
-    
+   
     @JsonIgnoreProperties({"user"})	
     @OneToOne(mappedBy="user", orphanRemoval = true,fetch = FetchType.LAZY)
 	private UserProfileImage userProfileImage;

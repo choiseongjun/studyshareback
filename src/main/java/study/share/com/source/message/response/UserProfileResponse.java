@@ -23,15 +23,24 @@ public class UserProfileResponse {
 	private String introduce;
 	
 	private String profileImage;
+	
+	private long age;
 
 	private List<FeedLike> feedlike;
 	
-	public UserProfileResponse(User user) {
+	private long followerlistsize;
+	
+	private long followlistsize;
+	
+	public UserProfileResponse(User user, long followerlistsize, long followlistsize) {
 		this.setId(user.getId());
 		this.setIntroduce(user.getIntroduce());
 		this.setSex(user.getSex());
+		this.setAge(user.getAge());
 		this.setProfileImage(user.getUserProfileImage().getSrc());		
 		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
 	}
 	
 }

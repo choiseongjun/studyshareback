@@ -30,22 +30,26 @@ public class UserController {
 		
 		try {			
 			Optional<User> user = userService.findUserNickname(principal.getName());
+			long followerlistsize=userService.followerlist(user).size();
+			long followlistsize = userService.followlist(user).size();
 			if(user.get().getUserProfileImage()==null) {//image notfound
-				return ResponseEntity.ok(new UserResponse(user.get()));//유저 프로필이미지가 없는 경우  
+				return ResponseEntity.ok(new UserResponse(user.get(),followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
 			}else {
-				return ResponseEntity.ok(new UserProfileResponse(user.get()));	//유저 프로필이미지가 있는경우
+				return ResponseEntity.ok(new UserProfileResponse(user.get(),followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}
 	}
-	/*내 팔로우정보 불러오기 2020-09-26 choiseongjun */
+	/*내 팔로우정보 불러오기 2020-09-26 choiseongjun 
+	 * DTO로 변환필요..
+	 * */
 	@GetMapping("/user/followlist")
 	public ResponseEntity<?> followlist(Principal principal){
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			List<Follow> followlist=userService.followlist(user);
+			List<Follow> followlist=userService.followerlist(user);
 			return new ResponseEntity<>(followlist,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

@@ -1,8 +1,8 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
-import study.share.com.source.model.UserProfileImage;
+import study.share.com.source.model.DTO.FollowerDTO;
+import study.share.com.source.repository.FollowRepository;
 import study.share.com.source.repository.UserProfileImageRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.service.UserService;
@@ -27,6 +29,8 @@ public class TestRestAPIs {
 	UserService userService;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	FollowRepository followRepository;
 	
 	@GetMapping("/api/test/user")
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -57,5 +61,12 @@ public class TestRestAPIs {
 		//OptionalLong.of(userProfile).orElseThrow(null);
 		
 		return new ResponseEntity<>("ok", HttpStatus.OK);
+	}
+	
+	@GetMapping("/test/myfollowlist")
+	public ResponseEntity<?> myfollowlist(Principal principal){
+		Optional<User> user = userService.findUserNickname(principal.getName());
+		List<Follow> principalFollows = followRepository.findByToUserId(user.get().getId());
+		return new ResponseEntity<>(principalFollows, HttpStatus.OK);
 	}
 }

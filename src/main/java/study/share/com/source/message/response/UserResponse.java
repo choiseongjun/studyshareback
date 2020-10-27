@@ -19,14 +19,23 @@ public class UserResponse {
 	
 	private String introduce;
 	
+	private long age;
+	
 	private List<FeedLike> feedlike;
 	
-	public UserResponse(User user) {
+	private long followerlistsize;
+	
+	private long followlistsize; 
+	
+	public UserResponse(User user, long followerlistsize, long followlistsize) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setSex(user.getSex());
 		this.setIntroduce(user.getIntroduce());
+		this.setAge(user.getAge());
 		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
 	}
 
 }
