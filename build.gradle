@@ -52,7 +52,7 @@ dependencies {
 
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-	
+
 	// https://mvnrepository.com/artifact/commons-codec/commons-codec
 	compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
 
@@ -60,8 +60,10 @@ dependencies {
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-			
-	
+
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
 }
 
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
