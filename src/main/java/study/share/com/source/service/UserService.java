@@ -37,7 +37,7 @@ public class UserService {
 		
 	}
 
-	public void following(long id, Optional<User> user) {
+	public User following(long id, Optional<User> user) {
 		
 		Optional<User> touser = userRepository.findById(id);
 		
@@ -45,8 +45,8 @@ public class UserService {
 		follow.setToUser(touser.get());
 		follow.setFromUser(user.get());
 		
-		followRepository.save(follow);
-		
+		User toUserone = followRepository.save(follow).getToUser();
+		return toUserone;
 	}
 
 	public void canclefollowing(long id, Optional<User> user) {

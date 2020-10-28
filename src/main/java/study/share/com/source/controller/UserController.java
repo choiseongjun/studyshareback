@@ -58,18 +58,18 @@ public class UserController {
 		
 		
 	}
-	/*id는 팔로워*/
+	/*id는 팔로잉당하는사람*/
 	@PostMapping("/user/following/{id}")
 	public ResponseEntity<?> following(@PathVariable long id,Principal principal){
 	
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			userService.following(id,user);
+			User users = userService.following(id,user);
+			return new ResponseEntity<>(users,HttpStatus.OK);
 		}catch(Exception e) {
-			
+			e.printStackTrace();
+			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
-		
-		return null;
 	}
 	@DeleteMapping("/user/following/{id}")
 	public ResponseEntity<?> canclefollowing(@PathVariable long id,Principal principal){

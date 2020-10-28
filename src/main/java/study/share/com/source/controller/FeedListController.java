@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.FeedList;
+import study.share.com.source.model.Follow;
 import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.FeedLikeDTO;
@@ -146,16 +147,35 @@ public class FeedListController {
 	}
 	/*게시글별 좋아요리스트 조회*/
 	@GetMapping("/feed/likefeedlist/{id}")
-	public ResponseEntity<?> likefeedlist(@PathVariable long id){
-		//List<FeedLike> feedlike=feedLikeRepository.findByfeedlistId(id);
+	public ResponseEntity<?> likefeedlist(@PathVariable long id,Principal principal){
 		try {
-			//FeedList feedlikelist=feedListRepository.findById(id).get();
+			Optional<User> user = userService.findUserNickname(principal.getName());
 			List<FeedLike> feedlike=feedListService.selectFeedlikelist(id);
-			
+			for(FeedLike feedlikefollow : feedlike) {
+				for(Follow f:feedlikefollow.getUser().getFollow()) {
+					if(f.getFromUser().getId()==user.get().getId()) {
+						//좋아요 유저의 팔로우정보를 들고와서 from으로부터 한 아이디와 내정보아이디를 비교한다 맞으면 true
+						feedlikefollow.setTempFollow(true);//임시변수로 팔로우한지 안한지 처리
+					}
+				}
+			}
 			return new ResponseEntity<Object>(feedlike,HttpStatus.OK);
-			///return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
+//	/*게시글별 좋아요리스트 조회*/
+//	@GetMapping("/feed/likefeedlistandfollow/{id}")
+//	public ResponseEntity<?> likefeedlist(@PathVariable long id,Principal principal){
+//		//List<FeedLike> feedlike=feedLikeRepository.findByfeedlistId(id);
+//		try {
+//			Optional<User> user = userService.findUserNickname(principal.getName());
+//			//FeedList feedlikelist=feedListRepository.findById(id).get();
+//			List<FeedLike> feedlike=feedListService.selectFeedlikelist(id);
+//			
+//			return new ResponseEntity<Object>(new FeedLikeListDTO(feedlike),HttpStatus.OK);
+//		}catch(Exception e) {  
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//	}
 }

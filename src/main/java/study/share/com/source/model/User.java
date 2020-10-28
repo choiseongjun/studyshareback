@@ -82,6 +82,8 @@ public class User{
 	private List<FeedLike> feedlike;
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "user")
 	private List<TodoList> todolist;
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval=true,mappedBy = "toUser")
+	private List<Follow> follow;
    
     @JsonIgnoreProperties({"user"})	
     @OneToOne(mappedBy="user", orphanRemoval = true,fetch = FetchType.LAZY)
