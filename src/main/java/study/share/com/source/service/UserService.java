@@ -49,11 +49,12 @@ public class UserService {
 		return toUserone;
 	}
 
-	public void canclefollowing(long id, Optional<User> user) {
+	public User canclefollowing(long id, Optional<User> user) {
 		
 		Optional<User> touser = userRepository.findById(id);
 		
 		followRepository.deleteByFromUserIdAndToUserId(user.get().getId(),touser.get().getId());
+		return touser.get();
 	}
 
 	public List<Follow> followerlist(Optional<User> user) {

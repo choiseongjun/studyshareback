@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
+import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
+import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
 
 @RestController
@@ -24,6 +26,8 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	@Autowired
+	FeedListService feedListService;
 	
 	@GetMapping("/api/auth/userinfo")
 	public ResponseEntity<?> userAccess(Principal principal) {
@@ -65,7 +69,16 @@ public class UserController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			User users = userService.following(id,user);
-			return new ResponseEntity<>(users,HttpStatus.OK);
+
+			FeedLike feedlike =new FeedLike();
+				for(Follow f:users.getFollow()) {
+					if(f.getFromUser().getId()==user.get().getId()) {
+						feedlike.setUserkey(users.getId());
+						feedlike.setTempFollow(true);//임시변수로 팔로우한지 안한지 처리
+				}
+			}
+
+			return new ResponseEntity<>(feedlike,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
@@ -76,11 +89,19 @@ public class UserController {
 		
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			userService.canclefollowing(id,user);
+			User users =userService.canclefollowing(id,user);
+			FeedLike feedlike =new FeedLike();
+			for(Follow f:users.getFollow()) {
+				if(f.getFromUser().getId()==user.get().getId()) {
+					feedlike.setUserkey(users.getId());
+					feedlike.setTempFollow(true);//임시변수로 팔로우한지 안한지 처리
+			}
+		}
+			return new ResponseEntity<>(feedlike,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
+			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 		
-		return null;
 	}
 }
