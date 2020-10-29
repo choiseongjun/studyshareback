@@ -154,3 +154,6 @@ $RECYCLE.BIN/
 .gradle/4.6/fileHashes/fileHashes.lock
 .gradle/vcsWorkingDirs/gc.properties
 .gradle/
+
+src/main/resources-dev/application-email.yml
+
