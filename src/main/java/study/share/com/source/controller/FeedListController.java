@@ -62,8 +62,18 @@ public class FeedListController {
 	public ResponseEntity<?> listfeed(){
 		 
 		try {
-			List<FeedList> feedlist = feedListService.listfeed(); 
+			List<FeedList> feedlist = feedListService.listfeed("DESC");
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	@GetMapping("/feedDetail/{id}")
+	public ResponseEntity<?> listfeedDetail(@PathVariable long id){
+		 
+		try {
+			FeedList feedlist = feedListService.listfeedDetail(id);
+			return new ResponseEntity<>(feedlist,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}

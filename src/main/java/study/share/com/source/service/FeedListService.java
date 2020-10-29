@@ -140,6 +140,10 @@ public class FeedListService {
 		return feedlike;
 	}
 
+	public FeedList listfeedDetail(long id) {
+		return feedListRepository.findById(id).get();
+	}
+
 	
 
 }
