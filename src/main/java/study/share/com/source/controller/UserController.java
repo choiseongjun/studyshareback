@@ -90,13 +90,10 @@ public class UserController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			User users =userService.canclefollowing(id,user);
+			
 			FeedLike feedlike =new FeedLike();
-			for(Follow f:users.getFollow()) {
-				if(f.getFromUser().getId()==user.get().getId()) {
-					feedlike.setUserkey(users.getId());
-					feedlike.setTempFollow(true);//임시변수로 팔로우한지 안한지 처리
-			}
-		}
+			feedlike.setTempFollow(false);
+			feedlike.setUserkey(id);
 			return new ResponseEntity<>(feedlike,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
