@@ -46,21 +46,52 @@ public class UserController {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}
 	}
-	/*내 팔로우정보 불러오기 2020-09-26 choiseongjun 
+	/*다른사람 정보불러오기*/
+	@GetMapping("/user/otheruserInfo/{id}")
+		public ResponseEntity<?> otheruserInfo(@PathVariable long id) {
+		
+		try {			
+			Optional<User> user = userService.findUserId(id);
+			long followerlistsize=userService.followerlist(user).size();
+			long followlistsize = userService.followlist(user).size();
+			if(user.get().getUserProfileImage()==null) {//image notfound
+				return ResponseEntity.ok(new UserResponse(user.get(),followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
+			}else {
+				return ResponseEntity.ok(new UserProfileResponse(user.get(),followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
+		}
+	}
+	/*내 팔로워리스트 불러오기 2020-09-26 choiseongjun
 	 * DTO로 변환필요..
 	 * */
-	@GetMapping("/user/followlist")
-	public ResponseEntity<?> followlist(Principal principal){
+	@GetMapping("/user/followerlist/{id}")
+	public ResponseEntity<?> followerlist(@PathVariable long id){
 		try {
-			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<User> user = userService.findUserId(id);
+//			Optional<User> user = userService.findUserNickname(principal.getName());
 			List<Follow> followlist=userService.followerlist(user);
 			return new ResponseEntity<>(followlist,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
-		
-		
+	}
+	/*내 팔로잉리스트 불러오기 2020-11-03 choiseongjun
+	 * DTO로 변환필요..
+	 * */
+	@GetMapping("/user/followinglist/{id}")
+	public ResponseEntity<?> followinglist(@PathVariable long id){
+		try {
+			Optional<User> user = userService.findUserId(id);
+			List<Follow> followlist=userService.followinglist(user);
+			return new ResponseEntity<>(followlist,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
 	}
 	/*id는 팔로잉당하는사람*/
 	@PostMapping("/user/following/{id}")

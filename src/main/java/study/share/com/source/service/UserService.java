@@ -107,6 +107,15 @@ public class UserService {
 		userProfileImageRepository.save(userProfileImage);
 	}
 
+	public List<Follow> followinglist(Optional<User> user) {
+		List<Follow> followlist=followRepository.findAllByFromUserId(user.get().getId());
+		return followlist;
+	}
+
+	public Optional<User> findUserId(long id) {
+		return userRepository.findById(id);
+	}
+
 	
 
 	

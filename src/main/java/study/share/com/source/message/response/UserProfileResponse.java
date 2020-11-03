@@ -34,6 +34,7 @@ public class UserProfileResponse {
 	
 	public UserProfileResponse(User user, long followerlistsize, long followlistsize) {
 		this.setId(user.getId());
+		this.setNickname(user.getNickname());
 		this.setIntroduce(user.getIntroduce());
 		this.setSex(user.getSex());
 		this.setAge(user.getAge());
