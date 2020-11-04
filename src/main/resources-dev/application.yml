@@ -2,24 +2,10 @@ spring:
   profiles:
     include:
       - email
+      - aws
   devtools:
     livereload:
       enabled: true
-
-  datasource:
-      driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: "jdbc:log4jdbc:mariadb://clouddb.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/studyshare"
-      username: csj2702
-      password: tjdwns2702!
-  jpa:
-        show-sql: false
-        hibernate:
-            ddl-auto: update
-            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-                format_sql: true
 
   security:
     oauth2:
@@ -37,19 +23,3 @@ spring:
 server:
     port: 8080
     
-cloud:
-  aws:
-    credentials:
-      accessKey: 
-      secretKey: 
-    s3:
-      bucket: studyshareimagestorage
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-
-      
-
-
-
