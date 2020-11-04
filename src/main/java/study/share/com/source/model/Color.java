@@ -21,8 +21,10 @@ public class Color extends DateAudit{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String name;
+	private String label;
 	
 	private String color;
+	
+	private String value;
 	
 }

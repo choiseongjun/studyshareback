@@ -7,10 +7,11 @@ spring:
       enabled: true
 
   datasource:
+      #driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: "jdbc:log4jdbc:mariadb://clouddb.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/studyshare"
-      username: csj2702
-      password: tjdwns2702!
+      url: "jdbc:log4jdbc:mysql://ls-5e1f6dc6cda34ee3ff0a83dddc17e6772c6fe068.cpd3bfmvavpa.ap-northeast-2.rds.amazonaws.com:3306/studyshare?serverTimezone=UTC&characterEncoding=UTF-8"
+      username: dbmasteruser
+      password: !
   jpa:
         show-sql: false
         hibernate:

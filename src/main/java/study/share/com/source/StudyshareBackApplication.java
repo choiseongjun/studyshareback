@@ -6,9 +6,17 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class StudyshareBackApplication {
+public class StudyshareBackApplication extends SpringBootServletInitializer{
+	
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(StudyshareBackApplication.class);
+	}
+	
 	@PostConstruct
 	void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));

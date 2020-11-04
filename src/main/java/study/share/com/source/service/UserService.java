@@ -116,6 +116,10 @@ public class UserService {
 		return userRepository.findById(id);
 	}
 
+	public List<User> searchUserNickname(String nickname) {
+		return userRepository.findByNicknameLike("%"+nickname+"%");
+	}
+
 	
 
 	

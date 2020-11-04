@@ -132,4 +132,19 @@ public class UserController {
 		}
 		
 	}
+	/*네비게이션 바에서 유저검색창
+	 * 2020.11.04
+	 * */
+	@GetMapping("/user/userSearch/{nickname}")
+	public ResponseEntity<?> userSearch(@PathVariable String nickname){
+		
+		try {
+			List<User> user = userService.searchUserNickname(nickname);	
+			return new ResponseEntity<>(user,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

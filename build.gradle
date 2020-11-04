@@ -2,12 +2,16 @@ plugins {
 	id 'org.springframework.boot' version '2.3.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
+	id 'war'
 }
 
 ext {
 	javaVersion='1.8'
 }
-
+bootWar{                        //bootWar Task시 이름 지정
+	archiveBaseName="studyshare"
+	archiveVersion="0.0.1-SNAPSHOT"
+}
 group = 'study.share.com'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -29,7 +33,8 @@ dependencies {
 	 //devtools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     //mariadb
-    implementation 'org.mariadb.jdbc:mariadb-java-client'
+    //implementation 'org.mariadb.jdbc:mariadb-java-client'
+    compile 'mysql:mysql-connector-java'
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

@@ -1,5 +1,6 @@
 package study.share.com.source.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query("SELECT IFNULL(MAX(id),0)+1 FROM User")
 	long selectusermaxid();
+	
+	List<User> findByNicknameLike(String string);
 }
