@@ -2,6 +2,7 @@ package study.share.com.source.model;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class TodoList extends DateAudit{
 	
 	private String todoContent;
 	
-	private String fontColor;
+	private String highlighter;//형광펜
 	
 	@Convert(converter=BooleanToYNConverter.class)
 	private boolean checked;
@@ -41,5 +42,9 @@ public class TodoList extends DateAudit{
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
+	
+	@ManyToOne(optional = false,fetch = FetchType.LAZY)
+	@JoinColumn(name = "subject_id")
+	private Subject subject;
 	
 }

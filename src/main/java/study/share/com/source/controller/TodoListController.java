@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import study.share.com.source.message.request.TodoListReq;
 import study.share.com.source.model.Color;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
@@ -40,12 +41,16 @@ public class TodoListController {
 		}
 	}
 	
+	
 	@PostMapping(path="/user/todo")
-	public ResponseEntity<?> addtodo(@RequestBody TodoList todoList,Principal principal) {
+	public ResponseEntity<?> addtodo(@RequestBody TodoListReq todoListreq,Principal principal) {
+
+		System.out.println(todoListreq.toString());
 		
+	
 		Optional<User> user = userService.findUserNickname(principal.getName());
-		
-		todoListService.addtodo(todoList,user);
+//		
+		TodoList todoList =todoListService.addtodo(todoListreq,user);
 		
 		return null;
 	}
@@ -53,7 +58,6 @@ public class TodoListController {
 	public ResponseEntity<?> listtodo(@RequestBody Map<String, String> data,Principal principal) {
 		
 		//String savedDate = data.get("savedDate");
-		System.out.println("saveddate=="+data.get("savedDate"));
 		String savedDate=data.get("savedDate");
 		Optional<User> user = userService.findUserNickname(principal.getName());
 		List<TodoList> todoList=todoListService.listtodo(savedDate,user);
