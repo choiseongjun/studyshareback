@@ -5,6 +5,7 @@ import study.share.com.source.model.User;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TodoListRepository extends JpaRepository<TodoList,Long>{
@@ -14,4 +15,7 @@ public interface TodoListRepository extends JpaRepository<TodoList,Long>{
 	List<TodoList> findBySavedDateAndUserId(String savedDate, Long id);
 
 	List<TodoList> findBySavedDateAndUser(String today, User user);
+
+	List<TodoList> findAllByOrderByIdDesc();
+
 }

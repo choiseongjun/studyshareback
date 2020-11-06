@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import study.share.com.source.message.request.TodoListReq;
@@ -14,6 +15,7 @@ import study.share.com.source.model.User;
 import study.share.com.source.repository.ColorRepository;
 import study.share.com.source.repository.SubjectRepository;
 import study.share.com.source.repository.TodoListRepository;
+import study.share.com.source.repository.UserRepository;
 
 @Service
 public class TodoListService {
@@ -24,6 +26,8 @@ public class TodoListService {
 	ColorRepository colorRepository;
 	@Autowired
 	SubjectRepository subjectRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	public TodoList addtodo(TodoListReq todoListreq, Optional<User> user) {
 		
@@ -43,7 +47,6 @@ public class TodoListService {
 		}
 		String[] rDate = todoListreq.getSavedDate().split(" ");
 		String savedDate =rDate[0];
-		System.out.println("savedDate==="+savedDate);
 		todoList.setChecked(false);
 		todoList.setSavedDate(savedDate);
 		todoList.setTodoContent(todoListreq.getTodoContent());
@@ -62,7 +65,7 @@ public class TodoListService {
 	}
 
 	public void deletetodo(long id) {
-		todoListRepository.deleteById(id);;
+		todoListRepository.deleteById(id);
 	}
 
 	public List<Color> selectColorList() {
@@ -74,4 +77,23 @@ public class TodoListService {
 		String savedDate =rDate[0];
 		return todoListRepository.findBySavedDateAndUser(savedDate,user);
 	}
+
+	public TodoList updateTodoCheck(long todoId) {
+		
+		Optional<TodoList> todolist = todoListRepository.findById(todoId);
+		todolist.ifPresent(todo->{
+			if(todo.isChecked()) {
+				todo.setChecked(false);
+			}else {
+				todo.setChecked(true);
+			}
+			todoListRepository.save(todo);
+		});
+		return todolist.get();
+	}
+
+	public List<TodoList> selectUserTodoList() {
+		return todoListRepository.findAllByOrderByIdDesc();
+	}
+ 
 }

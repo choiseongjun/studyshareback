@@ -1,21 +1,23 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sun.xml.bind.v2.TODO;
 
 import study.share.com.source.message.request.TodoListReq;
 import study.share.com.source.model.Color;
@@ -42,6 +44,35 @@ public class TodoListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
+	@PatchMapping(path="/todo/updateCheck/{todoId}")
+	public ResponseEntity<?> updateCheck(@PathVariable long todoId){
+		System.out.println("todoId====="+todoId);
+		try {
+			TodoList todoList=todoListService.updateTodoCheck(todoId);
+			return new ResponseEntity<>(todoList,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	} 
+	
+	/*
+	 * user의 투두리스트 조회 
+	 * */
+	@GetMapping(path="/todo/todofeedlist")
+	public ResponseEntity<?> todofeedlist(){
+		TodoList todos = new TodoList();
+		List<TodoList> todoFeedList=todoListService.selectUserTodoList();
+		List<Map<User, List<TodoList>>> todofeed=todoFeedList
+											.stream()  
+											.collect(Collectors.groupingBy(TodoList::getSavedDate,
+													Collectors.groupingBy(TodoList::getUser)))
+											.values().stream()
+											.collect(Collectors.toList())
+											;
+		return new ResponseEntity<>(todofeed,HttpStatus.OK);
+	}
+	
 	@GetMapping(path="/todo/mytodolist/{today}")
 	public ResponseEntity<?> mytodolist(@PathVariable String today,Principal principal){
 		
@@ -59,14 +90,16 @@ public class TodoListController {
 	@PostMapping(path="/user/todo")
 	public ResponseEntity<?> addtodo(@RequestBody TodoListReq todoListreq,Principal principal) {
 
-		System.out.println(todoListreq.toString());
-		
 	
-		Optional<User> user = userService.findUserNickname(principal.getName());
-//		
-		TodoList todoList =todoListService.addtodo(todoListreq,user);
-		
-		return null;
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			TodoList todoList =todoListService.addtodo(todoListreq,user);
+			System.out.println(todoList.toString());
+			return new ResponseEntity<>(todoList,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
 	}
 	@PatchMapping(path="/user/todo")//임시로 patch로 함 
 	public ResponseEntity<?> listtodo(@RequestBody Map<String, String> data,Principal principal) {
@@ -77,12 +110,12 @@ public class TodoListController {
 		List<TodoList> todoList=todoListService.listtodo(savedDate,user);
 		return new ResponseEntity<>(todoList,HttpStatus.OK);
 	}
-	@GetMapping(path="/user/todo/{id}")
-	public ResponseEntity<?> deletetodo(@PathVariable long id,Principal principal){
+	@DeleteMapping(path="/todo/deleteTodo/{todoId}")
+	public ResponseEntity<?> deletetodo(@PathVariable long todoId,Principal principal){
 		
 		try {
-			todoListService.deletetodo(id);
-			return new ResponseEntity<>("",HttpStatus.OK);
+			todoListService.deletetodo(todoId);
+			return new ResponseEntity<>(todoId,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

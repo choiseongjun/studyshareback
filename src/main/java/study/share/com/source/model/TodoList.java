@@ -49,4 +49,7 @@ public class TodoList extends DateAudit{
 	@JsonIgnoreProperties({"todolist","color"})
 	private Subject subject;
 	
+	public boolean isChecked(){return this.checked;}
+
+	public void setChecked(boolean active){this.checked = active;}
 }
