@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.Getter;
@@ -40,11 +41,12 @@ public class TodoList extends DateAudit{
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
+	@JsonIgnoreProperties({"user","feedlike","follow","todolist"})
 	private User user;
 	
-	@ManyToOne(optional = false,fetch = FetchType.LAZY)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "subject_id")
+	@JsonIgnoreProperties({"todolist","color"})
 	private Subject subject;
 	
 }

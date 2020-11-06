@@ -1,5 +1,8 @@
 package study.share.com.source.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -28,5 +32,7 @@ public class Subject extends DateAudit{
 	@ManyToOne(optional = false,fetch = FetchType.LAZY)
 	@JoinColumn(name = "color_id")
 	private Color color;
+	@OneToMany(orphanRemoval=true,mappedBy = "subject")
+	private List<TodoList> todolist=new ArrayList<TodoList>();
 	
 }

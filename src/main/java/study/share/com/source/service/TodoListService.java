@@ -68,4 +68,10 @@ public class TodoListService {
 	public List<Color> selectColorList() {
 		return colorRepository.findAll();
 	}
+
+	public List<TodoList> selectMyTodoList(String today, User user) {
+		String[] rDate = today.split(" ");
+		String savedDate =rDate[0];
+		return todoListRepository.findBySavedDateAndUser(savedDate,user);
+	}
 }

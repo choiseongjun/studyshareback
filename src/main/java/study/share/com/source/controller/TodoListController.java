@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sun.xml.bind.v2.TODO;
+
 import study.share.com.source.message.request.TodoListReq;
 import study.share.com.source.model.Color;
 import study.share.com.source.model.TodoList;
@@ -35,6 +37,18 @@ public class TodoListController {
 		try {
 			List<Color> todoColor = todoListService.selectColorList();
 			return new ResponseEntity<>(todoColor,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	@GetMapping(path="/todo/mytodolist/{today}")
+	public ResponseEntity<?> mytodolist(@PathVariable String today,Principal principal){
+		
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			List<TodoList> todolist = todoListService.selectMyTodoList(today,user.get());
+			return new ResponseEntity<>(todolist,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
