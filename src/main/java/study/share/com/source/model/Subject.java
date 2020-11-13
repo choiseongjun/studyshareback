@@ -29,7 +29,7 @@ public class Subject extends DateAudit{
 	
 	private String name;
 	
-	@ManyToOne(optional = false,fetch = FetchType.LAZY)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "color_id")
 	private Color color;
 	@OneToMany(orphanRemoval=true,mappedBy = "subject")

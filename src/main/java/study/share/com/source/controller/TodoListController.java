@@ -1,10 +1,9 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +22,7 @@ import study.share.com.source.message.request.TodoListReq;
 import study.share.com.source.model.Color;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
+import study.share.com.source.model.DTO.TodoListDTO;
 import study.share.com.source.service.TodoListService;
 import study.share.com.source.service.UserService;
 
@@ -46,7 +46,6 @@ public class TodoListController {
 	}
 	@PatchMapping(path="/todo/updateCheck/{todoId}")
 	public ResponseEntity<?> updateCheck(@PathVariable long todoId){
-		System.out.println("todoId====="+todoId);
 		try {
 			TodoList todoList=todoListService.updateTodoCheck(todoId);
 			return new ResponseEntity<>(todoList,HttpStatus.OK);
@@ -72,14 +71,36 @@ public class TodoListController {
 											;
 		return new ResponseEntity<>(todofeed,HttpStatus.OK);
 	}
-	
+	/*
+	 * user의 투두리스트 조회 (개인)
+	 * */
 	@GetMapping(path="/todo/mytodolist/{today}")
 	public ResponseEntity<?> mytodolist(@PathVariable String today,Principal principal){
 		
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			List<TodoList> todolist = todoListService.selectMyTodoList(today,user.get());
-			return new ResponseEntity<>(todolist,HttpStatus.OK);
+			long completeTodo= todoListService.countComplete(today,user);
+			long uncompleteTodo= todoListService.uncountComplete(today,user);
+
+			return new ResponseEntity<>(todolist.stream().map(TodoListDTO::new),HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	/*
+	 * user의 투두리스트 진행량 조회 (개인)
+	 * */
+	@GetMapping(path="/todo/mytodolistcount/{today}")
+	public ResponseEntity<?> mytodolistcount(@PathVariable String today,Principal principal){
+		
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			long completeTodo= todoListService.countComplete(today,user);
+			long uncompleteTodo= todoListService.uncountComplete(today,user);
+			
+			return new ResponseEntity<>(new TodoListDTO(completeTodo,uncompleteTodo),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

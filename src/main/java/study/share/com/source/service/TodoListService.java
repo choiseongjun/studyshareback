@@ -95,5 +95,17 @@ public class TodoListService {
 	public List<TodoList> selectUserTodoList() {
 		return todoListRepository.findAllByOrderByIdDesc();
 	}
+
+	public long countComplete(String today, Optional<User> user) {
+		String[] rDate = today.split(" ");
+		String savedDate =rDate[0];
+		return todoListRepository.countBySavedDateAndUserAndChecked(savedDate,user,true);
+	}
+
+	public long uncountComplete(String today, Optional<User> user) {
+		String[] rDate = today.split(" ");
+		String savedDate =rDate[0];
+		return todoListRepository.countBySavedDateAndUserAndChecked(savedDate,user,false);
+	}
  
 }
