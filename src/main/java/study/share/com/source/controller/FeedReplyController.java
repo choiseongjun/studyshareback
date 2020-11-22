@@ -2,11 +2,15 @@ package study.share.com.source.controller;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -94,12 +98,16 @@ public class FeedReplyController {
 	}
 	
 	@GetMapping("feed/reply/{id}")
-	public ResponseEntity<?> getfeedreply(@PathVariable long id){
+	public ResponseEntity<?> getfeedreply(@PathVariable long id
+			,@PageableDefault Pageable pageable){
 		try {
+//			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+//			pageable = PageRequest.of(page, 0, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+			pageable = PageRequest.of(0, 10, Sort.by("Id").descending());
 			Map<String, Object> map =new HashMap<String, Object>();
 			FeedList feedlist=new FeedList();
 			feedlist.setId(id);
-			Stream<FeedReply> feedReplylist=feedReplyService.getfeedreply(id);
+			List<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,pageable);
 			map.put("feedReplylist", feedReplylist);
 			map.put("feedlist",feedlist);
 			return new ResponseEntity<>(map,HttpStatus.OK);

@@ -35,6 +35,8 @@ public class TodoListDTO {
 	
 	private long uncompletetodo;
 	
+	private long percompletetodo;
+	
 	public TodoListDTO(TodoList todoList) {
 		this.setTodoContent(todoList.getTodoContent());
 		this.setHighlighter(todoList.getHighlighter());
@@ -45,9 +47,10 @@ public class TodoListDTO {
 		this.setChecked(todoList.isChecked());
 	}
 
-	public TodoListDTO(long completeTodo2, long uncompleteTodo2) {
+	public TodoListDTO(long completeTodo2, long uncompleteTodo2, long perCompleteTodo) {
 		this.setCompletetodo(completeTodo2);
 		this.setUncompletetodo(uncompleteTodo2);
+		this.setPercompletetodo(perCompleteTodo);
 	}
 
 }

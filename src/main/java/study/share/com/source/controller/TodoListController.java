@@ -80,8 +80,6 @@ public class TodoListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			List<TodoList> todolist = todoListService.selectMyTodoList(today,user.get());
-			long completeTodo= todoListService.countComplete(today,user);
-			long uncompleteTodo= todoListService.uncountComplete(today,user);
 
 			return new ResponseEntity<>(todolist.stream().map(TodoListDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
@@ -98,9 +96,13 @@ public class TodoListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			long completeTodo= todoListService.countComplete(today,user);
-			long uncompleteTodo= todoListService.uncountComplete(today,user);
+			long totalcompleteTodo= todoListService.uncountComplete(today,user);
+			System.out.println("completeTodo=="+completeTodo);
+			System.out.println("totalcompleteTodo=="+totalcompleteTodo);
+			long perCompleteTodo = Math.round(((double)completeTodo/(double)totalcompleteTodo)*100);
+			System.out.println("totalcompleteTodo=="+perCompleteTodo);
 			
-			return new ResponseEntity<>(new TodoListDTO(completeTodo,uncompleteTodo),HttpStatus.OK);
+			return new ResponseEntity<>(new TodoListDTO(completeTodo,totalcompleteTodo,perCompleteTodo),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

@@ -105,7 +105,7 @@ public class TodoListService {
 	public long uncountComplete(String today, Optional<User> user) {
 		String[] rDate = today.split(" ");
 		String savedDate =rDate[0];
-		return todoListRepository.countBySavedDateAndUserAndChecked(savedDate,user,false);
+		return todoListRepository.countBySavedDateAndUser(savedDate,user);
 	}
  
 }

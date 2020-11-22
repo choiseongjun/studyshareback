@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import study.share.com.source.model.FeedLike;
+import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
 
 @Data
@@ -27,7 +28,9 @@ public class UserResponse {
 	
 	private long followlistsize; 
 	
-	public UserResponse(User user, long followerlistsize, long followlistsize) {
+	private List<Follow> followlist;
+	
+	public UserResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setSex(user.getSex());
@@ -36,6 +39,7 @@ public class UserResponse {
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
+		this.setFollowlist(followlist);
 	}
 
 }

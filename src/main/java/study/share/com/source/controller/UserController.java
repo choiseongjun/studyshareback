@@ -36,10 +36,12 @@ public class UserController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			long followerlistsize=userService.followerlist(user).size();
 			long followlistsize = userService.followlist(user).size();
+			List<Follow> followlist = user.get().getFollow();
+			
 			if(user.get().getUserProfileImage()==null) {//image notfound
-				return ResponseEntity.ok(new UserResponse(user.get(),followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
+				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
 			}else {
-				return ResponseEntity.ok(new UserProfileResponse(user.get(),followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
+				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -54,10 +56,12 @@ public class UserController {
 			Optional<User> user = userService.findUserId(id);
 			long followerlistsize=userService.followerlist(user).size();
 			long followlistsize = userService.followlist(user).size();
+			List<Follow> followlist = user.get().getFollow();
+
 			if(user.get().getUserProfileImage()==null) {//image notfound
-				return ResponseEntity.ok(new UserResponse(user.get(),followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
+				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
 			}else {
-				return ResponseEntity.ok(new UserProfileResponse(user.get(),followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
+				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -115,6 +119,7 @@ public class UserController {
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
+	/*id는 팔로잉삭제*/
 	@DeleteMapping("/user/following/{id}")
 	public ResponseEntity<?> canclefollowing(@PathVariable long id,Principal principal){
 		
