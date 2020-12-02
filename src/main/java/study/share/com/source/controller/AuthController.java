@@ -161,10 +161,10 @@ public class AuthController {
             //long id = userRepository.selectusermaxid();
             user.setRoles(roles);
             User userone = userRepository.save(user);
-            System.out.println(signUpRequest.getProfileimagePaths());
-            if(!signUpRequest.getProfileimagePaths().equals("undefiend")) {
-            	userService.updateProfileImage(signUpRequest.getProfileimagePaths(),userone.getId());
-            }
+//            if(!signUpRequest.getProfileimagePaths().equals("undefiend")) {
+//            	userService.updateProfileImage(signUpRequest.getProfileimagePaths(),userone.getId());
+//            }
+            
 //            if(!(signUpRequest.getGtoken().equals(""))) {
 //            	externalAccountService.connect(userone.getUserid(), signUpRequest.getAccountType(), signUpRequest.getGtoken());
 //            }
