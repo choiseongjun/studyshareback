@@ -42,8 +42,8 @@ public class UserService {
 		Optional<User> touser = userRepository.findById(id);
 		
 		Follow follow=new Follow();
-		follow.setToUser(touser.get());
-		follow.setFromUser(user.get());
+		follow.setToUser(user.get());//팔로잉 하는 사람 ->팔로잉 거는사람 
+		follow.setFromUser(touser.get());//팔로잉 당하는 사람 
 		
 		User toUserone = followRepository.save(follow).getToUser();
 		return toUserone;
@@ -53,7 +53,7 @@ public class UserService {
 		
 		Optional<User> touser = userRepository.findById(id);
 		
-		followRepository.deleteByFromUserIdAndToUserId(user.get().getId(),touser.get().getId());
+		followRepository.deleteByFromUserIdAndToUserId(touser.get().getId(),user.get().getId());
 		return touser.get();
 	}
 
