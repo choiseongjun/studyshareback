@@ -37,9 +37,7 @@ public class UserController {
 			long followerlistsize=userService.followerlist(user).size();
 			long followlistsize = userService.followlist(user).size();
 			List<Follow> followlist = user.get().getFollow();
-			System.out.println("=========");
-			System.out.println(followlist);
-			System.out.println("====aaa=====");
+			
 			if(user.get().getUserProfileImage()==null) {//image notfound
 				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
 			}else {
@@ -106,11 +104,11 @@ public class UserController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			User users = userService.following(id,user);
-			System.out.println("id값은????"+id);
+			
 			FeedLike feedlike =new FeedLike();
 				for(Follow f:users.getFollow()) {
-					if(f.getFromUser().getId()==user.get().getId()) {
-						feedlike.setUserkey(users.getId());
+					if(f.getFromUser().getId()==id) {
+						feedlike.setUserkey(id);
 						feedlike.setTempFollow(true);//임시변수로 팔로우한지 안한지 처리
 				}
 			}
