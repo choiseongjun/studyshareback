@@ -37,7 +37,7 @@ public class FeedReply extends DateAudit{
 	@JoinColumn(name = "feedlist_id")
 	@JsonIgnore
 	private FeedList feedlist;
-	@ManyToOne(optional = false,fetch = FetchType.LAZY)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;
 	@Transient//댓글 추가할때 상태변화로 바로 넣을수있도록 임시조치

@@ -1,5 +1,6 @@
 package study.share.com.source.model.DTO;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class FeedListDTO {
 	private List<FeedReply> feedreply=new ArrayList<FeedReply>();
 	
 	private long feedreplysize;
+	private LocalDateTime createdAt;
+
 	
 	
 	public FeedListDTO(FeedList feedlist) {
@@ -47,6 +50,8 @@ public class FeedListDTO {
 		this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
 		this.setFeedlike(feedlist.getFeedlike());
 		this.setFeedreply(feedreply);
+		this.setCreatedAt(feedlist.getCreatedAt());
+	
 //		for(int i=0;i<feedlist.getFeedlike().size();i++) {
 //			this.setFeedlikeuser(feedlist.getFeedlike().get(i).getUser());	
 //		}
