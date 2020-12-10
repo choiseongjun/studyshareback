@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,8 @@ public class UserService {
 	FollowRepository followRepository;
 	@Autowired
 	UserProfileImageRepository userProfileImageRepository;
+	@Autowired
+    PasswordEncoder encoder;
 	
 	public Optional<User> findUserNickname(String name) {
 		Optional<User> user = userRepository.findByNickname(name);
@@ -118,6 +121,17 @@ public class UserService {
 
 	public List<User> searchUserNickname(String nickname) {
 		return userRepository.findByNicknameLike("%"+nickname+"%");
+	}
+
+	public void updateUserInfo(Optional<User> user, User userInfo) {
+		user.ifPresent(updateUser->{
+			updateUser.setAge(userInfo.getAge());
+			updateUser.setNickname(userInfo.getNickname());
+			updateUser.setSex(userInfo.getSex());
+			updateUser.setIntroduce(userInfo.getIntroduce());
+			updateUser.setPassword(encoder.encode(userInfo.getPassword2()));
+			userRepository.save(updateUser);
+		});
 	}
 
 	
