@@ -35,10 +35,7 @@ import study.share.com.source.repository.RoleRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.security.jwt.JwtProvider;
 import study.share.com.source.security.services.UserPrinciple;
-import study.share.com.source.service.AuthTokenService;
-import study.share.com.source.service.ExternalAccountService;
-import study.share.com.source.service.S3Service;
-import study.share.com.source.service.UserService;
+import study.share.com.source.service.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -67,6 +64,9 @@ public class AuthController {
 
     @Autowired
     ExternalAccountService externalAccountService;
+
+    @Autowired
+    VerificationTokenService verificationTokenService;
 
     @PostMapping("/signin")
     public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
@@ -168,6 +168,12 @@ public class AuthController {
 //            if(!(signUpRequest.getGtoken().equals(""))) {
 //            	externalAccountService.connect(userone.getUserid(), signUpRequest.getAccountType(), signUpRequest.getGtoken());
 //            }
+
+
+            if(!StringUtils.isEmpty(user.getEmail())) {
+                verificationTokenService.sendAuthEmail(user.getId(), user.getEmail());
+            }
+
             return new ResponseEntity<>("성공적으로 가입되었습니다.", HttpStatus.OK);
         }catch(Exception e) {
         	e.printStackTrace();

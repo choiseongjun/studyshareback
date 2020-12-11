@@ -68,6 +68,8 @@ public class User{
     
     private long age;
 
+    private boolean verified = false;
+
     @NotBlank
     @Size(min=6, max = 100)
     @JsonIgnore

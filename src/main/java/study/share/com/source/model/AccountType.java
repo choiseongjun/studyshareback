@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.commons.lang3.StringUtils;
 
 public enum  AccountType {
-    email, google, naver, kakao, none;
+    email, google, naver, kakao, none, phone_number;
 
     public static AccountType ofAccountType(String name) {
         for(AccountType type : values()){

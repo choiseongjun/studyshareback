@@ -8,10 +8,10 @@ spring:
 
   datasource:
       #driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      driverClassName : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: "jdbc:log4jdbc:mysql://ls-5e1f6dc6cda34ee3ff0a83dddc17e6772c6fe068.cpd3bfmvavpa.ap-northeast-2.rds.amazonaws.com:3306/studyshare?serverTimezone=UTC&characterEncoding=UTF-8"
-      username: dbmasteruser
-      password: !
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: "jdbc:log4jdbc:mysql://127.0.0.1:3306/studyshare?characterEncoding=UTF-8&serverTimezone=UTC"
+    username: root
+    password:
   jpa:
         show-sql: false
         hibernate:
@@ -33,8 +33,11 @@ spring:
             scope:
               - profile
               - email
+  messages:
+    basename: message/messages
+    encoding: UTF-8
 
-                     
+
 server:
     port: 8080
     
