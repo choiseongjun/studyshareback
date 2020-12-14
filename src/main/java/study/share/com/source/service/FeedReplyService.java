@@ -46,7 +46,7 @@ public class FeedReplyService {
 
 	public List<FeedReply> getfeedreply(long id, Pageable pageable) {
 		//List<FeedReply> feedreplylist=feedListRepository.findById(id).get().getFeedreply();
-		List<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_id(id,pageable);
+		List<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteyn(id,pageable,'N');
 		return feedreplylist;
 //		return feedreplylist.stream().filter(t->t.getDeleteyn()=='N').sorted(new Comparator<FeedReply>() {
 //			@Override
