@@ -1,22 +1,19 @@
 package study.share.com.source.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import study.share.com.source.model.AccountType;
-import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.model.User;
 import study.share.com.source.model.exception.GeneralErrorException;
 import study.share.com.source.service.ExternalAccountService;
 import study.share.com.source.service.UserService;
-
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/account")

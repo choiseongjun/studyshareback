@@ -20,22 +20,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.ApiOperation;
 import study.share.com.source.message.request.LoginForm;
 import study.share.com.source.message.request.SignUpForm;
 import study.share.com.source.model.AccountType;
-import study.share.com.source.model.DTO.AuthTokenDTO;
-import study.share.com.source.model.exception.GeneralErrorException;
 import study.share.com.source.model.Role;
 import study.share.com.source.model.RoleName;
 import study.share.com.source.model.User;
+import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.repository.RoleRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.security.jwt.JwtProvider;
 import study.share.com.source.security.services.UserPrinciple;
-import study.share.com.source.service.*;
+import study.share.com.source.service.AuthTokenService;
+import study.share.com.source.service.ExternalAccountService;
+import study.share.com.source.service.S3Service;
+import study.share.com.source.service.UserService;
+import study.share.com.source.service.VerificationTokenService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -68,6 +78,7 @@ public class AuthController {
     @Autowired
     VerificationTokenService verificationTokenService;
 
+    @ApiOperation(value="로그인",notes="로그인")
     @PostMapping("/signin")
     public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
@@ -90,7 +101,7 @@ public class AuthController {
             map.put("ROLE", ROLE);
             map.put("accessToken", authTokenDTO.getAccessToken());
             map.put("jwt", authTokenDTO.getAccessToken());
-            map.put("refreshToken", authTokenDTO.getAccessToken());
+            map.put("refreshToken", authTokenDTO.getRefreshToken());
             return ResponseEntity.ok(map);
     	}catch(Exception e) {
     		//e.printStackTrace();
@@ -99,7 +110,7 @@ public class AuthController {
     	
     }
 
-
+    @ApiOperation(value="외부로그인(소셜)",notes="외부로그인(소셜)")
     @PostMapping("/signin_by_external")
     public ResponseEntity<?> signInByExternal(
             @RequestParam("account_type") AccountType accountType,
@@ -113,12 +124,42 @@ public class AuthController {
         map.put("ROLE", "ROLE_USER");
         return ResponseEntity.ok(map);
     }
+    @ApiOperation(value="유저아이디중복체크",notes="유저아이디중복체크")
+    @PostMapping("/check/userid")
+    public ResponseEntity<?> checkUserId(@RequestBody SignUpForm signUpRequest) {
+    	 
+		 if(userRepository.existsByUserid(signUpRequest.getUserid())) {
+	         return new ResponseEntity<String>("이미 존재하는 아이디입니다.",HttpStatus.BAD_REQUEST);
+	     }
+		 return new ResponseEntity<String>("사용 가능한 아이디입니다.", HttpStatus.OK);
 
+    }
+    @ApiOperation(value="유저닉네임중복체크",notes="유저닉네임중복체크")
+    @PostMapping("/check/username")
+    public ResponseEntity<?> checkUserName(@RequestBody SignUpForm signUpRequest) {
+    	 
+    
+		 if(userRepository.existsByNickname(signUpRequest.getNickname())) {
+			 return new ResponseEntity<String>("이미 존재하는 닉네임입니다.",
+	                    HttpStatus.BAD_REQUEST);
+	     }
+		 return new ResponseEntity<String>("사용 가능한 닉네임입니다.", HttpStatus.OK);
+    }
+    @ApiOperation(value="유저이메일중복체크",notes="유저이메일중복체크")
+    @PostMapping("/check/useremail")
+    public ResponseEntity<?> checkUserEmail(@RequestBody SignUpForm signUpRequest) {
+    	
+		 if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+			 return new ResponseEntity<String>("이미 존재하는 이메일입니다",
+	                    HttpStatus.BAD_REQUEST);
+	     }
+		 return new ResponseEntity<String>("사용 가능한 이메일입니다.", HttpStatus.OK);
+    }
+    @ApiOperation(value="회원가입",notes="회원가입")
     @Transactional
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignUpForm signUpRequest) {
     	
-    	System.out.println(signUpRequest);
         if(userRepository.existsByNickname(signUpRequest.getNickname())) {
             return new ResponseEntity<String>("닉네임이 이미 존재합니다!",
                     HttpStatus.BAD_REQUEST);
@@ -132,7 +173,7 @@ public class AuthController {
         try {
         	// Creating user's account
             User user = new User(signUpRequest.getUserid(), signUpRequest.getNickname(),signUpRequest.getEmail(),
-            		signUpRequest.getSex(), encoder.encode(signUpRequest.getPassword()));
+            		signUpRequest.getSex(), encoder.encode(signUpRequest.getPassword()),signUpRequest.getAge());
 
             Set<String> strRoles = signUpRequest.getRole();
             Set<Role> roles = new HashSet<>();
@@ -182,6 +223,7 @@ public class AuthController {
         
         
     }
+    @ApiOperation(value="회원이미지 첨부",notes="회원이미지 첨부")
     @PostMapping("/profileimage")
 	public ResponseEntity<?> saveProfileimage(@RequestPart(name = "images", required = false) MultipartFile file,Principal principal) throws IOException {
     	try {
@@ -199,6 +241,7 @@ public class AuthController {
     	}
 	}
  
+    @ApiOperation(value="토큰재발행",notes="토큰재발행")
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestParam(name = "refresh_token") String refreshToken) throws IOException {
         try {
@@ -212,7 +255,8 @@ public class AuthController {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+    @ApiOperation(value="로그아웃",notes="로그아웃")
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader(value = "Authorization") String token) throws IOException {
 

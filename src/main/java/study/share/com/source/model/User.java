@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import study.share.com.source.model.common.DateAudit;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {
@@ -45,7 +46,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User{
+public class User extends DateAudit{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,10 +64,10 @@ public class User{
     @Size(max = 50)
     @Email
     private String email;
-    
+    @JsonIgnore
     private String sex;
-    
-    private long age;
+    @JsonIgnore
+    private String age;
 
     private boolean verified = false;
 
@@ -96,12 +97,13 @@ public class User{
     @OneToOne(mappedBy="user", orphanRemoval = true,fetch = FetchType.LAZY)
 	private UserProfileImage userProfileImage;
     
-    public User(String userid,String nickname, String email,String sex,String password) {
+    public User(String userid,String nickname, String email,String sex,String password,String age) {
         this.userid = userid;
         this.nickname = nickname;
         this.email = email;
         this.sex=sex;
         this.password = password;
+        this.age = age;
     }
 //    public User(String userid2, String nickname2, String sex2, String email2, String encode) {
 //		// TODO Auto-generated constructor stub

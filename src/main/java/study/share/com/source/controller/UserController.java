@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
+import study.share.com.source.repository.UserRepository;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
 
@@ -30,7 +32,10 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	FeedListService feedListService;
+	@Autowired
+	UserRepository userRepository;
 	
+	@ApiOperation(value="내정보 불러오기",notes="내정보 불러오기")
 	@GetMapping("/api/auth/userinfo")
 	public ResponseEntity<?> userAccess(Principal principal) {
 		
@@ -50,6 +55,7 @@ public class UserController {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}
 	}
+	@ApiOperation(value="내정보 수정",notes="내정보 수정")
 	@PatchMapping("/user/updateUser")
 	public ResponseEntity<?> updateUser(@RequestBody User userInfo,Principal principal){
 		System.out.println("User정보  ");
@@ -62,6 +68,7 @@ public class UserController {
 		}
 	}
 	/*다른사람 정보불러오기*/
+	@ApiOperation(value="다른사람 정보불러오기",notes="다른사람 정보불러오기")
 	@GetMapping("/user/otheruserInfo/{id}")
 		public ResponseEntity<?> otheruserInfo(@PathVariable long id) {
 		
@@ -84,6 +91,7 @@ public class UserController {
 	/*내 팔로워리스트 불러오기 2020-09-26 choiseongjun
 	 * DTO로 변환필요..
 	 * */
+	@ApiOperation(value="내 팔로워리스트 불러오기",notes="내 팔로워리스트 불러오기")
 	@GetMapping("/user/followerlist/{id}")
 	public ResponseEntity<?> followerlist(@PathVariable long id){
 		try {
@@ -99,6 +107,7 @@ public class UserController {
 	/*내 팔로잉리스트 불러오기 2020-11-03 choiseongjun
 	 * DTO로 변환필요..
 	 * */
+	@ApiOperation(value="내 팔로잉리스트 불러오기",notes="내 팔로잉리스트 불러오기")
 	@GetMapping("/user/followinglist/{id}")
 	public ResponseEntity<?> followinglist(@PathVariable long id){
 		try {
@@ -111,6 +120,7 @@ public class UserController {
 		}
 	}
 	/*id는 팔로잉당하는사람*/
+	@ApiOperation(value="팔로잉당하는사람",notes="팔로잉당하는사람")
 	@PostMapping("/user/following/{id}")
 	public ResponseEntity<?> following(@PathVariable long id,Principal principal){
 	
@@ -133,6 +143,7 @@ public class UserController {
 		}
 	}
 	/*id는 팔로잉삭제*/
+	@ApiOperation(value="팔로잉삭제",notes="팔로잉삭제")
 	@DeleteMapping("/user/following/{id}")
 	public ResponseEntity<?> canclefollowing(@PathVariable long id,Principal principal){
 		
@@ -153,6 +164,7 @@ public class UserController {
 	/*네비게이션 바에서 유저검색창
 	 * 2020.11.04
 	 * */
+	@ApiOperation(value="유저검색",notes="유저검색")
 	@GetMapping("/user/userSearch/{nickname}")
 	public ResponseEntity<?> userSearch(@PathVariable String nickname){
 		
@@ -164,5 +176,20 @@ public class UserController {
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+	@ApiOperation(value="아이디 중복체크",notes="아이디 중복체크")
+	@GetMapping("/user/emailcheck/{userId}")
+	public ResponseEntity<?> emailcheck(@PathVariable String userId){
+		
+		try {
+			if(userRepository.existsByUserid(userId)) {
+	            return new ResponseEntity<String>("아이디가 이미 존재합니다!",
+	                    HttpStatus.BAD_REQUEST);
+	        }else {
+	        	return new ResponseEntity<String>("사용 가능한 아이디입니다.",
+	                    HttpStatus.OK);	        }
+		}catch(Exception e) {
+			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 }

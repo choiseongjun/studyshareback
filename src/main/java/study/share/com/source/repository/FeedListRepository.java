@@ -2,6 +2,8 @@ package study.share.com.source.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,10 +22,13 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 
 	List<FeedList> findAllByDeleteyn(char c);
 
-	List<FeedList> findAllByDeleteynOrderByIdDesc(char c);
+	Page<FeedList> findAllByDeleteynOrderByIdDesc(Pageable pageable, char c);
 	@Query("SELECT IFNULL(MAX(totallike),0)+1 FROM FeedList")
 	long selectmaxtotalLiekid();
 
 	List<FeedReply> findByIdAndFeedreplyDeleteyn(long id, char c);
+
+	Page <FeedList> findAllByuser_id(Pageable pageable,long user_id);
+
 
 }

@@ -23,9 +23,7 @@ public class FeedListDTO {
 	
 	private long totallike;
 	
-	private long userKey;
-	
-	private User user;
+	private String nickname;
 	
 	private UserProfileImage userProfileImage;
 	
@@ -45,7 +43,7 @@ public class FeedListDTO {
 		this.setContent(feedlist.getContent());
 		this.setTotallike(feedlist.getFeedlike().size());
 		this.setUploadfile(feedlist.getUploadfile());
-		this.setUser(feedlist.getUser());
+		this.setNickname(feedlist.getUser().getNickname());
 		this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
 		this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
 		this.setFeedlike(feedlist.getFeedlike());

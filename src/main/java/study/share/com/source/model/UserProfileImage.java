@@ -34,5 +34,6 @@ public class UserProfileImage {
 	@JsonIgnore
 	private String ipaddress;
 	@OneToOne
+	@JsonIgnore
 	private User user;
 }

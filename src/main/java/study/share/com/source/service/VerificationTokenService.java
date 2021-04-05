@@ -44,8 +44,9 @@ public class VerificationTokenService {
         String token = createVerificationToken(userNo, AccountType.email, email);
 
         String title = messageSource.getMessage("email.auth.title", null, LocaleContextHolder.getLocale());
+        //String title ="테스트성준@#!@#!@##!@";
         String content = messageSource.getMessage("email.auth.content", new Object[]{String.format(EMAIL_VERIFY_API, token)}, LocaleContextHolder.getLocale());
-
+        //String content = "테스트본문@!#!@#";
         // TODO: 2020/12/05 Async 처리 필요( 너무 느림 .. )
         mailService.sendMail(email, title, content);
     }
@@ -75,6 +76,9 @@ public class VerificationTokenService {
         // TODO: 2020/12/05 사용자 테이블에 이메일 인증 컬럼 및 이메일 인증 마킹
         user.setVerified(true);
         userService.updateUser(user);
+
+        verificationToken.setUsedYn(true);
+        verificationTokenService.updateVerification(verificationToken);
 
     }
 
@@ -115,4 +119,7 @@ public class VerificationTokenService {
         return DigestUtils.md5Hex(stringBuilder.toString()).toUpperCase();
     }
 
+    public void updateVerification(VerificationToken verificationToken) {
+        verificationTokenRepository.save(verificationToken);
+    }
 }

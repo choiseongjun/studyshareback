@@ -28,6 +28,8 @@ public class SignUpForm {
     
     private String sex;
     
+    private String age;
+    
     private Set<String> role;
     
     @NotBlank

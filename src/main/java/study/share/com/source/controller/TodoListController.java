@@ -1,11 +1,7 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +14,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+import study.share.com.source.message.request.TodoCommentReq;
 import study.share.com.source.message.request.TodoListReq;
-import study.share.com.source.model.Color;
+import study.share.com.source.message.response.TodoDateResponse;
+import study.share.com.source.model.TodoComment;
+import study.share.com.source.model.TodoDate;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
-import study.share.com.source.model.DTO.TodoListDTO;
+import study.share.com.source.repository.TodoCommentRepository;
+import study.share.com.source.repository.TodoDateRepository;
+import study.share.com.source.service.TodoCommentService;
+import study.share.com.source.service.TodoDateService;
 import study.share.com.source.service.TodoListService;
 import study.share.com.source.service.UserService;
 
@@ -33,116 +36,281 @@ public class TodoListController {
 	UserService userService;	
 	@Autowired
 	TodoListService todoListService;
+	@Autowired
+	TodoDateService todoDateService;
+	@Autowired
+	TodoCommentService todoCommentService;
+	@Autowired
+	TodoDateRepository todoDateRepository;
+	@Autowired
+	TodoCommentRepository todoCommentRepository;
 	
-	@GetMapping(path="/todo/color")
-	public ResponseEntity<?> todocolor() {
-		try {
-			List<Color> todoColor = todoListService.selectColorList();
-			return new ResponseEntity<>(todoColor,HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
-	}
-	@PatchMapping(path="/todo/updateCheck/{todoId}")
-	public ResponseEntity<?> updateCheck(@PathVariable long todoId){
-		try {
-			TodoList todoList=todoListService.updateTodoCheck(todoId);
-			return new ResponseEntity<>(todoList,HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
-	} 
-	
-	/*
-	 * user의 투두리스트 조회 
-	 * */
-	@GetMapping(path="/todo/todofeedlist")
-	public ResponseEntity<?> todofeedlist(){
-		TodoList todos = new TodoList();
-		List<TodoList> todoFeedList=todoListService.selectUserTodoList();
-		List<Map<User, List<TodoList>>> todofeed=todoFeedList
-											.stream()  
-											.collect(Collectors.groupingBy(TodoList::getSavedDate,
-													Collectors.groupingBy(TodoList::getUser)))
-											.values().stream()
-											.collect(Collectors.toList())
-											;
-		return new ResponseEntity<>(todofeed,HttpStatus.OK);
-	}
-	/*
-	 * user의 투두리스트 조회 (개인)
-	 * */
-	@GetMapping(path="/todo/mytodolist/{today}")
-	public ResponseEntity<?> mytodolist(@PathVariable String today,Principal principal){
-		
-		try {
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			List<TodoList> todolist = todoListService.selectMyTodoList(today,user.get());
-
-			return new ResponseEntity<>(todolist.stream().map(TodoListDTO::new),HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
-	}
-	/*
-	 * user의 투두리스트 진행량 조회 (개인)
-	 * */
-	@GetMapping(path="/todo/mytodolistcount/{today}")
-	public ResponseEntity<?> mytodolistcount(@PathVariable String today,Principal principal){
-		
-		try {
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			long completeTodo= todoListService.countComplete(today,user);
-			long totalcompleteTodo= todoListService.uncountComplete(today,user);
-			System.out.println("completeTodo=="+completeTodo);
-			System.out.println("totalcompleteTodo=="+totalcompleteTodo);
-			long perCompleteTodo = Math.round(((double)completeTodo/(double)totalcompleteTodo)*100);
-			System.out.println("totalcompleteTodo=="+perCompleteTodo);
-			
-			return new ResponseEntity<>(new TodoListDTO(completeTodo,totalcompleteTodo,perCompleteTodo),HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
-	}
-	
-	
+	@ApiOperation(value="내 투두리스트 작성",notes="내 투두리스트 작성")
 	@PostMapping(path="/user/todo")
 	public ResponseEntity<?> addtodo(@RequestBody TodoListReq todoListreq,Principal principal) {
 
 	
 		try {
+			if(principal==null) { 
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+			}  
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			TodoList todoList =todoListService.addtodo(todoListreq,user);
-			System.out.println(todoList.toString());
+			TodoDate todoDate =new TodoDate();
+			todoDate.setSavedDate(todoListreq.getSavedDate());
+			todoDate.setUser(user.get());
+			
+			TodoList todoList =todoListService.saveTodoList(todoDate,todoListreq);
+			
+			
 			return new ResponseEntity<>(todoList,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
-	@PatchMapping(path="/user/todo")//임시로 patch로 함 
-	public ResponseEntity<?> listtodo(@RequestBody Map<String, String> data,Principal principal) {
-		
-		//String savedDate = data.get("savedDate");
-		String savedDate=data.get("savedDate");
-		Optional<User> user = userService.findUserNickname(principal.getName());
-		List<TodoList> todoList=todoListService.listtodo(savedDate,user);
-		return new ResponseEntity<>(todoList,HttpStatus.OK);
+	@ApiOperation(value="내 투두리스트 커멘츠 작성",notes="내 투두리스트 커멘츠 작성")
+	@PostMapping(path="/user/todoComment")
+	public ResponseEntity<?> addtodoComment(@RequestBody TodoCommentReq todoCommentReq,Principal principal) {
+
+	
+		try {
+			if(principal==null) { 
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+			}
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			
+			TodoDate todoDate =new TodoDate();
+			todoDate.setSavedDate(todoCommentReq.getSavedDate());
+			todoDate.setUser(user.get());
+
+			TodoComment todoCmt =new TodoComment();
+			todoCmt.setTodoDate(todoDate);
+			TodoDate returnTodoDate=todoDateRepository.findBySavedDateAndUser(todoCommentReq.getSavedDate(),user.get());
+			  
+			if(returnTodoDate!=null) {
+				boolean isCheck=todoCommentRepository.existsByTodoDate(returnTodoDate);//기존에 값이 있는지..
+				if(isCheck){
+					return new ResponseEntity<>("값이 이미 존재합니다.",HttpStatus.OK);
+				}
+			}
+			
+			TodoComment todoComment=todoCommentService.saveComment(todoDate,todoCommentReq);
+			return new ResponseEntity<>(todoComment,HttpStatus.OK);
+				     
+			
+			
+			
+//			if(todoCommentRepository.existsByTodoDate(todoCmt)) {
+//				return new ResponseEntity<>("값이 이미 존재합니다.",HttpStatus.OK);
+//			}else {
+//				TodoComment todoComment=todoCommentService.saveComment(todoDate,todoCommentReq);
+//				return new ResponseEntity<>(todoComment,HttpStatus.OK);
+//			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		} 
 	}
-	@DeleteMapping(path="/todo/deleteTodo/{todoId}")
-	public ResponseEntity<?> deletetodo(@PathVariable long todoId,Principal principal){
+	/*
+	 * user의 투두리스트 조회 (개인)
+	 * */
+	@ApiOperation(value="내 투두리스트 조회",notes="내 투두리스트 조회")
+	@GetMapping(path="/todo/mytodolist/{savedDate}")
+	public ResponseEntity<?> mytodolist(@PathVariable String savedDate,Principal principal){
 		
 		try {
-			todoListService.deletetodo(todoId);
-			return new ResponseEntity<>(todoId,HttpStatus.OK);
+			if(principal==null) { 
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+			}
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			TodoDate todolist = todoListService.selectMyTodoList(savedDate,user.get());
+			  
+			return new ResponseEntity<>(new TodoDateResponse(todolist),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
-		
 	}
+	@ApiOperation(value="내 투두리스트 수정",notes="내 투두리스트 수정")
+	@PatchMapping(path="/user/todo/{id}") 
+	public ResponseEntity<?> updateTodolist(@PathVariable long id,@RequestBody TodoListReq todoListReq,Principal principal){
+		try { 
+			if(principal==null) { 
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+			}
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<TodoList> todolist = todoListService.updateMyTodoList(id,todoListReq); 
+			
+			return new ResponseEntity<>(todolist,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+	@ApiOperation(value="내 투두리스트 코맨트 수정",notes="내 투두리스트 코맨트  수정")
+	@PatchMapping(path="/user/todoComment/{id}") 
+	public ResponseEntity<?> updateTodoComment(@PathVariable long id,@RequestBody TodoCommentReq todoCommentReq,Principal principal){
+		
+		try { 
+			if(principal==null) { 
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+			}
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<TodoComment> todoComment = todoCommentService.updateMyTodoComment(id,todoCommentReq);
+ 
+			return new ResponseEntity<>(todoComment,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+	@ApiOperation(value="내 투두리스트 코맨트 삭제",notes="내 투두리스트 코맨트  삭제")
+	@DeleteMapping(path="/user/todoComment/{id}") 
+	public ResponseEntity<?> deleteTodoComment(@PathVariable long id,Principal principal){
+			
+			try { 
+				if(principal==null) { 
+					return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+				}
+				todoCommentService.deleteTodoComment(id);
+	 
+				return new ResponseEntity<>(id,HttpStatus.OK);
+			}catch(Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+			}
+	}
+	@ApiOperation(value="내 투두리스트 삭제",notes="내 투두리스트  삭제")
+	@DeleteMapping(path="/user/todo/{id}") 
+	public ResponseEntity<?> deleteTodoList(@PathVariable long id,Principal principal){
+		try { 
+			if(principal==null) {  
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+			}
+			todoListService.deleteTodoList(id);
+   
+			return new ResponseEntity<>(id,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		} 
+	}
+	/*
+//	@ApiOperation(value="투두 컬러 조회",notes="투두 컬러 조회")
+//	@GetMapping(path="/todo/color")
+//	public ResponseEntity<?> todocolor() {
+//		try {
+//			List<Color> todoColor = todoListService.selectColorList();
+//			return new ResponseEntity<>(todoColor,HttpStatus.OK);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//	}
+//	@ApiOperation(value="투두리스트 체크",notes="투두리스트 체크")
+//	@PatchMapping(path="/todo/updateCheck/{todoId}")
+//	public ResponseEntity<?> updateCheck(@PathVariable long todoId){
+//		try {
+//			TodoList todoList=todoListService.updateTodoCheck(todoId);
+//			return new ResponseEntity<>(todoList,HttpStatus.OK);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//	} 
+//	
+//	/*
+//	 * user의 투두리스트 조회 
+//	 * */
+//	@ApiOperation(value="투두리스트 전체조회",notes="투두리스트 전체조회")
+//	@GetMapping(path="/todo/todofeedlist")
+//	public ResponseEntity<?> todofeedlist(){
+//		TodoList todos = new TodoList();
+//		List<TodoList> todoFeedList=todoListService.selectUserTodoList();
+//		List<Map<User, List<TodoList>>> todofeed=todoFeedList
+//											.stream()  
+//											.collect(Collectors.groupingBy(TodoList::getSavedDate,
+//													Collectors.groupingBy(TodoList::getUser)))
+//											.values().stream()
+//											.collect(Collectors.toList())
+//											;
+//		return new ResponseEntity<>(todofeed,HttpStatus.OK);
+//	}
+//	/*
+//	 * user의 투두리스트 조회 (개인)
+//	 * */
+//	@ApiOperation(value="내 투두리스트 조회",notes="내 투두리스트 조회")
+//	@GetMapping(path="/todo/mytodolist/{today}")
+//	public ResponseEntity<?> mytodolist(@PathVariable String today,Principal principal){
+//		
+//		try {
+//			Optional<User> user = userService.findUserNickname(principal.getName());
+//			List<TodoList> todolist = todoListService.selectMyTodoList(today,user.get());
+//
+//			return new ResponseEntity<>(todolist.stream().map(TodoListDTO::new),HttpStatus.OK);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//	}
+//	/*
+//	 * user의 투두리스트 진행량 조회 (개인)
+//	 * */
+//	@ApiOperation(value="내 투두리스트 진행량 조회",notes="내 투두리스트 진행량 조회")
+//	@GetMapping(path="/todo/mytodolistcount/{today}")
+//	public ResponseEntity<?> mytodolistcount(@PathVariable String today,Principal principal){
+//		
+//		try {
+//			Optional<User> user = userService.findUserNickname(principal.getName());
+//			long completeTodo= todoListService.countComplete(today,user);
+//			long totalcompleteTodo= todoListService.uncountComplete(today,user);
+//			long perCompleteTodo = Math.round(((double)completeTodo/(double)totalcompleteTodo)*100);
+//			
+//			return new ResponseEntity<>(new TodoListDTO(completeTodo,totalcompleteTodo,perCompleteTodo),HttpStatus.OK);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//	}
+//	
+//	@ApiOperation(value="내 투두리스트 작성",notes="내 투두리스트 작성")
+//	@PostMapping(path="/user/todo")
+//	public ResponseEntity<?> addtodo(@RequestBody TodoListReq todoListreq,Principal principal) {
+//
+//	
+//		try {
+//			Optional<User> user = userService.findUserNickname(principal.getName());
+//			TodoList todoList =todoListService.addtodo(todoListreq,user);
+//			System.out.println(todoList.toString());
+//			return new ResponseEntity<>(todoList,HttpStatus.OK);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//	}
+//	@ApiOperation(value="내 투두리스트 수정",notes="내 투두리스트 수정")
+//	@PatchMapping(path="/user/todo")//임시로 patch로 함 
+//	public ResponseEntity<?> listtodo(@RequestBody Map<String, String> data,Principal principal) {
+//		
+//		//String savedDate = data.get("savedDate");
+//		String savedDate=data.get("savedDate");
+//		Optional<User> user = userService.findUserNickname(principal.getName());
+//		List<TodoList> todoList=todoListService.listtodo(savedDate,user);
+//		return new ResponseEntity<>(todoList,HttpStatus.OK);
+//	}
+//	
+//	@ApiOperation(value="내 투두리스트 삭제",notes="내 투두리스트 삭제")
+//	@DeleteMapping(path="/todo/deleteTodo/{todoId}")
+//	public ResponseEntity<?> deletetodo(@PathVariable long todoId,Principal principal){
+//		
+//		try {
+//			todoListService.deletetodo(todoId);
+//			return new ResponseEntity<>(todoId,HttpStatus.OK);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
+//		
+//	}
 }

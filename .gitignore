@@ -17,7 +17,9 @@ local.properties
 
 # ignore properties file
 config.properties
-
+application.properties
+application.yml
+application-email.yml
 # External tool builders
 .externalToolBuilders/
 

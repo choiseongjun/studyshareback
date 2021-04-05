@@ -9,13 +9,17 @@ import lombok.ToString;
 @ToString
 public class TodoListReq {
 	
+
+	private String todoTitle;
+	
 	private String todoContent;
 	
-	private boolean checked;
+	private char checked;
 	
 	private String savedDate;
 	
-	private String color; //색상
+	private String startTime;
 	
-	private String name; //과목이름
+	private String endTime;
+	
 }

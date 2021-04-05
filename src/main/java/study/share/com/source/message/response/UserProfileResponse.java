@@ -25,7 +25,7 @@ public class UserProfileResponse {
 	
 	private String profileImage;
 	
-	private long age;
+	private String age;
 
 	private List<FeedLike> feedlike;
 	

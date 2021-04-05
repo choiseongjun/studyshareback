@@ -20,4 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	long selectusermaxid();
 	
 	List<User> findByNicknameLike(String string);
+	boolean existsByEmail(String email);
 }

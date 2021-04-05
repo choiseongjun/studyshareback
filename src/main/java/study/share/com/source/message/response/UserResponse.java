@@ -20,7 +20,7 @@ public class UserResponse {
 	
 	private String introduce;
 	
-	private long age;
+	private String age;
 	
 	private List<FeedLike> feedlike;
 	

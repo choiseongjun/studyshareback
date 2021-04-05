@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,8 +72,8 @@ public class FeedListService {
 	}
 
     @Cacheable(cacheNames = "feedLikeCache", key = "#order")
-	public List<FeedList> listfeed(String order) {
-		return feedListRepository.findAllByDeleteynOrderByIdDesc('N');
+	public Page<FeedList> listfeed(Pageable pageable) {
+		return feedListRepository.findAllByDeleteynOrderByIdDesc(pageable,'N');
 	}
 
 	public List<UploadFile> listgallary() {
@@ -144,6 +146,11 @@ public class FeedListService {
 		return feedListRepository.findById(id).get();
 	}
 
-	
+	public Page<FeedList> mylistfeed(Pageable pageable, long user_id) {
+		return feedListRepository.findAllByuser_id(pageable,user_id);
+	}
 
+	public Page<FeedList> otherlistfeed(Pageable pageable, long user_id) {
+		return feedListRepository.findAllByuser_id(pageable,user_id);
+	}
 }

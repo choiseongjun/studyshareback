@@ -1,5 +1,6 @@
 package study.share.com.source.model;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,32 +31,35 @@ public class TodoList extends DateAudit{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	private String todoContent;
-	
-	private String highlighter;//형광펜
-	
-	@Convert(converter=BooleanToYNConverter.class)
-	private boolean checked;
-	
-	private String savedDate;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "tododate_id")
+	@JsonIgnoreProperties({"user","todoDate","todoComment"})
+	private TodoDate todoDate;
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	@JsonIgnoreProperties({"user","feedlike","follow","todolist"})
 	private User user;
+	@Column(name = "todotitle")
+	private String todoTitle;
+
+	@Column(name = "todocontent")
+	private String todoContent;
 	
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "subject_id")
-	@JsonIgnoreProperties({"todolist","color"})
-	private Subject subject;
+	@Column(name = "checked")
+	private char checked;
+	
+
+	@Column(name = "starttime")
+	private String startTime;
+	@Column(name = "endtime")
+	private String endTime;
+	
+
 	
 	@Transient
 	private long completetodo;
 	@Transient
 	private long uncompletetodo;
 	
-	public boolean isChecked(){return this.checked;}
-
-	public void setChecked(boolean active){this.checked = active;}
 }

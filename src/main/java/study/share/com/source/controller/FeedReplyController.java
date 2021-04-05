@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
 import study.share.com.source.model.User;
@@ -35,6 +36,7 @@ public class FeedReplyController {
 	@Autowired
 	UserService userService;
 	
+	@ApiOperation(value="게시글별 댓글 작성",notes="게시글별 댓글 작성")
 	@PostMapping("feed/reply/{id}")
 	public ResponseEntity<?> addfeedcomment(@PathVariable long id,Principal principal,@RequestBody Map<String, String> data){
 		try {
@@ -48,6 +50,7 @@ public class FeedReplyController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
+	@ApiOperation(value="게시글별 댓글 수정",notes="게시글별 댓글 수정")
 	@PatchMapping("feed/reply/{id}")
 	public ResponseEntity<?> updatefeedcomment(@PathVariable long id,Principal principal,@RequestBody Map<String, String> data){
 		try {
@@ -69,7 +72,7 @@ public class FeedReplyController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
-	
+	@ApiOperation(value="게시글별 댓글 삭제",notes="게시글별 댓글 삭제")
 	@DeleteMapping("feed/reply/{id}")
 	public ResponseEntity<?> removefeedcomment(@PathVariable("id") long id,Principal principal){
 		
@@ -97,6 +100,7 @@ public class FeedReplyController {
 		}
 	}
 	
+	@ApiOperation(value="게시글별 댓글 조회",notes="게시글별 댓글 조회")
 	@GetMapping("feed/reply/{id}")
 	public ResponseEntity<?> getfeedreply(@PathVariable long id
 			,@PageableDefault Pageable pageable){
