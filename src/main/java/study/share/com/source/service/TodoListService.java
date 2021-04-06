@@ -81,6 +81,14 @@ public class TodoListService {
 		todoListRepository.deleteById(id); 
 	}
 
+	public long getMyAchievement(long id) {
+		return todoListRepository.countByCheckedAndUser_id('C',id);
+	}
+
+	public long getAllPlan(long id) {
+		return todoListRepository.countByuser_id(id);
+	}
+
 
 //	public TodoList addtodo(TodoListReq todoListreq, Optional<User> user) {
 //		

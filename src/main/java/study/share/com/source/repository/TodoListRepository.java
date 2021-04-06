@@ -23,4 +23,7 @@ public interface TodoListRepository extends JpaRepository<TodoList,Long>{
 //
 //	long countBySavedDateAndUserAndChecked(String today, Optional<User> user, boolean b);
 
+    long countByCheckedAndUser_id(char checked,long user_id);
+
+    long countByuser_id(long user_id);
 }

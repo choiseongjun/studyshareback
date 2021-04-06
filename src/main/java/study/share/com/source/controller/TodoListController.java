@@ -196,6 +196,27 @@ public class TodoListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		} 
 	}
+
+	@ApiOperation(value="내 투두리스트 달성률 조회",notes="내 투두리스트 달성률 조회")
+	@GetMapping(path="/todo/mytodolist/achievement")
+	public ResponseEntity<?> mytodolistacheive(Principal principal){
+
+		try {
+			if(principal==null) {
+				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);
+			}
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			long Completeresult= todoListService.getMyAchievement(user.get().getId());
+			long resultAll =todoListService.getAllPlan(user.get().getId());
+
+			Double result =(Completeresult/(double)resultAll);
+
+			return new ResponseEntity<>(String.format("%.2f",result),HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
 	/*
 //	@ApiOperation(value="투두 컬러 조회",notes="투두 컬러 조회")
 //	@GetMapping(path="/todo/color")
