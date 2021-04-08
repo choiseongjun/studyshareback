@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import study.share.com.source.model.DTO.FeedListLikeDTO;
+import study.share.com.source.model.DTO.FeedReplyLikeDTO;
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
+import study.share.com.source.model.FeedReplyLike;
 import study.share.com.source.model.User;
 import study.share.com.source.service.FeedReplyService;
 import study.share.com.source.service.UserService;
@@ -118,6 +121,33 @@ public class FeedReplyController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+
+	@ApiOperation(value="댓글 좋아요",notes="댓글 좋아요")
+	@PostMapping("/likefeedreply/{id}")
+	public ResponseEntity<?> likefeedreply(@PathVariable long id,Principal principal){
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			FeedReplyLikeDTO feedReplylike = feedReplyService.likefeedreply(user,id);
+			return new ResponseEntity<>(feedReplylike,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@ApiOperation(value="댓글의 댓글 작성",notes="댓글의 댓글 작성")
+	@PostMapping("feed/reply/re/{feedid}/{id}")
+	public ResponseEntity<?> addfeedcommentreply(@PathVariable long feedid,@PathVariable long id,Principal principal,@RequestBody Map<String, String> data){
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			String content = data.get("content");
+			FeedReply feedReplylist=feedReplyService.addfeedcommentReply(feedid,id,user,content);
+			return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
 }

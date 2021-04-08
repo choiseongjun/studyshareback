@@ -16,7 +16,5 @@ public class ReportDTO {
 
     private long id;
     private String content;
-    private LocalDateTime regdate;
-    private LocalDateTime moddate;
 
 }

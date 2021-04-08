@@ -2,6 +2,7 @@ package study.share.com.source.service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -10,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.FeedReply;
-import study.share.com.source.model.User;
+import study.share.com.source.model.*;
+import study.share.com.source.model.DTO.FeedReplyLikeDTO;
 import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.FeedReplyLikeRepository;
 import study.share.com.source.repository.FeedReplyRepository;
 
 @Service
@@ -23,6 +24,9 @@ public class FeedReplyService {
 	FeedListRepository feedListRepository;
 	@Autowired
 	FeedReplyRepository feedReplyRepository;
+	@Autowired
+	FeedReplyLikeRepository feedReplyLikeRepository;
+
 	
 	public FeedReply addfeedcomment(long id, Optional<User> user, String content) {
 		
@@ -88,6 +92,44 @@ public class FeedReplyService {
 		long feedreplyId = feedreply.get().getFeedlist().getId();
 		feedreply.get().setFeedlistkey(feedreplyId);
 		return feedreply.get();
+	}
+
+	public FeedReplyLikeDTO likefeedreply(Optional<User> user, long id) {
+
+		Optional<FeedReply> feedreply = feedReplyRepository.findById(id);
+
+		feedreply.orElseThrow(()-> new NoSuchElementException("해당하는 댓글이 존재하지 않습니다"));
+
+		FeedReplyLike feedReplyLike = FeedReplyLike
+				.builder()
+				.user(user.get())
+				.feedReply(feedreply.get())
+				.build();
+		feedReplyLikeRepository.save(feedReplyLike);
+		FeedReplyLikeDTO feedReplyLikeDTO=new FeedReplyLikeDTO(feedReplyLike);
+		return feedReplyLikeDTO;
+	}
+
+	public FeedReply addfeedcommentReply(long feedId, long id, Optional<User> user, String content) {
+
+		FeedList feedList=new FeedList();
+		feedList.setId(feedId);
+
+		Optional<FeedReply> feedReplyonelist=feedReplyRepository.findById(id);
+		feedReplyonelist.orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 존재하지 않습니다"));
+
+		FeedReply feedReply=new FeedReply();
+		feedReply.setUser(user.get());
+		feedReply.setContent(content);
+		feedReply.setFeedlist(feedList);
+		feedReply.setDeleteyn('N');
+		feedReply.setOrigin_no(id);
+		feedReply.setGroup_layer(feedReplyonelist.get().getGroup_layer()+1);
+		feedReply.setGroup_ord(feedReplyonelist.get().getGroup_ord()+1);
+		feedReplyRepository.save(feedReply);
+
+		feedReplyRepository.updateorder(id,feedReplyonelist.get().getGroup_ord());
+		return feedReplyonelist.get();
 	}
 
 }

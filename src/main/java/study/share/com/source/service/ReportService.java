@@ -17,7 +17,6 @@ public class ReportService {
         Report report= Report.createBuilder()
                 .reportDTO(reportDTO)
                 .build();
-
         return reportRepository.save(report);
     }
 

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import study.share.com.source.model.common.DateAudit;
 
 @Entity
@@ -42,4 +43,16 @@ public class FeedReply extends DateAudit{
 	private User user;
 	@Transient//댓글 추가할때 상태변화로 바로 넣을수있도록 임시조치
 	private long feedlistkey;
+
+	@Column(name = "origin_no")
+	@ColumnDefault("0")
+	private long origin_no;
+
+	@Column(name = "group_ord")
+	@ColumnDefault("0")
+	private long group_ord;
+
+	@Column(name = "group_layer")
+	@ColumnDefault("0")
+	private long group_layer;
 }
