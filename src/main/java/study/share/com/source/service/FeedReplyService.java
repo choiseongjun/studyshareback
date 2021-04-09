@@ -99,8 +99,10 @@ public class FeedReplyService {
 	public FeedReplyLikeDTO likefeedreply(Optional<User> user, long id) {
 
 		Optional<FeedReply> feedreply = feedReplyRepository.findById(id);
+		feedreply.orElseThrow(()-> new NoSuchElementException("해당 댓글이 존재하지 않습니다"));
 
-		feedreply.orElseThrow(()-> new NoSuchElementException("해당하는 댓글이 존재하지 않습니다"));
+		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByuser_idAndId(user.get().getId(),id);
+		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 이미 존재합니다"));
 
 		FeedReplyLike feedReplyLike = FeedReplyLike
 				.builder()
@@ -134,7 +136,9 @@ public class FeedReplyService {
 	}
 
 	public void likeCanclefeedreply(Optional<User> user, long id) {
-		
+
+		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByuser_idAndId(user.get().getId(),id);
+		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 존재하지 않습니다"));
 
 		feedReplyLikeRepository.deleteById(id);
 	}

@@ -137,7 +137,7 @@ public class FeedReplyController {
 	}
 	@ApiOperation(value="댓글 좋아요 취소",notes="댓글 좋아요 취소 ")
 	@DeleteMapping("/likefeedreply/{id}")
-	public ResponseEntity<?> likefeedreplyCancle(@PathVariable long id,Principal principal){
+	public ResponseEntity<?> likefeedreplyCancel(@PathVariable long id,Principal principal){
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			feedReplyService.likeCanclefeedreply(user,id);
