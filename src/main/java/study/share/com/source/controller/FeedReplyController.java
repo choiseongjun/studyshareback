@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
+import study.share.com.source.model.DTO.FeedReplyDTO;
 import study.share.com.source.model.DTO.FeedReplyLikeDTO;
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
@@ -144,7 +145,8 @@ public class FeedReplyController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			String content = data.get("content");
 			FeedReply feedReplylist=feedReplyService.addfeedcommentReply(feedid,id,user,content);
-			return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
+			FeedReplyDTO feedReplyDTO=new FeedReplyDTO(feedReplylist);
+			return new ResponseEntity<>(feedReplyDTO,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);

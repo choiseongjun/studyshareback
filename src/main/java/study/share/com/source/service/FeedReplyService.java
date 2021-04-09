@@ -124,7 +124,6 @@ public class FeedReplyService {
 		feedReply.setFeedlist(feedList);
 		feedReply.setDeleteyn('N');
 		feedReply.setOrigin_no(id);
-		feedReply.setGroup_layer(feedReplyonelist.get().getGroup_layer()+1);
 		feedReply.setGroup_ord(feedReplyonelist.get().getGroup_ord()+1);
 		feedReplyRepository.save(feedReply);
 

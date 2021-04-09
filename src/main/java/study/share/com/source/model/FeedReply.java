@@ -52,7 +52,4 @@ public class FeedReply extends DateAudit{
 	@ColumnDefault("0")
 	private long group_ord;
 
-	@Column(name = "group_layer")
-	@ColumnDefault("0")
-	private long group_layer;
 }
