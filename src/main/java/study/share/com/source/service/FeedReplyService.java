@@ -7,8 +7,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import study.share.com.source.model.*;
@@ -48,9 +50,9 @@ public class FeedReplyService {
 		return feedReplyonelist.get();
 	}
 
-	public List<FeedReply> getfeedreply(long id, Pageable pageable) {
+	public Page<FeedReply> getfeedreply(long id, @PageableDefault(size=10, page=0) Pageable pageable) {
 		//List<FeedReply> feedreplylist=feedListRepository.findById(id).get().getFeedreply();
-		List<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteyn(id,pageable,'N');
+		Page<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteyn(id,pageable,'N');
 		return feedreplylist;
 //		return feedreplylist.stream().filter(t->t.getDeleteyn()=='N').sorted(new Comparator<FeedReply>() {
 //			@Override

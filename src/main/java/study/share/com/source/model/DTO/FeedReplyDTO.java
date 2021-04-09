@@ -16,6 +16,8 @@ public class FeedReplyDTO {
 
     private long feedId;
 
+    private String nickname;
+
     private long userId;
 
     private long origin_no;
@@ -30,6 +32,7 @@ public class FeedReplyDTO {
         this.userId=feedReply.getUser().getId();
         this.origin_no=feedReply.getOrigin_no();
         this.group_ord=feedReply.getGroup_ord();
+        this.nickname=feedReply.getUser().getNickname();
     }
 
 }

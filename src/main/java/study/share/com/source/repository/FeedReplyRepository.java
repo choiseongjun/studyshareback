@@ -3,6 +3,7 @@ package study.share.com.source.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,7 +19,7 @@ public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 
 	List<FeedReply> findByFeedlist_id(long id, Pageable pageable);
 
-	List<FeedReply> findByFeedlist_idAndDeleteyn(long id, Pageable pageable, char c);
+	Page<FeedReply> findByFeedlist_idAndDeleteyn(long id, Pageable pageable, char c);
 
 	Optional<FeedReply> findById (long id);
 

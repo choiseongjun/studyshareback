@@ -1,25 +1,17 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
@@ -106,19 +98,25 @@ public class FeedReplyController {
 	
 	@ApiOperation(value="게시글별 댓글 조회",notes="게시글별 댓글 조회")
 	@GetMapping("feed/reply/{id}")
-	public ResponseEntity<?> getfeedreply(@PathVariable long id
-			,@PageableDefault Pageable pageable){
+	public ResponseEntity<?> getfeedreply(@PathVariable long id, @RequestParam("page")int page, @RequestParam("size")int size){
 		try {
 //			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 //			pageable = PageRequest.of(page, 0, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-			pageable = PageRequest.of(0, 10, Sort.by("Id").descending());
-			Map<String, Object> map =new HashMap<String, Object>();
-			FeedList feedlist=new FeedList();
-			feedlist.setId(id);
-			List<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,pageable);
-			map.put("feedReplylist", feedReplylist);
-			map.put("feedlist",feedlist);
-			return new ResponseEntity<>(map,HttpStatus.OK);
+			//pageable = PageRequest.of(0, 10, Sort.by("Id").descending());
+			//Map<String, Object> map =new HashMap<String, Object>();
+			//FeedList feedlist=new FeedList();
+			//feedlist.setId(id);
+
+			Page<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,PageRequest.of(page, size, Sort.Direction.DESC, "id"));
+			List<FeedReplyDTO> feedReplyDTOList =new ArrayList<>();
+			feedReplylist.stream()
+					.filter(feedReply -> feedReply != null)
+					.forEach(feedReply -> {
+						feedReplyDTOList.add(new FeedReplyDTO(feedReply));
+					});
+			//map.put("feedReplylist", feedReplylist);
+			//map.put("feedlist",feedlist);
+			return new ResponseEntity<>(feedReplyDTOList,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
