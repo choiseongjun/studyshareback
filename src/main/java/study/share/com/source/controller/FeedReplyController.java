@@ -135,15 +135,28 @@ public class FeedReplyController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
+	@ApiOperation(value="댓글 좋아요 취소",notes="댓글 좋아요 취소 ")
+	@DeleteMapping("/likefeedreply/{id}")
+	public ResponseEntity<?> likefeedreplyCancle(@PathVariable long id,Principal principal){
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			feedReplyService.likeCanclefeedreply(user,id);
+			return new ResponseEntity<>("댓글 좋아요 취소되었습니다",HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@ApiOperation(value="댓글의 댓글 작성",notes="댓글의 댓글 작성")
 	@PostMapping("feed/reply/re/{feedid}/{id}")
 	public ResponseEntity<?> addfeedcommentreply(@PathVariable long feedid,@PathVariable long id,Principal principal,@RequestBody Map<String, String> data){
+		Optional<User> user = userService.findUserNickname(principal.getName());
+		String content = data.get("content");
+		FeedReply feedReplylist=feedReplyService.addfeedcommentReply(feedid,id,user,content);
+		FeedReplyDTO feedReplyDTO=new FeedReplyDTO(feedReplylist);
 		try {
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			String content = data.get("content");
-			FeedReply feedReplylist=feedReplyService.addfeedcommentReply(feedid,id,user,content);
-			FeedReplyDTO feedReplyDTO=new FeedReplyDTO(feedReplylist);
+	
 			return new ResponseEntity<>(feedReplyDTO,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

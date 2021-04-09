@@ -26,5 +26,5 @@ public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 	@Modifying
 	@Transactional
 	@Query("UPDATE FeedReply f set f.group_ord=f.group_ord+1 WHERE f.origin_no=:origin_no AND f.group_ord>:group_ord")
-	void updateorder(long origin_no, long group_ord);
+	void updateorder(@Param(value = "origin_no") long origin_no,@Param(value = "group_ord") long group_ord);
 }

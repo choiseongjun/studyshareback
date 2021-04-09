@@ -133,4 +133,10 @@ public class FeedReplyService {
 		return feedReplyonelist.get();
 	}
 
+	public void likeCanclefeedreply(Optional<User> user, long id) {
+		
+
+		feedReplyLikeRepository.deleteById(id);
+	}
+
 }

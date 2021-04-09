@@ -1,8 +1,11 @@
 package study.share.com.source.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import study.share.com.source.model.common.DateAudit;
 
@@ -11,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "feedreplylike")
 @Getter
+@NoArgsConstructor
 public class FeedReplyLike extends DateAudit {
 
     @Id
