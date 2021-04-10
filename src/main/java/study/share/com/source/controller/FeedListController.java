@@ -25,11 +25,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import study.share.com.source.model.FeedLike;
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.Follow;
-import study.share.com.source.model.UploadFile;
-import study.share.com.source.model.User;
+import study.share.com.source.model.*;
 import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.repository.FeedListRepository;
@@ -52,11 +48,12 @@ public class FeedListController {
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
 	public ResponseEntity<?> savefeed(@RequestParam(name = "images", required = false) String file
-			,@RequestPart(name = "content", required = false) String content,Principal principal) throws IOException {
+			,@RequestBody String content,Principal principal) throws IOException {
 		
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			FeedList feedlist=feedListService.saveFeed(user,content,file);
+			feedListService.extractHashTagTest(content,feedlist);//해시태그 검출 및 저장
 			//long feedid =feedListService.saveFeed(user,content,file);
 			//Optional<FeedList> feedlist = feedListService.selectOne(feedid); 
 			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
