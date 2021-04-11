@@ -33,12 +33,12 @@ public class TodoList extends DateAudit{
 	private long id;
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "tododate_id")
-	@JsonIgnoreProperties({"user","todoDate","todoComment"})
-	private TodoDate todoDate;
+	@JsonIgnoreProperties({"user","todoLists","todoComment"})
+	private TodoDate todoLists;
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties({"user","feedlike","follow","todolist"})
+	@JsonIgnoreProperties({"feedlike","follow","todolist"})
 	private User user;
 	@Column(name = "todotitle")
 	private String todoTitle;

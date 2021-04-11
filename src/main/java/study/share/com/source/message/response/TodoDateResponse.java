@@ -24,14 +24,14 @@ public class TodoDateResponse {
 	private long completeRatioCnt;
 	private long allRatioCnt;
 	
-	public TodoDateResponse(TodoDate todoDate) {
+	public TodoDateResponse(TodoDate todoDate,List<TodoList> todoList2) {
 		this.setId(todoDate.getId());
 		this.setSavedDate(todoDate.getSavedDate());     
 		this.setTodoComment(todoDate.getTodoComment());  
-		this.setTodoList(todoDate.getTodoDate());    
-		this.setAllRatioCnt(todoDate.getTodoDate().size()); 
-		for(int i=0;i<todoDate.getTodoDate().size();i++) {
-			if(todoDate.getTodoDate().get(i).getChecked()=='C') {
+		this.setTodoList(todoList2);    
+		this.setAllRatioCnt(todoDate.getTodoLists().size()); 
+		for(int i=0;i<todoDate.getTodoLists().size();i++) {
+			if(todoDate.getTodoLists().get(i).getChecked()=='C') {
 				completeRatioCnt++;
 			}
 			 

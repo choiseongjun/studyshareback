@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,24 +28,25 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class TodoDate{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties({"user","feedlike","follow","todolist"})
-	private User user;
-	@OneToMany(orphanRemoval=true,mappedBy = "todoDate")
-	private List<TodoList> todoDate=new ArrayList<TodoList>();
+//	@ManyToOne(optional = false)
+//	@JoinColumn(name = "user_id")
+//	@JsonIgnoreProperties({"user","feedlike","follow","todolist"})
+//	private User user;
+	@OneToMany(orphanRemoval=true,mappedBy = "todoLists",fetch = FetchType.LAZY)
+	private List<TodoList> todoLists=new ArrayList<TodoList>();
 	
-	@OneToOne(mappedBy = "todoDate",fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "todoDate")
 	@JsonIgnoreProperties({"tododate","user"})
     private TodoComment todoComment;
 
-
+ 
 	@Column(name = "saveddate")
 	private String savedDate;
 }

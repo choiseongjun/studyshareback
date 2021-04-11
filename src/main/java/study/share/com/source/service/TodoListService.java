@@ -28,15 +28,15 @@ public class TodoListService {
 	@Autowired
 	UserRepository userRepository;
 
-	public TodoList saveTodoList(TodoDate todoDate, TodoListReq todoListreq) {
+	public TodoList saveTodoList(User user,TodoDate todoDate, TodoListReq todoListreq) {
 		
-		boolean dateCheck = todoDateRepository.existsBySavedDateAndUser(todoDate.getSavedDate(),todoDate.getUser());
+		boolean dateCheck = todoDateRepository.existsBySavedDate(todoDate.getSavedDate());
 		if(!dateCheck) {
 			TodoDate returnTodoDate = todoDateRepository.save(todoDate);
 			TodoList todoList = new TodoList();
-			todoList.setTodoDate(returnTodoDate);
+			todoList.setTodoLists(returnTodoDate);
 			todoList.setChecked(todoListreq.getChecked());
-			todoList.setUser(todoDate.getUser());
+			todoList.setUser(user);
 			todoList.setTodoTitle(todoListreq.getTodoTitle());
 			todoList.setTodoContent(todoListreq.getTodoContent());
 			todoList.setStartTime(todoListreq.getStartTime());
@@ -44,11 +44,11 @@ public class TodoListService {
 			 
 			return todoListRepository.save(todoList);
 		}else {
-			TodoDate returnTodoDate = todoDateRepository.findBySavedDateAndUser(todoDate.getSavedDate(),todoDate.getUser());
+			TodoDate returnTodoDate = todoDateRepository.findBySavedDate(todoDate.getSavedDate());
 			TodoList todoList = new TodoList();
-			todoList.setTodoDate(returnTodoDate);
+			todoList.setTodoLists(returnTodoDate);
 			todoList.setChecked(todoListreq.getChecked());
-			todoList.setUser(todoDate.getUser());
+			todoList.setUser(user);
 			todoList.setTodoTitle(todoListreq.getTodoTitle());
 			todoList.setTodoContent(todoListreq.getTodoContent());
 			todoList.setStartTime(todoListreq.getStartTime());
@@ -59,8 +59,9 @@ public class TodoListService {
 			
 	}
 
-	public TodoDate selectMyTodoList(String savedDate, User user) {
-		return todoDateRepository.findBySavedDateAndUser(savedDate,user);
+	public TodoDate selectMyTodoList(String savedDate, User user) { 
+		System.out.println("user.getId()"+user.getId());
+		return todoDateRepository.findAllBySavedDateAndTodoListsUserId(savedDate,user.getId()); 
 	}
 
 	public Optional<TodoList> updateMyTodoList(long id, TodoListReq todoListReq) {
@@ -87,6 +88,10 @@ public class TodoListService {
 
 	public long getAllPlan(long id) {
 		return todoListRepository.countByuser_id(id);
+	}
+
+	public List<TodoList> MyTodoList(String savedDate, User user) {
+		return todoListRepository.findAllByTodoListsSavedDateAndUser(savedDate,user);
 	}
 
 

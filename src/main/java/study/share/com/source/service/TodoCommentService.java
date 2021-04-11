@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import study.share.com.source.message.request.TodoCommentReq;
 import study.share.com.source.model.TodoComment;
 import study.share.com.source.model.TodoDate;
-import study.share.com.source.model.TodoList;
+import study.share.com.source.model.User;
 import study.share.com.source.repository.TodoCommentRepository;
 import study.share.com.source.repository.TodoDateRepository;
 
@@ -21,25 +21,25 @@ public class TodoCommentService {
 	@Autowired
 	TodoDateRepository todoDateRepository;
 	
-	public TodoComment saveComment(TodoDate todoDate, TodoCommentReq todoCommentReq) {
+	public TodoComment saveComment(User user,TodoDate todoDate, TodoCommentReq todoCommentReq) {
 		
-		boolean dateCheck = todoDateRepository.existsBySavedDateAndUser(todoDate.getSavedDate(), todoDate.getUser());
+		boolean dateCheck = todoDateRepository.existsBySavedDate(todoDate.getSavedDate());
 		if(!dateCheck) {//날짜가 없다면..
 			TodoDate returnTodoDate = todoDateRepository.save(todoDate);
 			
 			TodoComment todoComment = new TodoComment();
 			todoComment.setTodoDate(returnTodoDate);
-			todoComment.setUser(todoDate.getUser());
+			todoComment.setUser(user);
 			todoComment.setTitle(todoCommentReq.getTitle());
 			todoComment.setContent(todoCommentReq.getContent());
 			
 			return todoCommentRepository.save(todoComment);
 		}else {
-			TodoDate returnTodoDate = todoDateRepository.findBySavedDateAndUser(todoDate.getSavedDate(),todoDate.getUser());
+			TodoDate returnTodoDate = todoDateRepository.findBySavedDate(todoDate.getSavedDate());
 			
 			TodoComment todoComment = new TodoComment();
 			todoComment.setTodoDate(returnTodoDate);
-			todoComment.setUser(todoDate.getUser());
+			todoComment.setUser(user);
 			todoComment.setTitle(todoCommentReq.getTitle());
 			todoComment.setContent(todoCommentReq.getContent());
 			

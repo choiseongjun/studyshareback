@@ -1,6 +1,7 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class TodoListController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			TodoDate todoDate =new TodoDate();
 			todoDate.setSavedDate(todoListreq.getSavedDate());
-			todoDate.setUser(user.get());
+			//todoDate.setUser(user.get());
 			
-			TodoList todoList =todoListService.saveTodoList(todoDate,todoListreq);
+			TodoList todoList =todoListService.saveTodoList(user.get(),todoDate,todoListreq);
 			
 			
 			return new ResponseEntity<>(todoList,HttpStatus.OK);
@@ -81,11 +82,11 @@ public class TodoListController {
 			
 			TodoDate todoDate =new TodoDate();
 			todoDate.setSavedDate(todoCommentReq.getSavedDate());
-			todoDate.setUser(user.get());
+			//todoDate.setUser(user.get());
 
 			TodoComment todoCmt =new TodoComment();
 			todoCmt.setTodoDate(todoDate);
-			TodoDate returnTodoDate=todoDateRepository.findBySavedDateAndUser(todoCommentReq.getSavedDate(),user.get());
+			TodoDate returnTodoDate=todoDateRepository.findBySavedDate(todoCommentReq.getSavedDate());
 			  
 			if(returnTodoDate!=null) {
 				boolean isCheck=todoCommentRepository.existsByTodoDate(returnTodoDate);//기존에 값이 있는지..
@@ -94,7 +95,7 @@ public class TodoListController {
 				}
 			}
 			
-			TodoComment todoComment=todoCommentService.saveComment(todoDate,todoCommentReq);
+			TodoComment todoComment=todoCommentService.saveComment(user.get(),todoDate,todoCommentReq);
 			return new ResponseEntity<>(todoComment,HttpStatus.OK);
 				     
 			
@@ -124,9 +125,14 @@ public class TodoListController {
 				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
 			}
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			TodoDate todolist = todoListService.selectMyTodoList(savedDate,user.get());
-			  
-			return new ResponseEntity<>(new TodoDateResponse(todolist),HttpStatus.OK);
+			TodoDate tododate = todoListService.selectMyTodoList(savedDate,user.get()); //tododate로 조회 
+			List<TodoList> todoList= todoListService.MyTodoList(savedDate,user.get()); //todolist로 조회
+			if(tododate!=null) {
+				return new ResponseEntity<>(new TodoDateResponse(tododate,todoList),HttpStatus.OK);	
+			}else {
+				return new ResponseEntity<>("데이터가 없습니다",HttpStatus.OK);	
+			}
+			//return new ResponseEntity<>("성공.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
