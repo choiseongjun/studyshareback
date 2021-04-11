@@ -17,12 +17,15 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 @Service
 public class VerificationTokenService {
 
     private static long EXPIRES_MILLS = MillsConstant.ONE_DAY;
     private static long EXPIRED_MILLS = MillsConstant.ONE_HOUR;
-    private static String EMAIL_VERIFY_API = "http://localhost:8080/email/verify?token=%s";
+    private static String EMAIL_VERIFY_API = "http://3.35.255.192:9090/email/verify?token=";
 
     @Autowired
     MailService mailService;
@@ -39,15 +42,19 @@ public class VerificationTokenService {
     @Autowired
     VerificationTokenService verificationTokenService;
 
-    public void sendAuthEmail(Long userNo, String email) {
+    public void sendAuthEmail(Long userNo, String email) throws AddressException, MessagingException {
 
         String token = createVerificationToken(userNo, AccountType.email, email);
 
-        String title = messageSource.getMessage("email.auth.title", null, LocaleContextHolder.getLocale());
-        //String title ="테스트성준@#!@#!@##!@";
-        String content = messageSource.getMessage("email.auth.content", new Object[]{String.format(EMAIL_VERIFY_API, token)}, LocaleContextHolder.getLocale());
-        //String content = "테스트본문@!#!@#";
+        //String title = messageSource.getMessage("email.auth.title", null, LocaleContextHolder.getLocale());
+        String title ="이메일 주소 인증";
+       // String content = messageSource.getMessage("email.auth.content", new Object[]{String.format(EMAIL_VERIFY_API, token)}, LocaleContextHolder.getLocale());
+        String content = "<h2>안녕하세요</h2><p>가입해 주셔서 감사합니다! 시작하기 전에, 본인 확인을 해야 해요. 아래를 클릭해서 이메일 주소를 인증하세요:</p>";
+        content+="<br /><br /><br />";
+       //content+="<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer noopener\">이메일 인증</a>".format("%s", EMAIL_VERIFY_API+token);
+        content+="<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer noopener\">이메일 인증</a>".replace("{0}", EMAIL_VERIFY_API+token);
         // TODO: 2020/12/05 Async 처리 필요( 너무 느림 .. )
+        System.out.println(EMAIL_VERIFY_API+token);
         mailService.sendMail(email, title, content);
     }
 

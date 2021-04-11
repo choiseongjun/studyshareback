@@ -1,6 +1,7 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,7 +131,9 @@ public class TodoListController {
 			if(tododate!=null) {
 				return new ResponseEntity<>(new TodoDateResponse(tododate,todoList),HttpStatus.OK);	
 			}else {
-				return new ResponseEntity<>("데이터가 없습니다",HttpStatus.OK);	
+				TodoDate fakeTododate=new TodoDate();
+				List<TodoList> fakeTodoList = new ArrayList<TodoList>();
+				return new ResponseEntity<>(new TodoDateResponse(fakeTododate,fakeTodoList),HttpStatus.OK);	
 			}
 			//return new ResponseEntity<>("성공.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}catch(Exception e) {

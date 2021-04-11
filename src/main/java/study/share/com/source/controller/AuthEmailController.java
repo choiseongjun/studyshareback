@@ -1,5 +1,8 @@
 package study.share.com.source.controller;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,7 @@ public class AuthEmailController {
     @RequestMapping(value = "/send")
     public ResponseEntity<String> mailSending(
             @RequestParam("user_no") Long userNo,
-            @RequestParam("email") String email) {
+            @RequestParam("email") String email) throws AddressException, MessagingException {
 
         verificationTokenService.sendAuthEmail(userNo, email);
 

@@ -48,8 +48,9 @@ public class FeedListController {
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
 	public ResponseEntity<?> savefeed(@RequestParam(name = "images", required = false) String file
-			,@RequestBody String content,Principal principal) throws IOException {
+			,@RequestPart(name = "content", required = false) String content,Principal principal) throws IOException {
 		
+
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			FeedList feedlist=feedListService.saveFeed(user,content,file);

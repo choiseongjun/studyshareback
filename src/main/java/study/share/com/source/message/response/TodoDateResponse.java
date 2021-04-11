@@ -29,9 +29,9 @@ public class TodoDateResponse {
 		this.setSavedDate(todoDate.getSavedDate());     
 		this.setTodoComment(todoDate.getTodoComment());  
 		this.setTodoList(todoList2);    
-		this.setAllRatioCnt(todoDate.getTodoLists().size()); 
-		for(int i=0;i<todoDate.getTodoLists().size();i++) {
-			if(todoDate.getTodoLists().get(i).getChecked()=='C') {
+		this.setAllRatioCnt(todoList2.size()); 
+		for(int i=0;i<todoList2.size();i++) {
+			if(todoList2.get(i).getChecked()=='C') {
 				completeRatioCnt++;
 			}
 			 
