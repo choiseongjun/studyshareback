@@ -10,6 +10,8 @@ import study.share.com.source.model.User;
 public interface TodoCommentRepository extends JpaRepository<TodoComment,Long> {
 
 	boolean existsByTodoDate(TodoDate returnTodoDate);
+
+	TodoComment findAllByTodoDateSavedDateAndUser(String savedDate, User user);
 	
 
 

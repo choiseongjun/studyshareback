@@ -26,6 +26,8 @@ public class TodoListService {
 	@Autowired
 	TodoDateRepository todoDateRepository;
 	@Autowired
+	TodoCommentRepository todoCommentRepository;
+	@Autowired
 	UserRepository userRepository;
 
 	public TodoList saveTodoList(User user,TodoDate todoDate, TodoListReq todoListreq) {
@@ -92,6 +94,10 @@ public class TodoListService {
 
 	public List<TodoList> MyTodoList(String savedDate, User user) {
 		return todoListRepository.findAllByTodoListsSavedDateAndUser(savedDate,user);
+	}
+
+	public TodoComment MyTodoComment(String savedDate, User user) {
+		return todoCommentRepository.findAllByTodoDateSavedDateAndUser(savedDate,user);
 	}
 
 

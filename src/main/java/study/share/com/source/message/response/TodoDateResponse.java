@@ -3,6 +3,8 @@ package study.share.com.source.message.response;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.bind.v2.TODO;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import study.share.com.source.model.TodoComment;
@@ -24,10 +26,10 @@ public class TodoDateResponse {
 	private long completeRatioCnt;
 	private long allRatioCnt;
 	
-	public TodoDateResponse(TodoDate todoDate,List<TodoList> todoList2) {
+	public TodoDateResponse(TodoDate todoDate,List<TodoList> todoList2,TodoComment todoComment) {
 		this.setId(todoDate.getId());
 		this.setSavedDate(todoDate.getSavedDate());     
-		this.setTodoComment(todoDate.getTodoComment());  
+		this.setTodoComment(todoComment);  
 		this.setTodoList(todoList2);    
 		this.setAllRatioCnt(todoList2.size()); 
 		for(int i=0;i<todoList2.size();i++) {

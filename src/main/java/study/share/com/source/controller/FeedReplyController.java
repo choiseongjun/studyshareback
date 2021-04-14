@@ -98,7 +98,7 @@ public class FeedReplyController {
 	
 	@ApiOperation(value="게시글별 댓글 조회",notes="게시글별 댓글 조회")
 	@GetMapping("feed/reply/{id}")
-	public ResponseEntity<?> getfeedreply(@PathVariable long id, @RequestParam("page")int page, @RequestParam("size")int size){
+	public ResponseEntity<?> getfeedreply(@PathVariable long id,Pageable pageable){
 		try {
 //			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 //			pageable = PageRequest.of(page, 0, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
@@ -106,8 +106,9 @@ public class FeedReplyController {
 			//Map<String, Object> map =new HashMap<String, Object>();
 			//FeedList feedlist=new FeedList();
 			//feedlist.setId(id);
-
-			Page<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,PageRequest.of(page, size, Sort.Direction.DESC, "id"));
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+			Page<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,pageable);
 			List<FeedReplyDTO> feedReplyDTOList =new ArrayList<>();
 			feedReplylist.stream()
 					.filter(feedReply -> feedReply != null)

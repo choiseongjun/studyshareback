@@ -2,7 +2,9 @@ package study.share.com.source.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,12 +130,14 @@ public class TodoListController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			TodoDate tododate = todoListService.selectMyTodoList(savedDate,user.get()); //tododate로 조회 
 			List<TodoList> todoList= todoListService.MyTodoList(savedDate,user.get()); //todolist로 조회
+			TodoComment todoComment = todoListService.MyTodoComment(savedDate,user.get());
 			if(tododate!=null) {
-				return new ResponseEntity<>(new TodoDateResponse(tododate,todoList),HttpStatus.OK);	
-			}else {
-				TodoDate fakeTododate=new TodoDate();
-				List<TodoList> fakeTodoList = new ArrayList<TodoList>();
-				return new ResponseEntity<>(new TodoDateResponse(fakeTododate,fakeTodoList),HttpStatus.OK);	
+				return new ResponseEntity<>(new TodoDateResponse(tododate,todoList,todoComment),HttpStatus.OK);	
+			}else { 
+				TodoDate emptyTododate=new TodoDate();
+				List<TodoList> emptyTodoList = new ArrayList<TodoList>();
+				TodoComment emptyTodoComment = new TodoComment();
+				return new ResponseEntity<>(new TodoDateResponse(emptyTododate,emptyTodoList,emptyTodoComment),HttpStatus.OK);	
 			}
 			//return new ResponseEntity<>("성공.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}catch(Exception e) {
@@ -211,6 +215,7 @@ public class TodoListController {
 	public ResponseEntity<?> mytodolistacheive(Principal principal){
 
 		try {
+			Map<String, Long> map =new HashMap<String, Long>();
 			if(principal==null) {
 				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);
 			}
@@ -219,8 +224,12 @@ public class TodoListController {
 			long resultAll =todoListService.getAllPlan(user.get().getId());
 
 			Double result =(Completeresult/(double)resultAll);
+			
+			map.put("completeRatioCnt", Completeresult);
+			map.put("allRatioCnt",resultAll);
 
-			return new ResponseEntity<>(String.format("%.2f",result),HttpStatus.OK);
+//			return new ResponseEntity<>(String.format("%.2f",result),HttpStatus.OK);
+			return new ResponseEntity<>(map,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);

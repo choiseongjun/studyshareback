@@ -50,10 +50,10 @@ public class FeedReplyService {
 		return feedReplyonelist.get();
 	}
 
-	public Page<FeedReply> getfeedreply(long id, @PageableDefault(size=10, page=0) Pageable pageable) {
+	public Page<FeedReply> getfeedreply(long id,Pageable pageable) {
 		//List<FeedReply> feedreplylist=feedListRepository.findById(id).get().getFeedreply();
-		Page<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteyn(id,pageable,'N');
-		return feedreplylist;
+		Page<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteyn(pageable,id,'N');
+		return feedreplylist; 
 //		return feedreplylist.stream().filter(t->t.getDeleteyn()=='N').sorted(new Comparator<FeedReply>() {
 //			@Override
 //			public int compare(FeedReply o1, FeedReply o2) {
