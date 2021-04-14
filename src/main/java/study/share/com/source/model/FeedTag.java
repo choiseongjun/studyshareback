@@ -2,6 +2,8 @@ package study.share.com.source.model;
 
 import javax.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,6 +14,8 @@ import lombok.Data;
 @Entity
 @Table(name = "feed_tag")
 @Data
+@Getter
+@Setter
 public class FeedTag{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

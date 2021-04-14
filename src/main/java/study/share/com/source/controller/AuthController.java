@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import study.share.com.source.message.request.LoginForm;
+import study.share.com.source.message.request.PasswordChangeReq;
 import study.share.com.source.message.request.SignUpForm;
 import study.share.com.source.model.AccountType;
 import study.share.com.source.model.Role;
@@ -269,4 +265,26 @@ public class AuthController {
         }
     }
 
+    @ApiOperation(value="아이디 찾기",notes="아이디 찾기")
+    @GetMapping("/find/userId/{email}")
+    public ResponseEntity<?> findUserId(@PathVariable("email") String email) throws IOException {
+
+        try {
+            Optional<User> result=userService.findByEmail(email);
+            return new ResponseEntity<>(result.get().getUserid(), HttpStatus.OK);
+        }catch(Exception e) {
+            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
+//    @PostMapping("/change/password/{email}")
+//    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq) throws IOException {
+//        try {
+//            Optional<User> result=userService.changepassword(passwordChangeReq);
+//            return new ResponseEntity<>("success", HttpStatus.OK);
+//        }catch(Exception e) {
+//            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }

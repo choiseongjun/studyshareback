@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.share.com.source.model.FeedLike;
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.FeedReply;
-import study.share.com.source.model.UploadFile;
-import study.share.com.source.model.User;
-import study.share.com.source.model.UserProfileImage;
+import lombok.Setter;
+import study.share.com.source.model.*;
 
-
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 public class FeedListDTO {
@@ -32,6 +30,10 @@ public class FeedListDTO {
 	private List<FeedLike> feedlike;
 	
 	private List<FeedReply> feedreply=new ArrayList<FeedReply>();
+
+	private List<FeedTag> feedTagList =new ArrayList<>();
+
+	private List<Tag> tagList= new ArrayList<>();
 	
 	private long feedreplysize;
 	private LocalDateTime createdAt;
@@ -49,7 +51,7 @@ public class FeedListDTO {
 		this.setFeedlike(feedlist.getFeedlike());
 		this.setFeedreply(feedreply);
 		this.setCreatedAt(feedlist.getCreatedAt());
-	
+
 //		for(int i=0;i<feedlist.getFeedlike().size();i++) {
 //			this.setFeedlikeuser(feedlist.getFeedlike().get(i).getUser());	
 //		}

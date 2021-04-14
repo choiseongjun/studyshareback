@@ -15,10 +15,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	boolean existsByUserid(String email);
 	Optional<User> findByUserid(String username);
 	Optional<User> findByNickname(String username);
-	
+	Optional<User> findByemail(String email);
+	Optional<User> findByemailAnduserid(String email,String userId);
+
 	@Query("SELECT IFNULL(MAX(id),0)+1 FROM User")
 	long selectusermaxid();
 	
 	List<User> findByNicknameLike(String string);
 	boolean existsByEmail(String email);
+
 }
