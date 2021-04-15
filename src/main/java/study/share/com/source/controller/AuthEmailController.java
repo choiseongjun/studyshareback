@@ -36,4 +36,11 @@ public class AuthEmailController {
         verificationTokenService.verify(AccountType.email, token);
         return ResponseEntity.ok("success");
     }
+
+    @RequestMapping(value = "/send/pw/change")
+    public ResponseEntity<String> pwchangemailSending(
+            @RequestParam("email") String email) throws AddressException, MessagingException {
+        verificationTokenService.pwchangeEmailsend(email);
+        return ResponseEntity.ok("success");
+    }
 }
