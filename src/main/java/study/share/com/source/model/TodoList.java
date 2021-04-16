@@ -42,7 +42,7 @@ public class TodoList extends DateAudit{
 	private User user;
 	@Column(name = "todotitle")
 	private String todoTitle;
-
+ 
 	@Column(name = "todocontent")
 	private String todoContent;
 	

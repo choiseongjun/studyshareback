@@ -40,7 +40,7 @@ public class FeedReplyController {
 			String content = data.get("content");
 			FeedReply feedReplylist=feedReplyService.addfeedcomment(id,user,content);
 			
-			return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
+			return new ResponseEntity<>(new FeedReplyDTO(feedReplylist),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

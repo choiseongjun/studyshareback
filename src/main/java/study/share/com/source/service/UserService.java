@@ -1,7 +1,11 @@
 package study.share.com.source.service;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import study.share.com.source.message.request.PasswordChangeReq;
-import study.share.com.source.model.FeedList;
 import study.share.com.source.model.Follow;
-import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
 import study.share.com.source.model.UserProfileImage;
 import study.share.com.source.repository.FollowRepository;
@@ -139,7 +140,7 @@ public class UserService {
 
 	public Optional<User> findByEmail(String email) {
 
-		Optional <User> result=userRepository.findByemail(email);
+		Optional <User> result=userRepository.findByEmail(email);
 		result.orElseThrow(()-> new NoSuchElementException("해당 이메일을 사용한 유저가 존재하지 않습니다"));
 		return result;
 	}

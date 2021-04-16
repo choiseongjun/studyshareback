@@ -1,5 +1,6 @@
 package study.share.com.source.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,10 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +42,7 @@ public class FeedReply extends DateAudit{
 	@JsonIgnore
 	private FeedList feedlist;
 	@ManyToOne(optional = false)
+	@JsonIgnoreProperties({"feedlike","follow","todolist","userProfileImage"})
 	@JoinColumn(name = "user_id")
 	private User user;
 	@Transient//댓글 추가할때 상태변화로 바로 넣을수있도록 임시조치
@@ -51,5 +55,8 @@ public class FeedReply extends DateAudit{
 	@Column(name = "group_ord")
 	@ColumnDefault("0")
 	private long group_ord;
+	
+	@OneToMany(orphanRemoval=true,mappedBy = "feedReply")
+	private List<FeedReplyLike> feedReplylike=new ArrayList<FeedReplyLike>();
 
 }

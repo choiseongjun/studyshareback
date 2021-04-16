@@ -190,4 +190,9 @@ public class FeedListService {
 		return str;
 	}
 
+	public Page<FeedList> feedMylike(Pageable pageable, Optional<User> user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
