@@ -2,6 +2,7 @@ package study.share.com.source.controller;
 
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
+import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.model.DTO.FeedReplyDTO;
 import study.share.com.source.model.DTO.FeedReplyLikeDTO;
@@ -31,6 +33,9 @@ public class FeedReplyController {
 	FeedReplyService feedReplyService;
 	@Autowired
 	UserService userService;
+	
+	public static List<FeedReply> replyContnet = new ArrayList<FeedReply>();//대댓글 쓸때 필요함 2021 04-18 choiseongjun
+	
 	
 	@ApiOperation(value="게시글별 댓글 작성",notes="게시글별 댓글 작성")
 	@PostMapping("feed/reply/{id}")
@@ -99,25 +104,27 @@ public class FeedReplyController {
 	@ApiOperation(value="게시글별 댓글 조회",notes="게시글별 댓글 조회")
 	@GetMapping("feed/reply/{id}")
 	public ResponseEntity<?> getfeedreply(@PathVariable long id,Pageable pageable){
+//		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+//		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		
+
+		Page<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,pageable);
+		List<FeedReply> feedReplylist2 = feedReplylist.getContent();
+		List<Long> feedreplyId = feedReplylist.stream().map(t->t.getId()).collect(Collectors.toList());
+		
+		
+		for(int i=0;i<feedreplyId.size();i++) {
+			Page<FeedReply> feedReReplylist=feedReplyService.getfeedrereply(feedreplyId.get(i),pageable); 
+			replyContnet= feedReReplylist.getContent();
+
+			
+		}
+
+
 		try {
-//			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-//			pageable = PageRequest.of(page, 0, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-			//pageable = PageRequest.of(0, 10, Sort.by("Id").descending());
-			//Map<String, Object> map =new HashMap<String, Object>();
-			//FeedList feedlist=new FeedList();
-			//feedlist.setId(id);
-			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-			Page<FeedReply> feedReplylist=feedReplyService.getfeedreply(id,pageable);
-			List<FeedReplyDTO> feedReplyDTOList =new ArrayList<>();
-			feedReplylist.stream()
-					.filter(feedReply -> feedReply != null)
-					.forEach(feedReply -> {
-						feedReplyDTOList.add(new FeedReplyDTO(feedReply));
-					});
-			//map.put("feedReplylist", feedReplylist);
-			//map.put("feedlist",feedlist);
-			return new ResponseEntity<>(feedReplyDTOList,HttpStatus.OK);
+	
+			return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,replyContnet)),HttpStatus.OK);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -157,7 +164,7 @@ public class FeedReplyController {
 		FeedReply feedReplylist=feedReplyService.addfeedcommentReply(feedid,id,user,content);
 		FeedReplyDTO feedReplyDTO=new FeedReplyDTO(feedReplylist);
 		try {
-	
+			
 			return new ResponseEntity<>(feedReplyDTO,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

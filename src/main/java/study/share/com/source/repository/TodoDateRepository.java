@@ -23,5 +23,6 @@ public interface TodoDateRepository extends JpaRepository<TodoDate, Long>{
 
 	TodoDate findAllByTodoListsUserId(Long id);
 
+	TodoDate findAllBySavedDate(String savedDate);
  
 }

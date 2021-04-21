@@ -22,6 +22,8 @@ public class UserResponse {
 	
 	private String age;
 	
+	private String email;
+	
 	private List<FeedLike> feedlike;
 	
 	private long followerlistsize;
@@ -36,10 +38,11 @@ public class UserResponse {
 		this.setSex(user.getSex());
 		this.setIntroduce(user.getIntroduce());
 		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
-		this.setFollowlist(followlist);
+		//this.setFollowlist(followlist);
 	}
 
 }

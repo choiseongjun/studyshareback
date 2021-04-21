@@ -78,16 +78,28 @@ public class FeedListController {
 	}
 	@ApiOperation(value="피드리스트 조회",notes="피드리스트 조회")
 	@GetMapping("/feed")
-	public ResponseEntity<?> listfeed(Pageable pageable){
-		 
-		try {
+	public ResponseEntity<?> listfeed(Pageable pageable,Principal principal){
+		if(principal==null) {
 			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 			Page<FeedList> feedlist = feedListService.listfeed(pageable);
-			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
-		}catch(Exception e) {  
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
+			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);	
+		}else {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+			//Page<FeedList> feedlist = feedListService.listfeed(pageable);
+			Page<FeedList> feedMylike = feedListService.feedMylike(pageable,user);
+			
+			//return new ResponseEntity<>(feedMylike,HttpStatus.OK);
+			return new ResponseEntity<>(feedMylike.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
+		}	 
+//		try {
+//	
+//			
+//		}catch(Exception e) {  
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
 	}
 	@ApiOperation(value="피드리스트 상세조회",notes="피드리스트 상세조회")
 	@GetMapping("/feedDetail/{id}")
@@ -95,7 +107,7 @@ public class FeedListController {
 		 
 		try {
 			FeedList feedlist = feedListService.listfeedDetail(id);
-			return new ResponseEntity<>(feedlist,HttpStatus.OK);
+			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
@@ -112,10 +124,16 @@ public class FeedListController {
 	}
 	@ApiOperation(value="피드 수정",notes="피드 수정")
 	@PatchMapping("/feed/{id}")
-	public ResponseEntity<?> updatefeed(@PathVariable long id,@RequestBody Map<String, String> data){
+	public ResponseEntity<?> updatefeed(
+			@RequestParam(name = "images", required = false) String file,
+			@PathVariable long id,
+			@RequestParam(name = "content", required = false) String content
+			){
+		System.out.println("filetest"+file);
+		Optional<FeedList> feedlist = feedListService.updatefeed(id,content,file); 
 		try {
-			String content = data.get("content");
-			Optional<FeedList> feedlist = feedListService.updatefeed(id,content); 
+//			String content = data.get("content");
+			
 			return new ResponseEntity<>(feedlist,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -138,7 +156,15 @@ public class FeedListController {
 	public ResponseEntity<?> likefeed(@PathVariable long id,Principal principal){
 		
 		try {
+
 			Optional<User> user = userService.findUserNickname(principal.getName());
+
+			Optional<FeedList> checkFeedLikeUser = feedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
+			if(checkFeedLikeUser.isPresent()) {
+				return new ResponseEntity<>("이미 좋아요를 눌렀습니다.",HttpStatus.BAD_REQUEST);	
+
+			}
+			
 			Optional<FeedList> feedList = feedListService.likefeed(user,id);
 			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
 			feedListLike.setUserKey(user.get().getId());
@@ -156,6 +182,7 @@ public class FeedListController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.dislikefeed(user,id);
+			FeedList feedList1 =new FeedList();
 			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
 			feedListLike.setUserKey(user.get().getId());
 			return new ResponseEntity<>(feedListLike,HttpStatus.OK);

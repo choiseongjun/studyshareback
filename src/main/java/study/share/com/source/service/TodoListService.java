@@ -62,8 +62,8 @@ public class TodoListService {
 	}
 
 	public TodoDate selectMyTodoList(String savedDate, User user) { 
-		System.out.println("user.getId()"+user.getId());
-		return todoDateRepository.findAllBySavedDateAndTodoListsUserId(savedDate,user.getId()); 
+		return todoDateRepository.findAllBySavedDate(savedDate); 
+		//return todoDateRepository.findAllBySavedDateAndTodoListsUserId(savedDate,user.getId()); 
 	}
 
 	public Optional<TodoList> updateMyTodoList(long id, TodoListReq todoListReq) {

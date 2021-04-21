@@ -10,4 +10,6 @@ public interface UploadFileRepository extends JpaRepository<UploadFile, Long>{
 
 	UploadFile findBySrc(String imgPath);
 
+	List<UploadFile> findByFeedlistId(long id); 
+
 }

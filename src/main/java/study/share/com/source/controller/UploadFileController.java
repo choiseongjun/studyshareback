@@ -7,8 +7,11 @@ import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +44,14 @@ public class UploadFileController {
 		}
 		
 		return ResponseEntity.ok(Images);
+	}
+	@PutMapping("/feed/upload/image/delete")
+	public ResponseEntity<?> feeduploadImageDelete(@RequestParam(name = "src", required = false) String src) throws IOException {
+		
+		String imgPath="";
+//		List<ImagesDTO> Images = new ArrayList<>();
+		uploadFileService.deleteFeedListId(src);
+		return ResponseEntity.ok(HttpStatus.ACCEPTED);
 	}
 
 //	@PostMapping("/mobile/feed/upload")

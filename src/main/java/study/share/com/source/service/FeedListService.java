@@ -1,6 +1,7 @@
 package study.share.com.source.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +74,6 @@ public class FeedListService {
 		return feed;
 	}
 
-	@Cacheable(cacheNames = "feedLikeCache", key = "#order")
 	public Page<FeedList> listfeed(Pageable pageable) {
 		return feedListRepository.findAllByDeleteynOrderByIdDesc(pageable, 'N');
 	}
@@ -88,19 +90,45 @@ public class FeedListService {
 		});
 	}
 
-	public Optional<FeedList> updatefeed(long id, String content) {
+	public Optional<FeedList> updatefeed(long id, String content, String file) {
 		Optional<FeedList> feedlist = feedListRepository.findById(id);
 		feedlist.ifPresent(selectList -> {
 			selectList.setContent(content);
 			feedListRepository.save(selectList);
+			
 		});
+		List<UploadFile> fileone2 = uploadFileRepository.findByFeedlistId(id);
+		if (file != null) {//파일이 있는경우
+			String[] f = file.split(",");
+			for (int i = 0; i < f.length; i++) {
+				UploadFile fileone = uploadFileRepository.findBySrc(f[i]);
+
+				fileone.setFeedlist(feedlist.get());
+				String src =uploadFileRepository.save(fileone).getSrc();//파일리스트에 키 업데이트
+				System.out.println("src=="+src);
+
+//				for(int deleteIdx=0;deleteIdx<fileone2.size();deleteIdx++) {
+//					System.out.println("check@#$@$"+f[i]+"=="+fileone2.get(deleteIdx).getSrc());
+//					if(!(f[i].equals(fileone2.get(deleteIdx).getSrc()))) {
+//						System.out.println("file@#$@$"+file);
+//						fileone2.get(deleteIdx).setFeedlist(null);
+//						uploadFileRepository.save(fileone2.get(deleteIdx));
+//					}
+//				}
+			}
+
+		}
+		
 
 		return feedListRepository.findById(id);
 	}
 
 	public Optional<FeedList> likefeed(Optional<User> user, long id) {
 
-
+		
+	
+		
+		
 		FeedList feedList = new FeedList();
 		feedList.setId(id);
 
@@ -110,7 +138,9 @@ public class FeedListService {
 		feedLike.setUserkey(user.get().getId());
 		feedLikeRepository.save(feedLike);
 
-		Optional<FeedList> feed = feedListRepository.findById(id);
+		//Optional<FeedList> feed = feedListRepository.findById(id);
+		Optional<FeedList> feed = feedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
+
 //		feed.ifPresent(selectList -> {
 //			selectList.setTotallike(feed.get().getTotallike()+1);
 //			feedListRepository.save(selectList);
@@ -124,7 +154,7 @@ public class FeedListService {
 
 		long feedlikeno = feedLikeRepository.findlikeno(user.get(), feedlist);
 		feedLikeRepository.deleteById(feedlikeno);
-
+		
 		Optional<FeedList> feed = feedListRepository.findById(id);
 //		feed.ifPresent(selectList -> {
 //			selectList.setTotallike(feed.get().getTotallike()-1);
@@ -189,10 +219,9 @@ public class FeedListService {
 		}
 		return str;
 	}
-
+ 
 	public Page<FeedList> feedMylike(Pageable pageable, Optional<User> user) {
-		// TODO Auto-generated method stub
-		return null;
+		return feedListRepository.findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(pageable, 'N',user.get().getId());
 	}
 
 }

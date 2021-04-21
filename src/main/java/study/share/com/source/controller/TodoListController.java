@@ -131,9 +131,12 @@ public class TodoListController {
 			TodoDate tododate = todoListService.selectMyTodoList(savedDate,user.get()); //tododate로 조회 
 			List<TodoList> todoList= todoListService.MyTodoList(savedDate,user.get()); //todolist로 조회
 			TodoComment todoComment = todoListService.MyTodoComment(savedDate,user.get());
-			if(tododate!=null) {
+			System.out.println("tododate===="+tododate);
+			if(tododate!=null ) {
+				System.out.println("1번!@#!@#");
 				return new ResponseEntity<>(new TodoDateResponse(tododate,todoList,todoComment),HttpStatus.OK);	
 			}else { 
+				System.out.println("2번!@#!@#");
 				TodoDate emptyTododate=new TodoDate();
 				List<TodoList> emptyTodoList = new ArrayList<TodoList>();
 				TodoComment emptyTodoComment = new TodoComment();

@@ -67,6 +67,9 @@ public class UserPrinciple implements UserDetails {
         return name;
     }
 
+    public String getUserId() {
+    	return userid;
+    }
     public String getEmail() {
         return email;
     }

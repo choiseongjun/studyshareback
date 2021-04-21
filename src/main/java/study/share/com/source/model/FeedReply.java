@@ -50,11 +50,11 @@ public class FeedReply extends DateAudit{
 
 	@Column(name = "origin_no")
 	@ColumnDefault("0")
-	private long origin_no;
+	private long originNo;
 
 	@Column(name = "group_ord")
 	@ColumnDefault("0")
-	private long group_ord;
+	private long groupOrd;
 	
 	@OneToMany(orphanRemoval=true,mappedBy = "feedReply")
 	private List<FeedReplyLike> feedReplylike=new ArrayList<FeedReplyLike>();

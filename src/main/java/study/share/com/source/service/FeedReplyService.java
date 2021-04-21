@@ -4,10 +4,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -52,8 +54,12 @@ public class FeedReplyService {
 
 	public Page<FeedReply> getfeedreply(long id,Pageable pageable) {
 		//List<FeedReply> feedreplylist=feedListRepository.findById(id).get().getFeedreply();
-		Page<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteyn(pageable,id,'N');
-		return feedreplylist; 
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+
+		Page<FeedReply> feedreplylist = feedReplyRepository.findByFeedlist_idAndDeleteynAndGroupOrd(pageable,id,'N',0L);
+		
+		return feedreplylist;  
 //		return feedreplylist.stream().filter(t->t.getDeleteyn()=='N').sorted(new Comparator<FeedReply>() {
 //			@Override
 //			public int compare(FeedReply o1, FeedReply o2) {
@@ -127,12 +133,13 @@ public class FeedReplyService {
 		feedReply.setContent(content);
 		feedReply.setFeedlist(feedList);
 		feedReply.setDeleteyn('N');
-		feedReply.setOrigin_no(id);
-		feedReply.setGroup_ord(feedReplyonelist.get().getGroup_ord()+1);
+		feedReply.setOriginNo(id);
+		feedReply.setGroupOrd(feedReplyonelist.get().getGroupOrd()+1);
 		feedReplyRepository.save(feedReply);
 
-		feedReplyRepository.updateorder(id,feedReplyonelist.get().getGroup_ord());
-		return feedReplyonelist.get();
+		int replyid = feedReplyRepository.updateorder(id,feedReplyonelist.get().getGroupOrd());
+		FeedReply returnFeedReply = feedReplyRepository.findByOriginNoAndGroupOrd(id,2);
+		return returnFeedReply;
 	}
 
 	public void likeCanclefeedreply(Optional<User> user, long id) {
@@ -141,6 +148,15 @@ public class FeedReplyService {
 		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 존재하지 않습니다"));
 
 		feedReplyLikeRepository.deleteById(id);
+	}
+
+	public Page<FeedReply> getfeedrereply(Long id, Pageable pageable) {
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+		pageable = PageRequest.of(0, 10);// 내림차순으로 정렬한다
+
+		Page<FeedReply> feedreplylist = feedReplyRepository.findByOriginNoAndDeleteynOrderByGroupOrdDesc(pageable,id,'N');
+		
+		return feedreplylist;  
 	}
 
 }

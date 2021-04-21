@@ -3,6 +3,7 @@ package study.share.com.source.model.DTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import lombok.Data;
 import lombok.Getter;
@@ -29,6 +30,9 @@ public class FeedListDTO {
 	
 	private List<FeedLike> feedlike;
 	
+	private Stream<FeedLike> myFeedlike;
+
+	
 	private List<FeedReply> feedreply=new ArrayList<FeedReply>();
 
 	private List<FeedTag> feedTagList =new ArrayList<>();
@@ -48,7 +52,7 @@ public class FeedListDTO {
 		this.setNickname(feedlist.getUser().getNickname());
 		this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
 		this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
-		this.setFeedlike(feedlist.getFeedlike());
+		//this.setFeedlike(feedlist.getFeedlike());
 		this.setFeedreply(feedreply);
 		this.setCreatedAt(feedlist.getCreatedAt());
 
@@ -62,5 +66,19 @@ public class FeedListDTO {
 //		}		
 	}
 
+	public FeedListDTO(FeedList feedlist,User user) {
+		this.setId(feedlist.getId());
+		this.setContent(feedlist.getContent());
+		this.setTotallike(feedlist.getFeedlike().size());
+		this.setUploadfile(feedlist.getUploadfile());
+		this.setNickname(feedlist.getUser().getNickname());
+		this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
+		this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
+		this.setFeedlike(feedlist.getFeedlike());
+		this.setMyFeedlike(feedlist.getFeedlike().stream().filter(t->t.getUser().getId()==user.getId()));
+		this.setFeedreply(feedreply);
+		this.setCreatedAt(feedlist.getCreatedAt());
+
+	}
 	
 }

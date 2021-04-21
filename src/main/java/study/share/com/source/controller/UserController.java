@@ -21,7 +21,9 @@ import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
+import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.repository.UserRepository;
+import study.share.com.source.service.AuthTokenService;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
 
@@ -34,6 +36,8 @@ public class UserController {
 	FeedListService feedListService;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+    AuthTokenService authTokenService;
 	
 	@ApiOperation(value="내정보 불러오기",notes="내정보 불러오기")
 	@GetMapping("/api/auth/userinfo")
@@ -58,11 +62,13 @@ public class UserController {
 	@ApiOperation(value="내정보 수정",notes="내정보 수정")
 	@PatchMapping("/user/updateUser")
 	public ResponseEntity<?> updateUser(@RequestBody User userInfo,Principal principal){
-		System.out.println("User정보  ");
+
+
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			userService.updateUserInfo(user,userInfo);
-			return new ResponseEntity<>("성공적으로 수정되었습니다.",HttpStatus.OK);
+			User returnUser = userService.updateUserInfo(user,userInfo);
+	        AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(returnUser.getNickname());			
+			return new ResponseEntity<>(new UserProfileResponse(returnUser,authTokenDTO.getAccessToken(),authTokenDTO.getRefreshToken()),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}

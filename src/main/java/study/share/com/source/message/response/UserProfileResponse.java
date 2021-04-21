@@ -26,6 +26,12 @@ public class UserProfileResponse {
 	private String profileImage;
 	
 	private String age;
+	
+	private String email;
+	
+	private String accessToken;
+	
+	private String refreshToken;
 
 	private List<FeedLike> feedlike;
 	
@@ -34,18 +40,29 @@ public class UserProfileResponse {
 	private long followlistsize;
 	
 	private List<Follow> followlist;
-	
+	public UserProfileResponse(User user,String accessToken,String refreshToken) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setIntroduce(user.getIntroduce());
+		this.setSex(user.getSex());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setProfileImage(user.getUserProfileImage().getSrc());		
+		this.setAccessToken(accessToken);
+		this.setRefreshToken(refreshToken);
+	}
 	public UserProfileResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setIntroduce(user.getIntroduce());
 		this.setSex(user.getSex());
 		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
 		this.setProfileImage(user.getUserProfileImage().getSrc());		
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
-		this.setFollowlist(followlist);
+		//this.setFollowlist(followlist);
 	}
 	
 }

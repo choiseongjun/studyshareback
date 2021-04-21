@@ -42,6 +42,12 @@ public class UploadFileService {
 		uploadfileRepository.save(uploadFile);
 		
 	}
+	public void deleteFeedListId(String src) {
+		// TODO Auto-generated method stub
+		UploadFile file = uploadfileRepository.findBySrc(src);
+		file.setFeedlist(null);
+		uploadfileRepository.save(file);
+	}
 
 //	public List<ImagesDTO> getList(String imgPath) {
 //		List<UploadFile> uploadFilelist = uploadfileRepository.findByFilepath(imgPath);

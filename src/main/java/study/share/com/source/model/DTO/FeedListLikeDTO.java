@@ -1,6 +1,7 @@
 package study.share.com.source.model.DTO;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +25,15 @@ public class FeedListLikeDTO {
 	
 	private List<FeedLike> feedlike;
 	
+	private List<FeedLike> myFeedlike;
+	
+	
 	public FeedListLikeDTO(FeedList feedlist) {
 		this.setId(feedlist.getId());
 		this.setContent(feedlist.getContent());
 		this.setTotallike(feedlist.getFeedlike().size());
-		this.setFeedlike(feedlist.getFeedlike());
-		this.setUser(feedlist.getUser());
+		this.setMyFeedlike(feedlist.getFeedlike());
+//		this.setUser(feedlist.getUser());
 	}
 	
 }

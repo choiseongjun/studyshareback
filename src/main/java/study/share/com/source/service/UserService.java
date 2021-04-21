@@ -33,6 +33,8 @@ public class UserService {
 	@Autowired
     PasswordEncoder encoder;
 	
+	User returnUser = null;
+	
 	public Optional<User> findUserNickname(String name) {
 		Optional<User> user = userRepository.findByNickname(name);
 		return user;
@@ -125,16 +127,17 @@ public class UserService {
 	public List<User> searchUserNickname(String nickname) {
 		return userRepository.findByNicknameLike("%"+nickname+"%");
 	}
-
-	public void updateUserInfo(Optional<User> user, User userInfo) {
+	
+	public User updateUserInfo(Optional<User> user, User userInfo) {
+		
 		user.ifPresent(updateUser->{
-			updateUser.setAge(userInfo.getAge());
+//			updateUser.setAge(userInfo.getAge());
 			updateUser.setNickname(userInfo.getNickname());
-			updateUser.setSex(userInfo.getSex());
 			updateUser.setIntroduce(userInfo.getIntroduce());
-			updateUser.setPassword(encoder.encode(userInfo.getPassword2()));
-			userRepository.save(updateUser);
+//			updateUser.setPassword(encoder.encode(userInfo.getPassword2()));
+			returnUser = userRepository.save(updateUser);
 		});
+		return returnUser;
 	}
 
 

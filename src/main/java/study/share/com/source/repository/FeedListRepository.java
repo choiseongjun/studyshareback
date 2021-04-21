@@ -1,17 +1,17 @@
 package study.share.com.source.repository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.util.Streamable;
 
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
+import study.share.com.source.model.User;
 
 public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 
@@ -29,6 +29,26 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 	List<FeedReply> findByIdAndFeedreplyDeleteyn(long id, char c);
 
 	Page <FeedList> findAllByuser_id(Pageable pageable,long user_id);
+
+	Page<FeedList> findAllByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
+
+	Optional<FeedList> findByIdAndFeedlikeUserId(long id, Long id2);
+
+	Page<FeedList> findAllByDeleteynAndFeedlikeUserIdInOrderByIdDesc(Pageable pageable, char c, Collection<Long> userId);
+
+	Page<FeedList> findByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
+
+	Page<FeedList> findByIdAndFeedlikeUserId(Pageable pageable, char c, Long id);
+
+
+	Page<FeedList> findAllByDeleteynAndFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable, char c,
+			Long id);
+
+	Page<FeedList> findAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable, char c,
+			Long id);
+
+	Page<FeedList> findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable,
+			char c, Long id);
 
 
 }

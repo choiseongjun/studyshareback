@@ -37,7 +37,7 @@ public class FeedLike extends DateAudit{
 	private FeedList feedlist;
 	@ManyToOne(optional = false)  
 	@JoinColumn(name = "user_id")
-	@JsonIgnoreProperties({"feedlike","todolist"})	
+	@JsonIgnoreProperties({"feedlike","todolist","follow","roles"})	
 	private User user;
 	
 	private long userkey;
