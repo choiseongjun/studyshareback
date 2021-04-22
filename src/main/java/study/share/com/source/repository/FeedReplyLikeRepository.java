@@ -7,6 +7,12 @@ import java.util.Optional;
 
 public interface FeedReplyLikeRepository extends JpaRepository<FeedReplyLike,Long> {
 
-    Optional<FeedReplyLike> findByuser_idAndId(long user_id, long id);
+	Optional<FeedReplyLike> findByIdAndUserId(long id, Long id2);
+
+	Optional<FeedReplyLike> findByFeedReplyIdAndUserId(long id, Long id2);
+
+	void deleteByFeedReplyId(long id);
+
+	void deleteByFeedReplyIdAndUserId(long id, Long id2);
 
 }

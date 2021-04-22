@@ -50,5 +50,11 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 	Page<FeedList> findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable,
 			char c, Long id);
 
+	List<FeedList> findDistinctByIdOrFeedlikeUserIdOrFeedlikeUserIdIsNull(Long id, Long id2);
+
+	List<FeedList> findByIdAndFeedlikeUserIdOrFeedlikeUserIdIsNull(long id, Long id2);
+
+
+
 
 }

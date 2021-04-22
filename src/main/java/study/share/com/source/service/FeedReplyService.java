@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import study.share.com.source.model.*;
+import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedReplyLikeDTO;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.FeedReplyLikeRepository;
@@ -107,8 +108,8 @@ public class FeedReplyService {
 		Optional<FeedReply> feedreply = feedReplyRepository.findById(id);
 		feedreply.orElseThrow(()-> new NoSuchElementException("해당 댓글이 존재하지 않습니다"));
 
-		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByuser_idAndId(user.get().getId(),id);
-		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 이미 존재합니다"));
+//		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByuser_idAndId(user.get().getId(),id);
+//		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 이미 존재합니다"));
 
 		FeedReplyLike feedReplyLike = FeedReplyLike
 				.builder()
@@ -144,10 +145,11 @@ public class FeedReplyService {
 
 	public void likeCanclefeedreply(Optional<User> user, long id) {
 
-		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByuser_idAndId(user.get().getId(),id);
-		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 존재하지 않습니다"));
+//		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByIdAndUserId(id,user.get().getId());
+//		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 존재하지 않습니다"));
+		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByFeedReplyIdAndUserId(id,user.get().getId());
 
-		feedReplyLikeRepository.deleteById(id);
+		feedReplyLikeRepository.deleteById(userResult.get().getId());
 	}
 
 	public Page<FeedReply> getfeedrereply(Long id, Pageable pageable) {
@@ -157,6 +159,29 @@ public class FeedReplyService {
 		Page<FeedReply> feedreplylist = feedReplyRepository.findByOriginNoAndDeleteynOrderByGroupOrdDesc(pageable,id,'N');
 		
 		return feedreplylist;  
+	}
+
+
+
+	public List<FeedReply> feedReplyFeedLikeUserFind(Long id, User user) {
+		List<FeedReply> feedreply = feedReplyRepository.findByIdAndFeedReplylikeUserId(id,user.getId());
+		return feedreply;
+	}
+
+//	public Page<FeedReply> feedReplyFeedLikeUserFind(Long id, User user, Pageable pageable) {
+//		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+//		pageable = PageRequest.of(0, 10);// 내림차순으로 정렬한다
+//
+//		Page<FeedReply> feedreplylist = feedReplyRepository.findByOriginNoAndDeleteynOrFeedReplylikeUserIdOrderByGroupOrdDesc(pageable,id,'N',user.getId());
+//		
+//		return feedreplylist; 
+//	}
+
+	public Page<FeedReply> feedReplyFeedLikeUserFind(User user, Pageable pageable) {
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+		pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+		Page<FeedReply> pageList = feedReplyRepository.findByDeleteynOrFeedReplylikeUserIdOrFeedReplylikeUserIdIsNullOrderByGroupOrdDesc(pageable,'N',user.getId());
+		return pageList; 
 	}
 
 }

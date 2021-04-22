@@ -103,14 +103,26 @@ public class FeedListController {
 	}
 	@ApiOperation(value="피드리스트 상세조회",notes="피드리스트 상세조회")
 	@GetMapping("/feedDetail/{id}")
-	public ResponseEntity<?> listfeedDetail(@PathVariable long id){
+	public ResponseEntity<?> listfeedDetail(@PathVariable long id,Principal principal){
 		 
-		try {
+		if(principal==null) {
 			FeedList feedlist = feedListService.listfeedDetail(id);
 			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
-		}catch(Exception e) {  
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+
+		}else {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<FeedList> feedlist = feedListService.listMyFeedLikeFeedDetail(id,user);
+
+			return new ResponseEntity<>(new FeedListDTO(feedlist.get(),user.get()),HttpStatus.OK);
+			//return new ResponseEntity<>(feedlist.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
+
 		}
+		
+//		try {
+//			
+//		}catch(Exception e) {  
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
 	}
 	@GetMapping("/gallary")
 	public ResponseEntity<?> listgallary(){

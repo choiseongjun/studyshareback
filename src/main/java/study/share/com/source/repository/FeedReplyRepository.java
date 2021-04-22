@@ -37,4 +37,13 @@ public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 	Page<FeedReply> findByOriginNoAndDeleteyn(Pageable pageable, Long id, char c);
 
 	Page<FeedReply> findByOriginNoAndDeleteynOrderByGroupOrdDesc(Pageable pageable, Long id, char c);
+
+	List<FeedReply> findByIdAndFeedReplylikeUserId(Long id, Long id2);
+
+	Page<FeedReply> findByDeleteynOrFeedReplylikeUserIdOrderByGroupOrdDesc(Pageable pageable, char c, Long id);
+
+	Page<FeedReply> findByDeleteynOrFeedReplylikeUserIdOrFeedReplylikeUserIdIsNullOrderByGroupOrdDesc(Pageable pageable,
+			char c, Long id);
+
+	Page<FeedReply> findByDeleteynAndFeedReplylikeUserIdOrderByGroupOrdDesc(Pageable pageable, char c, Long id);
 }

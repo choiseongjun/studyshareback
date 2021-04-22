@@ -1,6 +1,7 @@
 package study.share.com.source.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +24,12 @@ public class FeedReplyLike extends DateAudit {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
+	@JsonIgnoreProperties({"feedlike","todolist","follow","roles"})	
     private User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "reply_id")
+	@JsonIgnore
     private FeedReply feedReply;
 
     @Builder

@@ -224,4 +224,14 @@ public class FeedListService {
 		return feedListRepository.findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(pageable, 'N',user.get().getId());
 	}
 
+	public Optional<FeedList> listMyFeedLikeFeedDetail(long id, Optional<User> user) {
+		Optional<FeedList> existsMyFeedlike= feedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
+		
+		if(existsMyFeedlike.isPresent()) {
+			return feedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
+		}else {
+			return feedListRepository.findById(id);
+		}
+	}
+
 }
