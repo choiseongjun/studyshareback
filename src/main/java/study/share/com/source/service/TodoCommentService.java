@@ -24,6 +24,7 @@ public class TodoCommentService {
 	public TodoComment saveComment(User user,TodoDate todoDate, TodoCommentReq todoCommentReq) {
 		
 		boolean dateCheck = todoDateRepository.existsBySavedDate(todoDate.getSavedDate());
+		System.out.println("dateCheck@#$@#$#$"+dateCheck);
 		if(!dateCheck) {//날짜가 없다면..
 			TodoDate returnTodoDate = todoDateRepository.save(todoDate);
 			

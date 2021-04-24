@@ -42,9 +42,9 @@ public class TodoDate{
 	@OneToMany(orphanRemoval=true,mappedBy = "todoLists",fetch = FetchType.LAZY)
 	private List<TodoList> todoLists=new ArrayList<TodoList>();
 	
-	@OneToOne(mappedBy = "todoDate")
+	@OneToMany(orphanRemoval=true,mappedBy = "todoDate",fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({"tododate","user"})
-    private TodoComment todoComment;
+    private List<TodoComment> todoComment;
 
  
 	@Column(name = "saveddate")

@@ -1,26 +1,34 @@
 package study.share.com.source.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import study.share.com.source.model.*;
-import study.share.com.source.repository.*;
+import study.share.com.source.model.FeedLike;
+import study.share.com.source.model.FeedList;
+import study.share.com.source.model.FeedTag;
+import study.share.com.source.model.Tag;
+import study.share.com.source.model.UploadFile;
+import study.share.com.source.model.User;
+import study.share.com.source.repository.FeedLikeRepository;
+import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.FeedReplyRepository;
+import study.share.com.source.repository.FeedTagRepository;
+import study.share.com.source.repository.TagRepository;
+import study.share.com.source.repository.UploadFileRepository;
 
 @Service
 @Transactional
@@ -39,12 +47,14 @@ public class FeedListService {
 	@Autowired
 	FeedTagRepository feedTagRepository;
 
-
+	
 	/*2020-10-20 리턴값으로 사진 리스트 받는거 해결
 	 *  addAll을 하여 방금 넣은 이미지를 리스트형식으로 하여 담아준다.
 	 *  그러면 리턴할떄 방금 넣은이미지가 그대로 뿌려진다.
 	 * */
 	public FeedList saveFeed(Optional<User> user, String content, String file) {
+		HttpServletRequest request = // 5
+				((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		long feedid = feedListRepository.selectmaxid();
 
 		FeedList feedList = new FeedList();
@@ -53,6 +63,7 @@ public class FeedListService {
 		feedList.setUser(user.get());
 		feedList.setDeleteyn('N');
 		feedList.setTotallike(0);
+		feedList.setIpaddress(request.getRemoteAddr());
 
 		FeedList feed = feedListRepository.save(feedList);
 
@@ -221,9 +232,9 @@ public class FeedListService {
 	}
  
 	public Page<FeedList> feedMylike(Pageable pageable, Optional<User> user) {
-		return feedListRepository.findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(pageable, 'N',user.get().getId());
+		return feedListRepository.findDistinctAllByDeleteynOrFeedlikeUserIdAndFeedlikeUserIdIsNullAndFeedlikeUserIdIsNotNullOrderByIdDesc(pageable, 'N',user.get().getId());
 	}
-
+ 
 	public Optional<FeedList> listMyFeedLikeFeedDetail(long id, Optional<User> user) {
 		Optional<FeedList> existsMyFeedlike= feedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
 		

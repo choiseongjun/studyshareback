@@ -38,7 +38,7 @@ public class Follow {
 	private User fromUser;
 	
 	@ManyToOne
-	@JsonIgnoreProperties({"roles", "feedlike","follow"})
+	@JsonIgnoreProperties({"roles", "feedlike","follow","todolist"})
 	@JoinColumn(name="toUserId")
 	private User toUser;
 	

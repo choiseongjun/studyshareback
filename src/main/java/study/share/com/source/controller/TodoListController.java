@@ -26,6 +26,7 @@ import study.share.com.source.model.TodoComment;
 import study.share.com.source.model.TodoDate;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
+import study.share.com.source.model.DTO.TodoListDTO;
 import study.share.com.source.repository.TodoCommentRepository;
 import study.share.com.source.repository.TodoDateRepository;
 import study.share.com.source.service.TodoCommentService;
@@ -64,9 +65,11 @@ public class TodoListController {
 			//todoDate.setUser(user.get());
 			
 			TodoList todoList =todoListService.saveTodoList(user.get(),todoDate,todoListreq);
-			
-			
-			return new ResponseEntity<>(todoList,HttpStatus.OK);
+			long Completeresult= todoListService.getMyAchievement(user.get().getId());
+			long resultAll =todoListService.getAllPlan(user.get().getId());
+			return new ResponseEntity<>(new TodoListDTO(todoList, user.get(),Completeresult,resultAll),HttpStatus.OK);	
+			//return new ResponseEntity<>(new TodoListDTO(todoList, user.get(),Completeresult,resultAll),HttpStatus.OK);	
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -75,46 +78,28 @@ public class TodoListController {
 	@ApiOperation(value="내 투두리스트 커멘츠 작성",notes="내 투두리스트 커멘츠 작성")
 	@PostMapping(path="/user/todoComment")
 	public ResponseEntity<?> addtodoComment(@RequestBody TodoCommentReq todoCommentReq,Principal principal) {
-
 	
-		try {
-			if(principal==null) { 
-				return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
-			}
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			
-			TodoDate todoDate =new TodoDate();
-			todoDate.setSavedDate(todoCommentReq.getSavedDate());
-			//todoDate.setUser(user.get());
+		if(principal==null) { 
+			return new ResponseEntity<>("로그인을 해주세요",HttpStatus.FORBIDDEN);	
+		}
+		Optional<User> user = userService.findUserNickname(principal.getName());
+		
+		TodoDate todoDate =new TodoDate();
+		todoDate.setSavedDate(todoCommentReq.getSavedDate());
+		//todoDate.setUser(user.get());
 
-			TodoComment todoCmt =new TodoComment();
-			todoCmt.setTodoDate(todoDate);
-			TodoDate returnTodoDate=todoDateRepository.findBySavedDate(todoCommentReq.getSavedDate());
-			  
-			if(returnTodoDate!=null) {
-				boolean isCheck=todoCommentRepository.existsByTodoDate(returnTodoDate);//기존에 값이 있는지..
-				if(isCheck){
-					return new ResponseEntity<>("값이 이미 존재합니다.",HttpStatus.OK);
-				}
-			}
-			
+		TodoComment todoCmt =new TodoComment();
+		todoCmt.setTodoDate(todoDate);
+		TodoDate returnTodoDate=todoDateRepository.findBySavedDate(todoCommentReq.getSavedDate());
+
+		if(returnTodoDate==null) {
+
 			TodoComment todoComment=todoCommentService.saveComment(user.get(),todoDate,todoCommentReq);
 			return new ResponseEntity<>(todoComment,HttpStatus.OK);
-				     
-			
-			
-			
-//			if(todoCommentRepository.existsByTodoDate(todoCmt)) {
-//				return new ResponseEntity<>("값이 이미 존재합니다.",HttpStatus.OK);
-//			}else {
-//				TodoComment todoComment=todoCommentService.saveComment(todoDate,todoCommentReq);
-//				return new ResponseEntity<>(todoComment,HttpStatus.OK);
-//			}
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		} 
+		}else {
+			TodoComment todoComment=todoCommentService.saveComment(user.get(),returnTodoDate,todoCommentReq);
+			return new ResponseEntity<>(todoComment,HttpStatus.OK);
+		}
 	}
 	/*
 	 * user의 투두리스트 조회 (개인)
@@ -131,12 +116,9 @@ public class TodoListController {
 			TodoDate tododate = todoListService.selectMyTodoList(savedDate,user.get()); //tododate로 조회 
 			List<TodoList> todoList= todoListService.MyTodoList(savedDate,user.get()); //todolist로 조회
 			TodoComment todoComment = todoListService.MyTodoComment(savedDate,user.get());
-			System.out.println("tododate===="+tododate);
 			if(tododate!=null ) {
-				System.out.println("1번!@#!@#");
 				return new ResponseEntity<>(new TodoDateResponse(tododate,todoList,todoComment),HttpStatus.OK);	
 			}else { 
-				System.out.println("2번!@#!@#");
 				TodoDate emptyTododate=new TodoDate();
 				List<TodoList> emptyTodoList = new ArrayList<TodoList>();
 				TodoComment emptyTodoComment = new TodoComment();

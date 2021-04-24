@@ -71,7 +71,7 @@ public class FeedReplyDTO {
         this.groupOrd=feedReply.getGroupOrd();
         this.nickname=feedReply.getUser().getNickname();
         this.likeCnt = feedReply.getFeedReplylike().size();
-    	for(int i=0;i<feedReply2.size();i++) {
+        for(int i=0;i<feedReply2.size();i++) {
     		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
     			this.feedreReply = feedReply2;		
     		}

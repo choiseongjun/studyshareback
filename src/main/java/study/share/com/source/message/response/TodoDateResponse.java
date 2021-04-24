@@ -28,7 +28,8 @@ public class TodoDateResponse {
 	
 	public TodoDateResponse(TodoDate todoDate,List<TodoList> todoList2,TodoComment todoComment) {
 		this.setId(todoDate.getId());
-		this.setSavedDate(todoDate.getSavedDate());     
+		this.setSavedDate(todoDate.getSavedDate());    
+		System.out.println(todoComment);
 		this.setTodoComment(todoComment);  
 		this.setTodoList(todoList2);    
 		this.setAllRatioCnt(todoList2.size()); 

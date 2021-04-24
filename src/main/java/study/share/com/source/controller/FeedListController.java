@@ -3,15 +3,15 @@ package study.share.com.source.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,13 +19,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import study.share.com.source.model.*;
+import study.share.com.source.model.FeedLike;
+import study.share.com.source.model.FeedList;
+import study.share.com.source.model.Follow;
+import study.share.com.source.model.UploadFile;
+import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.repository.FeedListRepository;
@@ -88,9 +91,10 @@ public class FeedListController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-			//Page<FeedList> feedlist = feedListService.listfeed(pageable);
+//			Page<FeedList> feedlist = feedListService.listfeed(pageable);
 			Page<FeedList> feedMylike = feedListService.feedMylike(pageable,user);
 			
+			//Stream<FeedList> allMyFeedlist = Stream.concat(feedlist.stream(),feedMylike.stream());
 			//return new ResponseEntity<>(feedMylike,HttpStatus.OK);
 			return new ResponseEntity<>(feedMylike.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
 		}	 
@@ -112,7 +116,6 @@ public class FeedListController {
 		}else {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedlist = feedListService.listMyFeedLikeFeedDetail(id,user);
-
 			return new ResponseEntity<>(new FeedListDTO(feedlist.get(),user.get()),HttpStatus.OK);
 			//return new ResponseEntity<>(feedlist.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
 

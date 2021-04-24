@@ -2,6 +2,7 @@ package study.share.com.source.model.DTO;
 
 import lombok.Getter;
 import lombok.Setter;
+import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
 
 @Getter
@@ -9,40 +10,33 @@ import study.share.com.source.model.User;
 public class TodoListDTO {
 	private long id;
 	
+	private String todoTitle;
+	
 	private String todoContent;
 	
-	private String highlighter;//형광펜
-	
-	private boolean checked;
+	private char checked;
 	
 	private String savedDate;
 	
+	private String startTime;
+	
+	private String endTime;
+	
 	private User user;
 	
-	public boolean isChecked(){return this.checked;}
-
-	public void setChecked(boolean active){this.checked = active;}
+	private long Completeresult;
 	
-	private long completetodo;
+	private long resultAll;
 	
-	private long uncompletetodo;
 	
-	private long percompletetodo;
-//	
-//	public TodoListDTO(TodoList todoList) {
-//		this.setTodoContent(todoList.getTodoContent());
-//		this.setHighlighter(todoList.getHighlighter());
-//		this.setSavedDate(todoList.getSavedDate());
-//		this.setSubject(todoList.getSubject());
-//		this.setUser(todoList.getUser());
-//		this.setId(todoList.getId());
-//		this.setChecked(todoList.isChecked());
-//	}
-//
-//	public TodoListDTO(long completeTodo2, long uncompleteTodo2, long perCompleteTodo) {
-//		this.setCompletetodo(completeTodo2);
-//		this.setUncompletetodo(uncompleteTodo2);
-//		this.setPercompletetodo(perCompleteTodo);
-//	}
-
+	public TodoListDTO(TodoList todoList,User user,long Completeresult,long resultAll) {
+		this.setTodoTitle(todoList.getTodoTitle());
+		this.setTodoContent(todoList.getTodoContent());
+		this.setChecked(todoList.getChecked());
+		this.setStartTime(todoList.getStartTime());
+		this.setEndTime(todoList.getEndTime());
+//		this.setUser(user);
+		this.setCompleteresult(Completeresult);
+		this.setResultAll(resultAll);
+	}
 }
