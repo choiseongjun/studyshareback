@@ -46,4 +46,7 @@ public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 			char c, Long id);
 
 	Page<FeedReply> findByDeleteynAndFeedReplylikeUserIdOrderByGroupOrdDesc(Pageable pageable, char c, Long id);
+
+	Page<FeedReply> findByFeedlist_idAndDeleteynOrFeedReplylikeUserIdAndFeedReplylikeUserIdIsNullAndFeedReplylikeUserIdIsNotNullOrderByGroupOrdDesc(
+			Pageable pageable, Long id, char c, Long id2);
 }

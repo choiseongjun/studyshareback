@@ -121,13 +121,21 @@ public class FeedReplyController {
 			List<FeedReply> feedReplylist2 = feedReplylist.getContent();
 			List<Long> feedreplyId = feedReplylist.stream().map(t->t.getId()).collect(Collectors.toList());
 			
+			System.out.println("여기 탐 ");
 			
 			for(int i=0;i<feedreplyId.size();i++) {
 				Page<FeedReply> feedReReplylist=feedReplyService.getfeedrereply(feedreplyId.get(i),pageable); 
 				replyContnet= feedReReplylist.getContent();
-			}
-	
-			return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,replyContnet)),HttpStatus.OK);
+			}	
+//			if(replyContnet.size()>0) {
+//				return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,replyContnet)),HttpStatus.OK);
+//				
+//			}else {
+//				return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t)),HttpStatus.OK);
+//
+//			}
+			return new ResponseEntity<>(feedReplylist.stream().map(t->new FeedReplyDTO(t)),HttpStatus.OK);
+
 
 		}else {
 			Optional<User> user = userService.findUserNickname(principal.getName());
@@ -139,17 +147,18 @@ public class FeedReplyController {
 				Page<FeedReply> feedReReplylist=feedReplyService.getfeedrereply(feedreplyId.get(i),pageable); 
 				replyContnet= feedReReplylist.getContent();
 			}
-			Page<FeedReply> feedReplylist3 = feedReplyService.feedReplyFeedLikeUserFind(user.get(),pageable);
-			feedReplyUser = feedReplylist3.getContent();
-			
-			return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,replyContnet,user.get())),HttpStatus.OK);
+//			Page<FeedReply> feedReplylist3 = feedReplyService.feedReplyFeedLikeUserFind(id,user.get(),pageable);
+//			feedReplyUser = feedReplylist3.getContent();
+			return new ResponseEntity<>(feedReplylist.stream().map(t->new FeedReplyDTO(t,user.get())),HttpStatus.OK);
 
-//			if(feedReplyUser.isEmpty()) {
-//				return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,replyContnet)),HttpStatus.OK);
+//			if(replyContnet.size()>0) {
+//				return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,replyContnet,user.get())),HttpStatus.OK);
+//				
 //			}else {
-//				System.out.println("여기타나??");
-//				return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,feedReplyUser)),HttpStatus.OK);
+//				return new ResponseEntity<>(feedReplylist2.stream().map(t->new FeedReplyDTO(t,user.get())),HttpStatus.OK);
+//
 //			}
+
 	
 
 		}

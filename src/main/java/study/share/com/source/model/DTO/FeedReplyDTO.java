@@ -71,12 +71,13 @@ public class FeedReplyDTO {
         this.groupOrd=feedReply.getGroupOrd();
         this.nickname=feedReply.getUser().getNickname();
         this.likeCnt = feedReply.getFeedReplylike().size();
-        for(int i=0;i<feedReply2.size();i++) {
-    		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
-    			this.feedreReply = feedReply2;		
-    		}
-   
-    	}
+        	for(int i=0;i<feedReply2.size();i++) {
+        		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
+        			this.feedreReply = feedReply2;		
+        		}
+       
+        	}	
+        
     	this.createdAt = feedReply.getCreatedAt();
 
     	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
@@ -92,16 +93,34 @@ public class FeedReplyDTO {
         this.groupOrd=feedReply.getGroupOrd();
         this.nickname=feedReply.getUser().getNickname();
         this.likeCnt = feedReply.getFeedReplylike().size();
-    	for(int i=0;i<feedReply2.size();i++) {
-    		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
-    			this.feedreReply = feedReply2;		
-    		}
-   
-    	}
+        if(feedReply2.size()>0) {
+        	for(int i=0;i<feedReply2.size();i++) {
+        		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
+        			this.feedreReply = feedReply2;		
+        		}
+       
+        	}	
+        }
+    	
     	this.createdAt = feedReply.getCreatedAt();
 		this.myFeedReplyLike = feedReply.getFeedReplylike().stream().filter(t->t.getUser().getId()==user.getId());
 
     	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
     }
+	public FeedReplyDTO(FeedReply feedReply, User user) {
+		this.id=feedReply.getId();
+        this.content=feedReply.getContent();
+        this.feedId=feedReply.getFeedlist().getId();
+        this.userId=feedReply.getUser().getId();
+        this.originNo=feedReply.getOriginNo();
+        this.groupOrd=feedReply.getGroupOrd();
+        this.nickname=feedReply.getUser().getNickname();
+        this.likeCnt = feedReply.getFeedReplylike().size();
+		this.createdAt = feedReply.getCreatedAt();
+		this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
+		this.myFeedReplyLike = feedReply.getFeedReplylike().stream().filter(t->t.getUser().getId()==user.getId());
+
+		
+	}
 
 }
