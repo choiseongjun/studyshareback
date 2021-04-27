@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Table(name = "user_history")
 @Getter
 @Setter
-@Data
 public class UserHistory extends DateAudit {
 
     @Id

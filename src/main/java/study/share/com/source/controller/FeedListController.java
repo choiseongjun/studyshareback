@@ -3,6 +3,7 @@ package study.share.com.source.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,8 +53,6 @@ public class FeedListController {
 	@PostMapping("/feed")
 	public ResponseEntity<?> savefeed(@RequestParam(name = "images", required = false) String file
 			,@RequestPart(name = "content", required = false) String content,Principal principal) throws IOException {
-		
-
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			FeedList feedlist=feedListService.saveFeed(user,content,file);
@@ -142,13 +141,15 @@ public class FeedListController {
 	public ResponseEntity<?> updatefeed(
 			@RequestParam(name = "images", required = false) String file,
 			@PathVariable long id,
-			@RequestParam(name = "content", required = false) String content
-			){
+			@RequestParam(name = "content", required = false) String content,
+			Principal principal){
 		System.out.println("filetest"+file);
-		Optional<FeedList> feedlist = feedListService.updatefeed(id,content,file); 
+
 		try {
 //			String content = data.get("content");
-			
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			Optional<FeedList> feedlist = feedListService.updatefeed(id,content,file);
+
 			return new ResponseEntity<>(feedlist,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	

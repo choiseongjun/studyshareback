@@ -1,6 +1,7 @@
 package study.share.com.source.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
 
@@ -46,7 +49,7 @@ import study.share.com.source.service.VerificationTokenService;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthController extends HttpServlet {
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -77,7 +80,7 @@ public class AuthController {
 
     @ApiOperation(value="로그인",notes="로그인")
     @PostMapping("/signin")
-    public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+    public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest, HttpServletResponse response) {
 
     	try {
     		Authentication authentication = authenticationManager.authenticate(
@@ -99,6 +102,10 @@ public class AuthController {
             map.put("accessToken", authTokenDTO.getAccessToken());
             map.put("jwt", authTokenDTO.getAccessToken());
             map.put("refreshToken", authTokenDTO.getRefreshToken());
+            //로깅을 위한 사용자 아이디 세팅
+//            response.setContentType("text/html");
+//            PrintWriter writer = response.getWriter();
+//            writer.println(userPrincipal.getUserId());
             return ResponseEntity.ok(map);
     	}catch(Exception e) {
     		//e.printStackTrace();

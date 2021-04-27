@@ -105,8 +105,6 @@ public class FeedListService {
 		Optional<FeedList> feedlist = feedListRepository.findById(id);
 		feedlist.ifPresent(selectList -> {
 			selectList.setContent(content);
-			feedListRepository.save(selectList);
-			
 		});
 		List<UploadFile> fileone2 = uploadFileRepository.findByFeedlistId(id);
 		if (file != null) {//파일이 있는경우
