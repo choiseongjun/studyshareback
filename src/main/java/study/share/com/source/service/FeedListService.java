@@ -190,7 +190,7 @@ public class FeedListService {
 	}
 
 	public Page<FeedList> otherlistfeed(Pageable pageable, long user_id) {
-		return feedListRepository.findAllByuser_id(pageable, user_id);
+		return feedListRepository.findAllByuser_idAndDeleteyn(pageable, user_id,'N');
 	}
 
 	public void extractHashTagTest(String content,FeedList feedList) {//해시태그 검출을 위한 함수
