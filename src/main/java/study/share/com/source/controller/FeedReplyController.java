@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,7 @@ public class FeedReplyController {
 	@Autowired
 	FeedReplyLikeRepository feedReplyLikeRepository;
 	@Autowired
-	MessageController messageController;
+	AlarmController alarmController;
 	
 	public static List<FeedReply> replyContnet = new ArrayList<FeedReply>();//대댓글 쓸때 필요함 2021 04-18 choiseongjun
 	public static List<FeedReply> feedReplyUser = new ArrayList<FeedReply>();//댓글조회해서 내가 좋아요누른거 가져오기
@@ -56,7 +55,7 @@ public class FeedReplyController {
 			String content = data.get("content");
 			FeedReply feedReplylist=feedReplyService.addfeedcomment(id,user,content);
 
-			messageController.alertreply(feedReplylist);//댓글 생성 알림
+			alarmController.alertreply(feedReplylist, id);//댓글 생성 알림
 
 			return new ResponseEntity<>(new FeedReplyDTO(feedReplylist),HttpStatus.OK);
 		}catch(Exception e) {

@@ -3,10 +3,7 @@ package study.share.com.source.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,7 +46,7 @@ public class FeedListController {
 	@Autowired
 	HashTagExtract hashTagExtract;
 	@Autowired
-	MessageController messageController;
+	AlarmController alarmController;
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
@@ -187,7 +184,7 @@ public class FeedListController {
 			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
 			feedListLike.setUserKey(user.get().getId());
 
-			messageController.alertlike(feedList.get());//피드 좋아요 사용자에게 알림
+			alarmController.alertlike(feedList.get(),user.get());//피드 좋아요 사용자에게 알림
 
 			return new ResponseEntity<>(feedListLike,HttpStatus.OK);
 		}catch(Exception e) {
