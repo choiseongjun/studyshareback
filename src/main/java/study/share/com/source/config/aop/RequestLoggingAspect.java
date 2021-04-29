@@ -67,7 +67,6 @@ public class RequestLoggingAspect {
 
         long start = System.currentTimeMillis();
         try {
-
             Authentication auth=SecurityContextHolder.getContext().getAuthentication();
             String username=auth.getName();
             System.out.println("current user: "+username);
@@ -89,7 +88,7 @@ public class RequestLoggingAspect {
             userhistory.setSessionlastaccess(lastTime);	//마지막접속시간
             userhistory.setOstype(request.getHeader("User-Agent"));
 
-            if(!(username.equals("anonymousUser"))) {
+            if(!(username.equals("anonymousUser"))) {//사용자의 정보를 가져올 수 있는 경우
                 Optional <User> findUser = userRepository.findByNickname(username);
                 User users=new User();
                 long userid = findUser.get().getId();
@@ -97,6 +96,7 @@ public class RequestLoggingAspect {
                 userhistory.setUser(users);
                 userhistory.setAccessname(findUser.get().getNickname());
             }
+            //없는 경우는 accessname, userid없이 저장
 
             userHistoryRepository.save(userhistory);
             return pjp.proceed(pjp.getArgs()); // 6

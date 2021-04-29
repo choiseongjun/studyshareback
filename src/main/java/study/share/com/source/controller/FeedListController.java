@@ -48,6 +48,8 @@ public class FeedListController {
 	FeedListRepository feedListRepository;
 	@Autowired
 	HashTagExtract hashTagExtract;
+	@Autowired
+	MessageController messageController;
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
@@ -184,6 +186,9 @@ public class FeedListController {
 			Optional<FeedList> feedList = feedListService.likefeed(user,id);
 			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
 			feedListLike.setUserKey(user.get().getId());
+
+			messageController.alertlike(feedList.get());//피드 좋아요 사용자에게 알림
+
 			return new ResponseEntity<>(feedListLike,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

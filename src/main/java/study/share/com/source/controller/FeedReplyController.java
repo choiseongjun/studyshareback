@@ -41,6 +41,8 @@ public class FeedReplyController {
 	UserService userService;
 	@Autowired
 	FeedReplyLikeRepository feedReplyLikeRepository;
+	@Autowired
+	MessageController messageController;
 	
 	public static List<FeedReply> replyContnet = new ArrayList<FeedReply>();//대댓글 쓸때 필요함 2021 04-18 choiseongjun
 	public static List<FeedReply> feedReplyUser = new ArrayList<FeedReply>();//댓글조회해서 내가 좋아요누른거 가져오기
@@ -53,7 +55,9 @@ public class FeedReplyController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			String content = data.get("content");
 			FeedReply feedReplylist=feedReplyService.addfeedcomment(id,user,content);
-			
+
+			messageController.alertreply(feedReplylist);//댓글 생성 알림
+
 			return new ResponseEntity<>(new FeedReplyDTO(feedReplylist),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

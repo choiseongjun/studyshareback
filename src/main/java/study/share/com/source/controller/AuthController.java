@@ -102,10 +102,7 @@ public class AuthController extends HttpServlet {
             map.put("accessToken", authTokenDTO.getAccessToken());
             map.put("jwt", authTokenDTO.getAccessToken());
             map.put("refreshToken", authTokenDTO.getRefreshToken());
-            //로깅을 위한 사용자 아이디 세팅
-//            response.setContentType("text/html");
-//            PrintWriter writer = response.getWriter();
-//            writer.println(userPrincipal.getUserId());
+
             return ResponseEntity.ok(map);
     	}catch(Exception e) {
     		//e.printStackTrace();
