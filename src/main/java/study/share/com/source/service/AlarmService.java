@@ -10,6 +10,7 @@ import study.share.com.source.repository.AlarmRepository;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +44,12 @@ public class AlarmService {
         alarmHistory.setToUser(feedList.getUser());
         alarmHistory.setFromUser(user);
         alarmRepository.save(alarmHistory);
+    }
+
+    public List<AlarmHistory> allalarmView(User user)
+    {
+        List<AlarmHistory> alarmHistoryList= alarmRepository.findByToUserId(user.getId());
+        return alarmHistoryList;
     }
 
 
