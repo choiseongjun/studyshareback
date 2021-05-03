@@ -20,6 +20,7 @@ public class AlarmHistoryDTO {
     private String content;
     private long toUserId;
     private long fromUserId;
+    private String fromUserSId;
 
     public AlarmHistoryDTO (AlarmHistory alarmHistory)
     {
@@ -28,5 +29,6 @@ public class AlarmHistoryDTO {
         this.content=alarmHistory.getContent();
         this.toUserId=alarmHistory.getToUser().getId();
         this.fromUserId=alarmHistory.getFromUser().getId();
+        this.fromUserSId =alarmHistory.getFromUser().getUserid();
     }
 }

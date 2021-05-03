@@ -52,6 +52,7 @@ public class AlarmController {
     @ApiOperation(value="사용자의 알람 조회하기",notes="사용자의 알람 조회하기")
     @MessageMapping("/alarmView")
     @SendTo("/alert/view")
+    //@GetMapping("/message/alarm")
     public ResponseEntity<?> allalertView(Principal principal) throws Exception {
 
         try {

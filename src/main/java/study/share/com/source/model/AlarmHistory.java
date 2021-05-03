@@ -26,4 +26,5 @@ public class AlarmHistory extends DateAudit {
     @ManyToOne
     @JoinColumn(name = "fromUserId")//알람 발생 사용자
     private User fromUser;
+
 }

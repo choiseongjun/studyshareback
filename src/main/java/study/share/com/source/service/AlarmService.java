@@ -40,7 +40,7 @@ public class AlarmService {
         AlarmHistory alarmHistory= new AlarmHistory();
 
         alarmHistory.setFunction(2);
-        alarmHistory.setContent(feedList.getContent());
+        alarmHistory.setContent(user.getUserid()+"님이 내 게시물을 좋아합니다.");
         alarmHistory.setToUser(feedList.getUser());
         alarmHistory.setFromUser(user);
         alarmRepository.save(alarmHistory);
