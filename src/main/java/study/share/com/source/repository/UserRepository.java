@@ -16,7 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUserid(String username);
 	Optional<User> findByNickname(String username);
 	Optional<User> findByEmail(String email);
-	//Optional<User> findByemailAnduserid(String email,String userid);
 
 	@Query("SELECT IFNULL(MAX(id),0)+1 FROM User")
 	long selectusermaxid();

@@ -130,15 +130,11 @@ public class VerificationTokenService {
         verificationTokenRepository.save(verificationToken);
     }
 
-    public void pwchangeEmailsend(String email) throws AddressException, MessagingException {
+    public void userIdEmailsend(String email,User user) throws AddressException, MessagingException {
 
-        //String title = messageSource.getMessage("email.auth.title", null, LocaleContextHolder.getLocale());
-        String title ="비밀번호 변경";
-        // String content = messageSource.getMessage("email.auth.content", new Object[]{String.format(EMAIL_VERIFY_API, token)}, LocaleContextHolder.getLocale());
-        String content = "<h2>안녕하세요</h2><p>비밀번호 변경을 위한 링크를 클릭해 주세요</p><hr>";
-        content+="<a href=\"http://localhost:8080/passwordset?email={0}\"" .replace("{0}",email);
-        content+=">비밀번호 변경을 위한 링크</a>";
-        content+="<br /><br /><br />";
+        String title ="아이디 조회";
+        String content = "<h2>안녕하세요</h2><p>고객님의 아이디는 다음과 같습니다</p><hr>";
+        content+=user.getUserid();
 
         mailService.sendMail(email, title, content);
     }

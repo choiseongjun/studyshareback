@@ -3,11 +3,7 @@ package study.share.com.source.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -77,6 +73,8 @@ public class AuthController extends HttpServlet {
 
     @Autowired
     VerificationTokenService verificationTokenService;
+
+
 
     @ApiOperation(value="로그인",notes="로그인")
     @PostMapping("/signin")
@@ -265,27 +263,16 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    @ApiOperation(value="아이디 찾기",notes="아이디 찾기")
-    @GetMapping("/find/userId/{email}")
-    public ResponseEntity<?> findUserId(@PathVariable("email") String email) throws IOException {
 
+    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
+    @PostMapping("/change/password/")
+    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq) throws IOException {
         try {
-            Optional<User> result=userService.findByEmail(email);
-            return new ResponseEntity<>(result.get().getUserid(), HttpStatus.OK);
+            Optional<User> result=userService.checkpassword(passwordChangeReq);
+            //result.orElseThrow(()->new NoSuchElementException("해당 유저 정보가 존재하지 않습니다"));
+            return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
         }catch(Exception e) {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-//    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
-//    @PostMapping("/change/password/{email}")
-//    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq) throws IOException {
-//        try {
-//            Optional<User> result=userService.changepassword(passwordChangeReq);
-//            return new ResponseEntity<>("success", HttpStatus.OK);
-//        }catch(Exception e) {
-//            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 }

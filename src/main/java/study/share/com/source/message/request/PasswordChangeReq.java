@@ -7,7 +7,9 @@ import lombok.Setter;
 @Setter
 public class PasswordChangeReq {
 
-    private String email;
     private String userId;
     private String password;
+    private String newPassword;
+    private String newPassword2;
+
 }

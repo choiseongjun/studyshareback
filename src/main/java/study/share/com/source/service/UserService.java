@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import study.share.com.source.message.request.PasswordChangeReq;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
 import study.share.com.source.model.UserProfileImage;
@@ -148,11 +149,11 @@ public class UserService {
 		return result;
 	}
 
-//	public Optional<User> changepassword(PasswordChangeReq passwordChangeReq) {
-//
-//		Optional <User> result=userRepository.findByemailAnduserid(passwordChangeReq.getEmail(),passwordChangeReq.getUserId());
-//		result.orElseThrow(()-> new NoSuchElementException("해당 이메일과 아이디를 사용한 유저가 존재하지 않습니다"));
-//		result.get().setPassword(passwordChangeReq.getPassword());
-//		return result;
-//	}
+	public Optional <User> checkpassword(PasswordChangeReq passwordChangeReq) {
+		Optional <User> result=userRepository.findByUserid(passwordChangeReq.getUserId());
+		if(encoder.matches(passwordChangeReq.getPassword(),result.get().getPassword()))//비밀번호가 일치하는 경우에만 변경
+			result.get().setPassword(encoder.encode(passwordChangeReq.getNewPassword()));
+
+		return result;
+	}
 }
