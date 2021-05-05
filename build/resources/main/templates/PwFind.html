@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>비밀번호 재설정</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<script type="text/javascript">
+    $(function () {
+        $('#submit').on('click', function () {
+            $.ajax({
+                type : 'post',
+                url : '/change/password/set/',
+                data : {
+                    userId: $('#userid').val(),
+                    password : $('#password').val(),
+                    password2 : $('#password2').val()
+                },
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8;",
+                success : function (data) {
+                },
+                error : function (xhr) {
+                    console.log("error");
+                }
+            })
+        })
+    })
+</script>
+<body>
+<h2>비밀번호 재설정</h2> <hr>
+
+<div>
+    <p> 안녕하세요 <span th:text="${user.userid}"/>님!</p>
+    <p> 새로운 비밀번호로 변경해 주세요</p>
+
+    <form >
+        <input type="hidden" id="userid" th:value="${user.userid}"/>
+        <p>새 비밀번호: <input placeholder="새 비밀번호" type="password" id="password" required/></p>
+        <p>재 입력: <input placeholder="새 비밀번호" type="password" id="password2" required/></p>
+        <button class="btn" type="submit" id="submit">변경</button>
+    </form>
+</div>
+
+</body>
+</html>

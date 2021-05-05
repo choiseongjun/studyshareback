@@ -153,7 +153,13 @@ public class UserService {
 		Optional <User> result=userRepository.findByUserid(passwordChangeReq.getUserId());
 		if(encoder.matches(passwordChangeReq.getPassword(),result.get().getPassword()))//비밀번호가 일치하는 경우에만 변경
 			result.get().setPassword(encoder.encode(passwordChangeReq.getNewPassword()));
-
 		return result;
 	}
+
+	public Optional <User> checkpasswordSet(PasswordChangeReq passwordChangeReq) {
+		Optional <User> result=userRepository.findByUserid(passwordChangeReq.getUserId());
+		result.get().setPassword(encoder.encode(passwordChangeReq.getNewPassword()));
+		return result;
+	}
+
 }

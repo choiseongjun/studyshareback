@@ -59,4 +59,20 @@ public class AuthEmailController {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @ApiOperation(value="비밀번호 찾기",notes="비밀번호 찾기")
+    @GetMapping(value = "/find/user/pw/{email}")
+    public ResponseEntity<String> UserPwemailSending(
+            @PathVariable("email") String email) throws AddressException, MessagingException {
+        try{
+            Optional<User> result=userService.findByEmail(email);
+            result.orElseThrow(()->new NoSuchElementException("해당 이메일을 가진 사용자가 존재하지 않습니다"));
+            verificationTokenService.userPwEmailsend(email,result.get());
+            return ResponseEntity.ok("success");
+        }
+        catch(Exception e)
+        {
+            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
