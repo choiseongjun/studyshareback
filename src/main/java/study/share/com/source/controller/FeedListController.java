@@ -54,8 +54,9 @@ public class FeedListController {
 			,@RequestPart(name = "content", required = false) String content,Principal principal) throws IOException {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			FeedList feedlist=feedListService.saveFeed(user,content,file);
-			feedListService.extractHashTagTest(content,feedlist);//해시태그 검출 및 저장
+			String eraseTag=feedListService.remakeTag(content);
+			FeedList feedlist=feedListService.saveFeed(user,eraseTag,file);
+			feedListService.extractHashTag(content,feedlist);//해시태그 검출 및 저장-> 테이블 사용시 다시
 			//long feedid =feedListService.saveFeed(user,content,file);
 			//Optional<FeedList> feedlist = feedListService.selectOne(feedid); 
 			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);

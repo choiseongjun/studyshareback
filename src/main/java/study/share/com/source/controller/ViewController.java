@@ -36,15 +36,11 @@ public class ViewController {
     @PostMapping("/change/password/set/")
     @ResponseBody
     public ResponseEntity<?> changepassword(@RequestParam(required = false) String userId
-            ,@RequestParam(required = false) String password
-            ,@RequestParam(required = false) String password2)
+            ,@RequestParam(required = false) String password)
             throws IOException {
         try {
-            System.out.println("사용자 아이디: "+ userId);
-            System.out.println("사용자 비밀번호: "+ password);
             PasswordChangeReq passwordChangeReq = new PasswordChangeReq();
             passwordChangeReq.setNewPassword(password);
-            passwordChangeReq.setNewPassword2(password2);
             passwordChangeReq.setUserId(userId);
             Optional<User> result=userService.checkpasswordSet(passwordChangeReq);
             return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);

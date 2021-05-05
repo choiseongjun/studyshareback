@@ -6,23 +6,35 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <script type="text/javascript">
+    function test() {
+        var p1 = document.getElementById('password').value;
+        var p2 = document.getElementById('password2').value;
+        if( p1 != p2 ) {
+            alert("비밀번호가 일치 하지 않습니다");
+            return false;
+        } else{
+            return true;
+        }
+    }
     $(function () {
         $('#submit').on('click', function () {
-            $.ajax({
-                type : 'post',
-                url : '/change/password/set/',
-                data : {
-                    userId: $('#userid').val(),
-                    password : $('#password').val(),
-                    password2 : $('#password2').val()
-                },
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8;",
-                success : function (data) {
-                },
-                error : function (xhr) {
-                    console.log("error");
-                }
-            })
+            if (test() == true)
+            {
+                $.ajax({
+                    type: 'post',
+                    url: '/change/password/set/',
+                    data: {
+                        userId: $('#userid').val(),
+                        password: $('#password').val(),
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8;",
+                    success: function (data) {
+                    },
+                    error: function (xhr) {
+                        console.log("error");
+                    }
+                })
+            }
         })
     })
 </script>
@@ -37,7 +49,7 @@
         <input type="hidden" id="userid" th:value="${user.userid}"/>
         <p>새 비밀번호: <input placeholder="새 비밀번호" type="password" id="password" required/></p>
         <p>재 입력: <input placeholder="새 비밀번호" type="password" id="password2" required/></p>
-        <button class="btn" type="submit" id="submit">변경</button>
+        <button class="btn" onclick="test()" type="submit" id="submit">변경</button>
     </form>
 </div>
 

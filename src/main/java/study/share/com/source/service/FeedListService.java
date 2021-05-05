@@ -56,7 +56,6 @@ public class FeedListService {
 		HttpServletRequest request = // 5
 				((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		long feedid = feedListRepository.selectmaxid();
-
 		FeedList feedList = new FeedList();
 		feedList.setId(feedid);
 		feedList.setContent(content);
@@ -195,14 +194,13 @@ public class FeedListService {
 		return feedListRepository.findAllByuser_idAndDeleteyn(pageable, user_id,'N');
 	}
 
-	public void extractHashTagTest(String content,FeedList feedList) {//해시태그 검출을 위한 함수
+	public void extractHashTag(String content,FeedList feedList) {//해시태그 검출을 위한 함수
 
 		Pattern p = Pattern.compile("\\#([0-9a-zA-Z가-힣]*)");
 		Matcher m = p.matcher(content);
 		String extractHashTag = null;
 		while (m.find()) {
 			extractHashTag = sepecialCharacter_replace(m.group());
-
 			if (extractHashTag != null) //해시태그 저장
 			{
 				Tag tag = new Tag();
@@ -222,6 +220,31 @@ public class FeedListService {
 			}
 		}
 
+	}
+	public String remakeTag(String content) {//해시태그 검출을 위한 함수
+
+		Pattern p = Pattern.compile("\\#([0-9a-zA-Z가-힣]*)");
+		Matcher m = p.matcher(content);
+		List tagSave = new ArrayList();
+		String extractHashTag = null;
+		while (m.find()) {
+			extractHashTag = sepecialCharacter_replace(m.group());
+			String Tag = "#"+extractHashTag;
+			content=content.replace(Tag,"");
+			if (extractHashTag != null) //해시태그가 있는 경우
+			{
+				content.replace(extractHashTag, "");//검출한 태그 내용에서 지우기
+				tagSave.add(extractHashTag);//태그 저장
+			}
+		}
+		content+="<br/><br/>";
+		for (Object object: tagSave)
+		{
+			String tag= (String) object;
+			content+="#";
+			content+=tag;
+		}
+		return content;
 	}
 	public String sepecialCharacter_replace(String str) {
 		str = StringUtils.replaceChars(str, "-_+=!@#$%^&*()[]{}|\\;:'\"<>,.?/~`） ","");
