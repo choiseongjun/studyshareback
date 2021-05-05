@@ -102,9 +102,12 @@ public class FeedListService {
 	}
 
 	public Optional<FeedList> updatefeed(long id, String content, String file) {
+		System.out.println("service id===="+id);
 		Optional<FeedList> feedlist = feedListRepository.findById(id);
 		feedlist.ifPresent(selectList -> {
 			selectList.setContent(content);
+			System.out.println("id===="+id);
+			feedListRepository.save(selectList);
 		});
 		List<UploadFile> fileone2 = uploadFileRepository.findByFeedlistId(id);
 		if (file != null) {//파일이 있는경우
@@ -114,7 +117,6 @@ public class FeedListService {
 
 				fileone.setFeedlist(feedlist.get());
 				String src =uploadFileRepository.save(fileone).getSrc();//파일리스트에 키 업데이트
-				System.out.println("src=="+src);
 
 //				for(int deleteIdx=0;deleteIdx<fileone2.size();deleteIdx++) {
 //					System.out.println("check@#$@$"+f[i]+"=="+fileone2.get(deleteIdx).getSrc());
