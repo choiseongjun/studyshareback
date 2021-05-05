@@ -59,6 +59,7 @@ public class FeedReplyDTO {
         this.likeCnt = feedReply.getFeedReplylike().size();
 		this.createdAt = feedReply.getCreatedAt();
 		this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
+		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
     }
     public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2) {
 
@@ -79,7 +80,7 @@ public class FeedReplyDTO {
         	}	
         
     	this.createdAt = feedReply.getCreatedAt();
-
+		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
     	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
     }
     public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2,User user) {
@@ -104,7 +105,7 @@ public class FeedReplyDTO {
     	
     	this.createdAt = feedReply.getCreatedAt();
 		this.myFeedReplyLike = feedReply.getFeedReplylike().stream().filter(t->t.getUser().getId()==user.getId());
-
+		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
     	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
     }
 	public FeedReplyDTO(FeedReply feedReply, User user) {
@@ -119,6 +120,7 @@ public class FeedReplyDTO {
 		this.createdAt = feedReply.getCreatedAt();
 		this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
 		this.myFeedReplyLike = feedReply.getFeedReplylike().stream().filter(t->t.getUser().getId()==user.getId());
+		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
 
 		
 	}
