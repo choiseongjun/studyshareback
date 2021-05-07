@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Controller
-public class ViewController {
+public class MailViewController {
 
     @Autowired
     UserService userService;
