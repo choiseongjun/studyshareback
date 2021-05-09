@@ -25,14 +25,14 @@ public class FeedListLikeDTO {
 	
 	private List<FeedLike> feedlike;
 	
-	private List<FeedLike> myFeedlike;
+	private Stream<FeedLike> myFeedlike;
 	
 	
-	public FeedListLikeDTO(FeedList feedlist) {
+	public FeedListLikeDTO(FeedList feedlist,User user) {
 		this.setId(feedlist.getId());
 		this.setContent(feedlist.getContent());
 		this.setTotallike(feedlist.getFeedlike().size());
-		this.setMyFeedlike(feedlist.getFeedlike());
+		this.setMyFeedlike(feedlist.getFeedlike().stream().filter(t->t.getUser().getId()==user.getId()));
 //		this.setUser(feedlist.getUser());
 	}
 	

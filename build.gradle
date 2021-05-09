@@ -79,6 +79,8 @@ dependencies {
 	compile group: 'org.json', name: 'json', version: '20180813'
 	//aop 사용자 logging을 위한 설정
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.5.0'
 
 	//STOMP 알림을 위한 설정
 	implementation 'org.webjars:webjars-locator-core'

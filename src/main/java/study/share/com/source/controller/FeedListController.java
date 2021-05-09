@@ -182,7 +182,7 @@ public class FeedListController {
 			}
 			
 			Optional<FeedList> feedList = feedListService.likefeed(user,id);
-			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
+			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get(),user.get());
 			feedListLike.setUserKey(user.get().getId());
 
 			alarmController.alertlike(feedList.get(),user.get());//피드 좋아요 사용자에게 알림
@@ -202,7 +202,7 @@ public class FeedListController {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedList> feedList = feedListService.dislikefeed(user,id);
 			FeedList feedList1 =new FeedList();
-			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get());
+			FeedListLikeDTO feedListLike=new FeedListLikeDTO(feedList.get(),user.get());
 			feedListLike.setUserKey(user.get().getId());
 			return new ResponseEntity<>(feedListLike,HttpStatus.OK);
 		}catch(Exception e) {

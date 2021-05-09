@@ -78,7 +78,7 @@ public class FeedReplyController {
 				String content = data.get("content");
 				FeedReply feedReplylist=feedReplyService.updatefeedcomment(id,user,content);
 				
-				return new ResponseEntity<>(feedReplylist,HttpStatus.OK);
+				return new ResponseEntity<>(new FeedReplyDTO(feedReplylist),HttpStatus.OK);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -124,7 +124,6 @@ public class FeedReplyController {
 			List<FeedReply> feedReplylist2 = feedReplylist.getContent();
 			List<Long> feedreplyId = feedReplylist.stream().map(t->t.getId()).collect(Collectors.toList());
 			
-			System.out.println("여기 탐 ");
 			
 			for(int i=0;i<feedreplyId.size();i++) {
 				Page<FeedReply> feedReReplylist=feedReplyService.getfeedrereply(feedreplyId.get(i),pageable); 
