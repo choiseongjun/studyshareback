@@ -51,12 +51,16 @@ public class FeedListController {
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
 	public ResponseEntity<?> savefeed(@RequestParam(name = "images", required = false) String file
-			,@RequestPart(name = "content", required = false) String content,Principal principal) throws IOException {
+			,@RequestParam(name = "content", required = false) String content,Principal principal) throws IOException {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
+			System.out.println(content);
+
 			String eraseTag=feedListService.remakeTag(content);
 			FeedList feedlist=feedListService.saveFeed(user,eraseTag,file);
-			feedListService.extractHashTag(content,feedlist);//해시태그 검출 및 저장-> 테이블 사용시 다시
+			if(eraseTag!=null)
+				feedListService.extractHashTag(content,feedlist);//해시태그 검출 및 저장-> 테이블 사용시 다시
+
 			//long feedid =feedListService.saveFeed(user,content,file);
 			//Optional<FeedList> feedlist = feedListService.selectOne(feedid); 
 			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
@@ -107,24 +111,22 @@ public class FeedListController {
 	@ApiOperation(value="피드리스트 상세조회",notes="피드리스트 상세조회")
 	@GetMapping("/feedDetail/{id}")
 	public ResponseEntity<?> listfeedDetail(@PathVariable long id,Principal principal){
-		 
-		if(principal==null) {
-			FeedList feedlist = feedListService.listfeedDetail(id);
-			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
 
-		}else {
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			Optional<FeedList> feedlist = feedListService.listMyFeedLikeFeedDetail(id,user);
-			return new ResponseEntity<>(new FeedListDTO(feedlist.get(),user.get()),HttpStatus.OK);
-			//return new ResponseEntity<>(feedlist.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
+			if(principal==null) {
+				FeedList feedlist = feedListService.listfeedDetail(id);
+				return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
 
-		}
-		
-//		try {
-//			
-//		}catch(Exception e) {  
-//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-//		}
+			}else {
+				Optional<User> user = userService.findUserNickname(principal.getName());
+				Optional<FeedList> feedlist = feedListService.listMyFeedLikeFeedDetail(id,user);
+				if(!user.isPresent())
+					return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
+				if(!feedlist.isPresent())
+					return new ResponseEntity<>("해당 사용자의 피드가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new FeedListDTO(feedlist.get(),user.get()),HttpStatus.OK);
+				//return new ResponseEntity<>(feedlist.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
+			}
+
 	}
 	@GetMapping("/gallary")
 	public ResponseEntity<?> listgallary(){
@@ -258,6 +260,13 @@ public class FeedListController {
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@ApiOperation(value="방어로직 확인",notes="방어로직 확인")
+	@GetMapping("/xss")
+	public ResponseEntity<?> testXss(){
+		String dirty = "\"><script>alert('xss');</script>";
+		return new ResponseEntity<>(dirty,HttpStatus.OK);
 	}
 //	/*게시글별 좋아요리스트 조회*/
 //	@GetMapping("/feed/likefeedlistandfollow/{id}")

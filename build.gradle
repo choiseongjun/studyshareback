@@ -88,6 +88,10 @@ dependencies {
 	implementation 'org.webjars:stomp-websocket:2.3.3'
 	implementation 'org.webjars:bootstrap:3.3.7'
 	implementation 'org.webjars:jquery:3.1.1-1'
+
+	//lucy-xss-servlet-filter 설정
+	implementation group: 'com.navercorp.lucy', name: 'lucy-xss-servlet', version: '2.0.0'
+	compile 'org.apache.commons:commons-text:1.9'
 }
 
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile

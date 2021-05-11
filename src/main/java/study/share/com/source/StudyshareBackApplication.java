@@ -5,11 +5,14 @@ import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
@@ -27,6 +30,7 @@ public class StudyshareBackApplication extends SpringBootServletInitializer{
 		
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 	}
+
 	public static final String APPLICATION_LOCATIONS = "spring.config.location="
             + "classpath:application.yml,"
             + "classpath:aws.yml,"

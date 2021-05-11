@@ -195,7 +195,6 @@ public class FeedListService {
 	}
 
 	public void extractHashTag(String content,FeedList feedList) {//해시태그 검출을 위한 함수
-
 		Pattern p = Pattern.compile("\\#([0-9a-zA-Z가-힣]*)");
 		Matcher m = p.matcher(content);
 		String extractHashTag = null;
@@ -222,7 +221,8 @@ public class FeedListService {
 
 	}
 	public String remakeTag(String content) {//해시태그 검출을 위한 함수
-
+		if(content==null)//입력 내용이 없는 경우 검출 하지 않음
+			return null;
 		Pattern p = Pattern.compile("\\#([0-9a-zA-Z가-힣]*)");
 		Matcher m = p.matcher(content);
 		List tagSave = new ArrayList();
