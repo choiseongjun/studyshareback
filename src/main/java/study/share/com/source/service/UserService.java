@@ -149,8 +149,8 @@ public class UserService {
 		return result;
 	}
 
-	public Optional <User> checkpassword(PasswordChangeReq passwordChangeReq) {
-		Optional <User> result=userRepository.findByUserid(passwordChangeReq.getUserId());
+	public Optional <User> checkpassword(String nickname,PasswordChangeReq passwordChangeReq) {
+		Optional <User> result=userRepository.findByNickname(nickname);
 		if(encoder.matches(passwordChangeReq.getPassword(),result.get().getPassword()))//비밀번호가 일치하는 경우에만 변경
 			result.get().setPassword(encoder.encode(passwordChangeReq.getNewPassword()));
 		return result;

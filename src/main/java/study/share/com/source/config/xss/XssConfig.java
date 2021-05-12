@@ -17,4 +17,5 @@ public class XssConfig implements WebMvcConfigurer {
         filterRegistration.addUrlPatterns("/*");
         return filterRegistration;
     }
+
 }

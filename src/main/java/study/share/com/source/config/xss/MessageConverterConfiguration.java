@@ -19,23 +19,29 @@
 //     * @return 커스텀 설정이 적용된 컨버터
 //     */
 //    @Bean
-//    public HttpMessageConverter<?> htmlEscapingConverter() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.getFactory().setCharacterEscapes(new HTMLCharacterEscapes()); //
-//        objectMapper.registerModule(new JavaTimeModule());
-//        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//    public MessageConverterConfiguration controlTowerWebConfigurerAdapter() {
+//        return new MessageConverterConfiguration() {
 //
-//        MappingJackson2HttpMessageConverter htmlEscapingConverter =
-//                new MappingJackson2HttpMessageConverter();
-//        htmlEscapingConverter.setObjectMapper(objectMapper);
+//            @Override
+//            public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//                super.configureMessageConverters(converters);
 //
-//        return htmlEscapingConverter;
-//    }
+//                // 5. WebMvcConfigurerAdapter에 MessageConverter 추가
+//                converters.add(htmlEscapingConveter());
+//            }
 //
-//    @Override
-//    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        converters.add(htmlEscapingConverter());
-//        super.addDefaultHttpMessageConverters(converters);  // default Http Message Converter  추가
+//            private HttpMessageConverter<?> htmlEscapingConveter() {
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                // 3. ObjectMapper에 특수 문자 처리 기능 적용
+//                objectMapper.getFactory().setCharacterEscapes(new HTMLCharacterEscapes());
+//
+//                // 4. MessageConverter에 ObjectMapper 설정
+//                MappingJackson2HttpMessageConverter htmlEscapingConverter =
+//                        new MappingJackson2HttpMessageConverter();
+//                htmlEscapingConverter.setObjectMapper(objectMapper);
+//
+//                return htmlEscapingConverter;
+//            }
+//        };
 //    }
 //}
