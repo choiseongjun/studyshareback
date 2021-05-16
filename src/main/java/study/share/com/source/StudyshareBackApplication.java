@@ -28,7 +28,8 @@ public class StudyshareBackApplication extends SpringBootServletInitializer{
 	@PostConstruct
 	void init() {
 		
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+		//TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 	}
 
 	public static final String APPLICATION_LOCATIONS = "spring.config.location="

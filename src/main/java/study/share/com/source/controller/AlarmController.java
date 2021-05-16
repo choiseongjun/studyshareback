@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import study.share.com.source.message.response.UserProfileResponse;
@@ -27,6 +28,9 @@ public class AlarmController {
     AlarmService alarmService;
     @Autowired
     UserService userService;
+	
+    @Autowired private SimpMessagingTemplate webSocket;
+
     //피드 댓글 알림
     @MessageMapping("/reply")
     @SendTo("/alert/feedreply")
@@ -44,6 +48,7 @@ public class AlarmController {
         System.out.println("Id: "+feedList.getId());
         System.out.println("user nickname:"+feedList.getUser().getNickname());
         System.out.println("content: "+ feedList.getContent());
+        webSocket.convertAndSend("/alert/feedlike" , feedList.getContent()+"내용!@");
         alarmService.alarmlike(feedList,user);
         return feedList;
     }

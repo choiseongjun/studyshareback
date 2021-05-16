@@ -13,12 +13,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/alert");
-        config.setApplicationDestinationPrefixes("/msg");
+//        config.setApplicationDestinationPrefixes("/msg");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stompAlert").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/stompNoti").setAllowedOrigins("*").withSockJS();
         //endpoint설정
     }
 

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,6 +49,7 @@ public class FeedListController {
 	HashTagExtract hashTagExtract;
 	@Autowired
 	AlarmController alarmController;
+
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
@@ -170,9 +173,11 @@ public class FeedListController {
 	}
 	/*좋아요 */
 	@ApiOperation(value="좋아요",notes="좋아요")
+//    @SendTo("/alert/feedlike")
 	@PostMapping("/likefeed/{id}")
 	public ResponseEntity<?> likefeed(@PathVariable long id,Principal principal){
 		
+
 		try {
 
 			Optional<User> user = userService.findUserNickname(principal.getName());
