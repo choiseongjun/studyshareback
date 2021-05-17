@@ -32,8 +32,11 @@ import study.share.com.source.model.UploadFile;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
+import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.ReportFeedRepository;
 import study.share.com.source.service.FeedListService;
+import study.share.com.source.service.ReportFeedService;
 import study.share.com.source.service.UserService;
 import study.share.com.source.utils.HashTagExtract;
 
@@ -43,13 +46,17 @@ public class FeedListController {
 	@Autowired
 	UserService userService;
 	@Autowired
-	FeedListService feedListService;
+	FeedListService  feedListService;
 	@Autowired
 	FeedListRepository feedListRepository;
 	@Autowired
 	HashTagExtract hashTagExtract;
 	@Autowired
 	AlarmController alarmController;
+	@Autowired
+	ReportFeedService reportFeedService;
+	@Autowired
+	ReportFeedRepository reportFeedRepository;
 
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
@@ -269,16 +276,48 @@ public class FeedListController {
 		}
 	}
 	@ApiOperation(value="피드 신고",notes="피드 신고")
-	@GetMapping("/report/feed/user")
-	public ResponseEntity<?> reportFeeduser(Pageable pageable,@PathVariable long id){
-
+	@PostMapping("/report/feed/{id}")
+	public ResponseEntity<?> reportFeeduser(@RequestParam(name = "content", required = false) String content,@PathVariable long id){
 		try {
-		
-			return new ResponseEntity<>("",HttpStatus.OK);
+			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
+			if(reportfeed.isPresent()) {
+				reportFeedService.reportFeedSave(reportfeed.get(), content);
+			}
+			return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
+
+//	@ApiOperation(value="피드 신고 취소",notes="피드 신고 취소")
+//	@DeleteMapping("/report/feed/{id}")
+//	public ResponseEntity<?> reportFeedDelete(@PathVariable long id){
+//		try {
+//			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
+//			if(reportfeed.isPresent()) {
+//				reportFeedService.reportFeedDelete(reportfeed.get());
+//			}
+//			return new ResponseEntity<>("피드 신고 삭제 성공",HttpStatus.OK);
+//		}catch(Exception e) {
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+//		}
+//	}
+
+	@ApiOperation(value="피드 신고 조회",notes="피드 신고 조회")
+	@GetMapping("/report/feed")
+	public ResponseEntity<?> reportFeedView(Pageable pageable){
+		try {
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+			Page<ReportFeed> reportFeedPage =reportFeedService.reportfeedlist(pageable);
+			return new ResponseEntity<>(reportFeedPage,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+
+
+
 
 	@ApiOperation(value="방어로직 확인",notes="방어로직 확인")
 	@GetMapping("/xss")

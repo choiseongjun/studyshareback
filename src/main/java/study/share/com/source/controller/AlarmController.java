@@ -83,7 +83,7 @@ public class AlarmController {
         }
     }
 
-    @MessageMapping("/aaa")
+   /* @MessageMapping("/aaa")
     @SendTo("/noti/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
         try
@@ -96,5 +96,5 @@ public class AlarmController {
             e.printStackTrace();
             return new Greeting("error occured");
         }
-    }
+    }*/
 }
