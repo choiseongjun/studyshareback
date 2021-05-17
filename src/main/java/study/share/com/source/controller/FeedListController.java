@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -171,6 +172,7 @@ public class FeedListController {
 	/*좋아요 */
 	@ApiOperation(value="좋아요",notes="좋아요")
 	@PostMapping("/likefeed/{id}")
+
 	public ResponseEntity<?> likefeed(@PathVariable long id,Principal principal){
 		
 		try {
@@ -265,7 +267,7 @@ public class FeedListController {
 	@ApiOperation(value="방어로직 확인",notes="방어로직 확인")
 	@GetMapping("/xss")
 	public ResponseEntity<?> testXss(){
-		String dirty = "\"><script>alert('xss');</script>";
+		String dirty = "<script>alert('xss');</script>";
 		return new ResponseEntity<>(dirty,HttpStatus.OK);
 	}
 //	/*게시글별 좋아요리스트 조회*/

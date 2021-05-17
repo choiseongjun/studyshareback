@@ -6,13 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.util.HtmlUtils;
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.*;
 import study.share.com.source.model.DTO.AlarmHistoryDTO;
 import study.share.com.source.service.AlarmService;
+import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
 
 import java.security.Principal;
@@ -27,6 +30,11 @@ public class AlarmController {
     AlarmService alarmService;
     @Autowired
     UserService userService;
+    @Autowired
+    private SimpMessagingTemplate webSocket;
+
+    @Autowired
+    FeedListService feedListService;
     //피드 댓글 알림
     @MessageMapping("/reply")
     @SendTo("/alert/feedreply")
@@ -45,11 +53,12 @@ public class AlarmController {
         System.out.println("user nickname:"+feedList.getUser().getNickname());
         System.out.println("content: "+ feedList.getContent());
         alarmService.alarmlike(feedList,user);
+        webSocket.convertAndSend("/alert/feedlike/"+feedList.getUser().getId(), feedList.getContent()+"내용!@");
         return feedList;
     }
 
     //유저의 전체 알람 조회
-    @ApiOperation(value="사용자의 알람 조회하기",notes="사용자의 알람 조회하기")
+    //@ApiOperation(value="사용자의 알람 조회하기",notes="사용자의 알람 조회하기")
     @MessageMapping("/alarmView")
     @SendTo("/alert/view")
     //@GetMapping("/message/alarm")
@@ -71,6 +80,21 @@ public class AlarmController {
         }catch(Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @MessageMapping("/aaa")
+    @SendTo("/noti/greetings")
+    public Greeting greeting(HelloMessage message) throws Exception {
+        try
+        {
+            System.out.println(message.getName());
+            return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new Greeting("error occured");
         }
     }
 }
