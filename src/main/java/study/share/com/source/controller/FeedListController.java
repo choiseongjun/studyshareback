@@ -266,6 +266,17 @@ public class FeedListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
+	@ApiOperation(value="피드 신고",notes="피드 신고")
+	@GetMapping("/report/feed/user")
+	public ResponseEntity<?> reportFeeduser(Pageable pageable,@PathVariable long id){
+
+		try {
+		
+			return new ResponseEntity<>("",HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@ApiOperation(value="방어로직 확인",notes="방어로직 확인")
 	@GetMapping("/xss")

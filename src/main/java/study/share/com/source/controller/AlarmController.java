@@ -48,7 +48,7 @@ public class AlarmController {
         System.out.println("Id: "+feedList.getId());
         System.out.println("user nickname:"+feedList.getUser().getNickname());
         System.out.println("content: "+ feedList.getContent());
-        webSocket.convertAndSend("/alert/feedlike" , feedList.getContent()+"내용!@");
+        webSocket.convertAndSend("/alert/feedlike/"+feedList.getUser().getId(), feedList.getContent()+"내용!@");        
         alarmService.alarmlike(feedList,user);
         return feedList;
     }
