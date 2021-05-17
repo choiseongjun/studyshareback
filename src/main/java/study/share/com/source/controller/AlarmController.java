@@ -33,8 +33,7 @@ public class AlarmController {
     @Autowired
     private SimpMessagingTemplate webSocket;
 
-    @Autowired
-    FeedListService feedListService;
+
     //피드 댓글 알림
     @MessageMapping("/reply")
     @SendTo("/alert/feedreply")
@@ -52,6 +51,7 @@ public class AlarmController {
         System.out.println("Id: "+feedList.getId());
         System.out.println("user nickname:"+feedList.getUser().getNickname());
         System.out.println("content: "+ feedList.getContent());
+        webSocket.convertAndSend("/alert/feedlike/"+feedList.getUser().getId(), feedList.getContent()+"내용!@");        
         alarmService.alarmlike(feedList,user);
         webSocket.convertAndSend("/alert/feedlike/"+feedList.getUser().getId(), feedList.getContent()+"내용!@");
         return feedList;

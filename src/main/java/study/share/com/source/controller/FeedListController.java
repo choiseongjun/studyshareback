@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -48,6 +50,7 @@ public class FeedListController {
 	HashTagExtract hashTagExtract;
 	@Autowired
 	AlarmController alarmController;
+
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
 	@PostMapping("/feed")
@@ -171,10 +174,12 @@ public class FeedListController {
 	}
 	/*좋아요 */
 	@ApiOperation(value="좋아요",notes="좋아요")
+//    @SendTo("/alert/feedlike")
 	@PostMapping("/likefeed/{id}")
 
 	public ResponseEntity<?> likefeed(@PathVariable long id,Principal principal){
 		
+
 		try {
 
 			Optional<User> user = userService.findUserNickname(principal.getName());
@@ -259,6 +264,17 @@ public class FeedListController {
 			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 			Page<FeedList> feedlist = feedListService.otherlistfeed(pageable,id);
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+	@ApiOperation(value="피드 신고",notes="피드 신고")
+	@GetMapping("/report/feed/user")
+	public ResponseEntity<?> reportFeeduser(Pageable pageable,@PathVariable long id){
+
+		try {
+		
+			return new ResponseEntity<>("",HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
