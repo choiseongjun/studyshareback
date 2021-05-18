@@ -1,12 +1,6 @@
 package study.share.com.source.model.report;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,4 +30,11 @@ public class ReportFeedReply extends DateAudit{
 	@JoinColumn(name = "user_id")
 	@JsonIgnoreProperties({"feedlike","todolist","follow","roles"})	
 	private User user;
+
+	@Column(name="content")
+	private String content;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "reporter")
+	@JsonIgnoreProperties({"feedlike","todolist","follow","roles"})
+	private User reporter;
 }

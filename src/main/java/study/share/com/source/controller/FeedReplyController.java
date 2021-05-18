@@ -10,25 +10,27 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
+import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
 import study.share.com.source.model.FeedReplyLike;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.FeedReplyDTO;
 import study.share.com.source.model.DTO.FeedReplyLikeDTO;
+import study.share.com.source.model.report.ReportFeed;
+import study.share.com.source.model.report.ReportFeedReply;
 import study.share.com.source.repository.FeedReplyLikeRepository;
+import study.share.com.source.repository.FeedReplyRepository;
+import study.share.com.source.repository.ReportFeedReplyRepository;
 import study.share.com.source.service.FeedReplyService;
+import study.share.com.source.service.ReportFeedReplyService;
 import study.share.com.source.service.UserService;
 
 @RestController
@@ -42,6 +44,12 @@ public class FeedReplyController {
 	FeedReplyLikeRepository feedReplyLikeRepository;
 	@Autowired
 	AlarmController alarmController;
+	@Autowired
+	ReportFeedReplyRepository reportFeedReplyRepository;
+	@Autowired
+	FeedReplyRepository feedReplyRepository;
+	@Autowired
+	ReportFeedReplyService reportFeedReplyService;
 	
 	public static List<FeedReply> replyContnet = new ArrayList<FeedReply>();//대댓글 쓸때 필요함 2021 04-18 choiseongjun
 	public static List<FeedReply> feedReplyUser = new ArrayList<FeedReply>();//댓글조회해서 내가 좋아요누른거 가져오기
@@ -229,4 +237,51 @@ public class FeedReplyController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@ApiOperation(value="댓글 신고",notes="댓글 신고")
+	@PostMapping("/report/feedReply/{id}")
+	public ResponseEntity<?> reportFeeduser(@RequestParam(name = "content", required = false) String content,@PathVariable long id
+			,Principal principal){
+		Optional <User> reporter = userService.findUserNickname(principal.getName());
+		Optional<FeedReply> reportfeedReply = feedReplyRepository.findById(id);
+		int result =0;
+		if(reportfeedReply.isPresent()) {
+			result=reportFeedReplyService.reportFeedReplySave(reportfeedReply.get(), content, reporter.get());
+		}
+		if (result==0)
+			return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
+		else
+			return new ResponseEntity<>("이미 신고한 피드 입니다",HttpStatus.BAD_REQUEST);
+	}
+
+	@ApiOperation(value="댓글 신고 취소",notes="댓글 신고 취소")
+	@DeleteMapping("/report/feedReply/{id}")
+	public ResponseEntity<?> reportFeedDelete(@PathVariable long id,Principal principal){
+		try {
+			Optional<FeedReply> reportfeedReply = feedReplyRepository.findById(id);
+			Optional <User> reporter = userService.findUserNickname(principal.getName());
+			if(reportfeedReply.isPresent()) {
+				reportFeedReplyService.reportFeedReplyDelete(reportfeedReply.get(),reporter.get());
+			}
+			return new ResponseEntity<>("피드 신고 삭제 성공",HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@ApiOperation(value="피드 신고 조회",notes="피드 신고 조회")
+	@GetMapping("/report/feedReply")
+	public ResponseEntity<?> reportFeedView(Pageable pageable){
+		try {
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+			Page<ReportFeedReply> reportFeedPage =reportFeedReplyService.reportfeedlist(pageable);
+			return new ResponseEntity<>(reportFeedPage,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+
+
+
 }

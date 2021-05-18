@@ -32,4 +32,9 @@ public class ReportFeed extends DateAudit{
 	private User user;
 	@Column(name="content")
 	private String content;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "reporter")
+	@JsonIgnoreProperties({"feedlike","todolist","follow","roles"})
+	private User reporter;
+
 }

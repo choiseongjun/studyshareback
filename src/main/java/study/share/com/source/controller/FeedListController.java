@@ -35,6 +35,7 @@ import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.ReportFeedRepository;
+import study.share.com.source.repository.UserRepository;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.ReportFeedService;
 import study.share.com.source.service.UserService;
@@ -57,6 +58,8 @@ public class FeedListController {
 	ReportFeedService reportFeedService;
 	@Autowired
 	ReportFeedRepository reportFeedRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
@@ -277,31 +280,34 @@ public class FeedListController {
 	}
 	@ApiOperation(value="피드 신고",notes="피드 신고")
 	@PostMapping("/report/feed/{id}")
-	public ResponseEntity<?> reportFeeduser(@RequestParam(name = "content", required = false) String content,@PathVariable long id){
+	public ResponseEntity<?> reportFeeduser(@RequestParam(name = "content", required = false) String content,@PathVariable long id
+	,Principal principal){
+			Optional <User> reporter = userService.findUserNickname(principal.getName());
+			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
+			int result =0;
+			if(reportfeed.isPresent()) {
+				result=reportFeedService.reportFeedSave(reportfeed.get(), content, reporter.get());
+			}
+				if (result==0)
+					return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
+				else
+					return new ResponseEntity<>("이미 신고한 피드 입니다",HttpStatus.BAD_REQUEST);
+	}
+
+	@ApiOperation(value="피드 신고 취소",notes="피드 신고 취소")
+	@DeleteMapping("/report/feed/{id}")
+	public ResponseEntity<?> reportFeedDelete(@PathVariable long id,Principal principal){
 		try {
 			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
+			Optional <User> reporter = userService.findUserNickname(principal.getName());
 			if(reportfeed.isPresent()) {
-				reportFeedService.reportFeedSave(reportfeed.get(), content);
+				reportFeedService.reportFeedDelete(reportfeed.get(),reporter.get());
 			}
-			return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
+			return new ResponseEntity<>("피드 신고 삭제 성공",HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
-
-//	@ApiOperation(value="피드 신고 취소",notes="피드 신고 취소")
-//	@DeleteMapping("/report/feed/{id}")
-//	public ResponseEntity<?> reportFeedDelete(@PathVariable long id){
-//		try {
-//			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
-//			if(reportfeed.isPresent()) {
-//				reportFeedService.reportFeedDelete(reportfeed.get());
-//			}
-//			return new ResponseEntity<>("피드 신고 삭제 성공",HttpStatus.OK);
-//		}catch(Exception e) {
-//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
-//		}
-//	}
 
 	@ApiOperation(value="피드 신고 조회",notes="피드 신고 조회")
 	@GetMapping("/report/feed")

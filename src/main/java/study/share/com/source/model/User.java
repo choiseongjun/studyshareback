@@ -88,6 +88,10 @@ public class User extends DateAudit{
     @Column(name="reportedCnt")
     @ColumnDefault("0")
     private long reportedCnt;
+
+    @Column(name="account_suspend")
+    @ColumnDefault("0")
+    private long accountSuspend;
     
     public User(String userid,String nickname, String email,String sex,String password,String age) {
         this.userid = userid;
