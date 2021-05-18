@@ -1,23 +1,23 @@
 package study.share.com.source;
 
-import java.util.Date;
 import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
-
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties
+@EnableMongoRepositories(basePackages = "study.share.com.source.mongo")
+@EnableJpaRepositories(basePackages = "study.share.com.source.repository")
 public class StudyshareBackApplication extends SpringBootServletInitializer{
 	
 	@Override

@@ -56,6 +56,8 @@ public class User extends DateAudit{
     private String sex;
     @JsonIgnore
     private String age;
+    
+
 
     private boolean verified = false;
 
@@ -92,6 +94,8 @@ public class User extends DateAudit{
     @Column(name="account_suspend")
     @ColumnDefault("0")
     private long accountSuspend;
+    
+    private String fcmToken;
     
     public User(String userid,String nickname, String email,String sex,String password,String age) {
         this.userid = userid;

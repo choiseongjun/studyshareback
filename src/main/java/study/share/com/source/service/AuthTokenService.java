@@ -28,7 +28,7 @@ public class AuthTokenService {
     public AuthTokenDTO createAuthToken(String userid) {
         AuthToken authToken = new AuthToken();
         authToken.setUserid(userid);
-        authTokenRepository.save(authToken);
+        //authTokenRepository.save(authToken);
         
         String accessToken = jwtProvider.generateJwtToken(authToken.getId(), userid, AuthTokenType.accessToken);
         String refreshToken = jwtProvider.generateJwtToken(authToken.getId(), userid, AuthTokenType.refreshToken);

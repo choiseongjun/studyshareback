@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,6 +55,12 @@ public class NotificationController {
         }
 
         return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("testtoken")
+    public void testToken(@RequestParam(name = "fcmToken", required = false) String fcmToken) {
+    	
+    	System.out.println("fcmToken=="+fcmToken);
+    	
     }
 }
 

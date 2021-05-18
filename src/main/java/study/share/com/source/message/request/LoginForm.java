@@ -3,6 +3,12 @@ package study.share.com.source.message.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
 public class LoginForm {
 	
     @NotBlank
@@ -12,20 +18,7 @@ public class LoginForm {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+    
+    private String fcmToken;
 
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

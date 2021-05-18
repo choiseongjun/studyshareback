@@ -162,4 +162,32 @@ public class UserService {
 		return result;
 	}
 
+	public Optional<User> findUserLoginId(String userid) {
+		return userRepository.findByUserid(userid);
+	}
+
+	public Optional <User> findFcmToken(String fcmToken) {
+		return userRepository.findByFcmToken(fcmToken);
+	}
+
+	public void deleteFcm(String fcmToken, Optional<User> user) {
+		Optional <User> result = userRepository.findByFcmToken(fcmToken);	
+		
+		if(result.get().getId()!=user.get().getId()) {
+			result.ifPresent((deleteToken)->{
+				deleteToken.setFcmToken("");
+				userRepository.save(deleteToken);
+			});			
+		}
+
+	}
+
+	public void deleteFcm(Optional<User> otherFcmToken, String fcmToken) {
+		Optional <User> deleteOther = userRepository.findById(otherFcmToken.get().getId());
+		deleteOther.ifPresent((deleteFcm)->{
+			deleteFcm.setFcmToken("");
+			userRepository.save(deleteFcm);
+		});
+	}
+
 }

@@ -78,29 +78,49 @@ public class AuthController extends HttpServlet {
 
     @ApiOperation(value="로그인",notes="로그인")
     @PostMapping("/signin")
-    public ResponseEntity<?>  authenticateUser(@Valid @RequestBody LoginForm loginRequest, HttpServletResponse response) {
-
+    public ResponseEntity<?>  authenticateUser(@RequestBody LoginForm loginRequest, HttpServletResponse response) {        
+       
     	try {
     		Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUserid(),
+                    		loginRequest.getUserid(),
                             loginRequest.getPassword()
                     )
             );
-           
+        	
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String ROLE=auth.getAuthorities().toString();
 
             UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-            AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
-            String jwt = jwtProvider.generateJwtToken(authentication);
-            Map<String, String> map =new HashMap<String, String>();
-            map.put("ROLE", ROLE);
-            map.put("accessToken", authTokenDTO.getAccessToken());
-            map.put("jwt", authTokenDTO.getAccessToken());
-            map.put("refreshToken", authTokenDTO.getRefreshToken());
+            String fcmToken = loginRequest.getFcmToken();//Fcm_Token
+            
+            Optional <User> otherFcmToken = userService.findFcmToken(fcmToken);
+            
+            Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());
 
+            if(otherFcmToken.isPresent() && otherFcmToken!=null) {
+            	if(otherFcmToken.get().getId()!=user.get().getId()) {//fcm있는 아이디와 로그인한 사람이 같지 않으면 
+                    	userService.deleteFcm(otherFcmToken,fcmToken); 
+                    	user.ifPresent(loginUser -> {
+                        	loginUser.setFcmToken(fcmToken);
+                        	userRepository.save(loginUser);
+                		});
+                    }	
+            }else{
+            	user.ifPresent(loginUser -> {
+                	loginUser.setFcmToken(fcmToken);
+                	userRepository.save(loginUser);
+        		});
+            }
+
+    		AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
+	        String jwt = jwtProvider.generateJwtToken(authentication);
+	        Map<String, String> map =new HashMap<String, String>();
+	        map.put("ROLE", ROLE);
+	        map.put("accessToken", authTokenDTO.getAccessToken());
+	        map.put("jwt", authTokenDTO.getAccessToken());
+	        map.put("refreshToken", authTokenDTO.getRefreshToken());
             return ResponseEntity.ok(map);
     	}catch(Exception e) {
     		//e.printStackTrace();
@@ -252,11 +272,11 @@ public class AuthController extends HttpServlet {
     
     @ApiOperation(value="로그아웃",notes="로그아웃")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization") String token) throws IOException {
-
+    public ResponseEntity<?> logout() throws IOException {
+//    	String tokenValue = StringUtils.split(token, " ")[1];
+//        authTokenService.logout(tokenValue);
         try {
-            String tokenValue = StringUtils.split(token, " ")[1];
-            authTokenService.logout(tokenValue);
+            
             return new ResponseEntity<>("success", HttpStatus.OK);
         }catch(Exception e) {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);

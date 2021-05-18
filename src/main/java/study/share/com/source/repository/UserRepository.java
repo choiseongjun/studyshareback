@@ -22,5 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	List<User> findByNicknameLike(String string);
 	boolean existsByEmail(String email);
+	boolean existsByFcmToken(String fcmToken);
+	Optional<User> findByFcmToken(String fcmToken);
 
 }
