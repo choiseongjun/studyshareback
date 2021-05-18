@@ -1,7 +1,6 @@
 package study.share.com.source.config.aop;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -16,21 +15,19 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UrlPathHelper;
 
 import com.google.common.base.Joiner;
+
 import study.share.com.source.model.User;
 import study.share.com.source.model.UserHistory;
-import study.share.com.source.repository.UserHistoryRepository;
+import study.share.com.source.mongo.UserHistoryRepository;
 import study.share.com.source.repository.UserRepository;
-import study.share.com.source.security.services.UserPrinciple;
 
 
 @Component // 1
@@ -93,7 +90,9 @@ public class RequestLoggingAspect {
                 User users=new User();
                 long userid = findUser.get().getId();
                 users.setId(userid);
-                userhistory.setUser(users);
+                //userhistory.setUser(users);
+                userhistory.setUserNumber(findUser.get().getId());
+                userhistory.setUserId(findUser.get().getUserid());
                 userhistory.setAccessname(findUser.get().getNickname());
             }
             //없는 경우는 accessname, userid없이 저장
