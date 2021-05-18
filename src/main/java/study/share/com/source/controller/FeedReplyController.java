@@ -249,9 +249,9 @@ public class FeedReplyController {
 			result=reportFeedReplyService.reportFeedReplySave(reportfeedReply.get(), content, reporter.get());
 		}
 		if (result==0)
-			return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
+			return new ResponseEntity<>("피드 신고 성공><",HttpStatus.OK);
 		else
-			return new ResponseEntity<>("이미 신고한 피드 입니다",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("이미 신고한 피드 입니다><",HttpStatus.BAD_REQUEST);
 	}
 
 	@ApiOperation(value="댓글 신고 취소",notes="댓글 신고 취소")
