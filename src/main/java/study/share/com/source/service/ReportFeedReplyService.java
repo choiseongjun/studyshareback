@@ -12,6 +12,7 @@ import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.model.report.ReportFeedReply;
 import study.share.com.source.repository.ReportFeedReplyRepository;
 import study.share.com.source.repository.UserRepository;
+import study.share.com.source.utils.ReportConstant;
 
 import java.util.Optional;
 
@@ -32,10 +33,22 @@ public class ReportFeedReplyService {
             return -1;
         else
         {
+            long value=1L;
+            if(content.equals(ReportConstant.INAPPROPRIATE.getContent()))
+                value= ReportConstant.INAPPROPRIATE.getId();
+            else if(content.equals(ReportConstant.ABOMINATION.getContent()))
+                value= ReportConstant.ABOMINATION.getId();
+            else if(content.equals(ReportConstant.ADVERTISEMENT.getContent()))
+                value= ReportConstant.ADVERTISEMENT.getId();
+            else if(content.equals(ReportConstant.BAD_LANGUAGE.getContent()))
+                value= ReportConstant.BAD_LANGUAGE.getId();
+            else
+                value= ReportConstant.ETC.getId();
+
             ReportFeedReply reportFeedReply = new ReportFeedReply();
             reportFeedReply.setUser(feedOnwer.get());
             reportFeedReply.setFeedreply(reportfeedReply);
-            reportFeedReply.setContent(content);
+            reportFeedReply.setContent(value);
             reportFeedReply.setReporter(user);
             if(feedOnwer.get().getReportedCnt()==4)//5회째 누적 시 계정정지
                 feedOnwer.get().setAccountSuspend(feedOnwer.get().getAccountSuspend()+1);

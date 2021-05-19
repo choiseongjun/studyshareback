@@ -13,6 +13,7 @@ import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.ReportFeedRepository;
 import study.share.com.source.repository.UserRepository;
+import study.share.com.source.utils.ReportConstant;
 
 import java.util.Optional;
 
@@ -33,12 +34,24 @@ public class ReportFeedService {
         Optional <ReportFeed> findReport = reportFeedRepository.findByFeedlistIdAndReporter(reportfeed.getId(),user);
         if(findReport.isPresent())//이미 신고를 했던 경우
             return -1;
-        else
+        else//새로운 신고 내역
         {
+            long value=1L;
+            if(content.equals(ReportConstant.INAPPROPRIATE.getContent()))
+                 value= ReportConstant.INAPPROPRIATE.getId();
+            else if(content.equals(ReportConstant.ABOMINATION.getContent()))
+                value= ReportConstant.ABOMINATION.getId();
+            else if(content.equals(ReportConstant.ADVERTISEMENT.getContent()))
+                value= ReportConstant.ADVERTISEMENT.getId();
+            else if(content.equals(ReportConstant.BAD_LANGUAGE.getContent()))
+                value= ReportConstant.BAD_LANGUAGE.getId();
+            else
+                value= ReportConstant.ETC.getId();
+
             ReportFeed reportFeed = new ReportFeed();
             reportFeed.setUser(feedOnwer.get());
             reportFeed.setFeedlist(reportfeed);
-            reportFeed.setContent(content);
+            reportFeed.setContent(value);
             reportFeed.setReporter(user);
             if(feedOnwer.get().getReportedCnt()==4)//5회째 누적 시 계정정지
                 feedOnwer.get().setAccountSuspend(feedOnwer.get().getAccountSuspend()+1);
@@ -53,10 +66,7 @@ public class ReportFeedService {
 
         Optional <User> feedOnwer = userRepository.findById(reportfeed.getUser().getId());//사용자 찾기
         feedOnwer.get().setReportedCnt(feedOnwer.get().getReportedCnt()-1);//신고수 1 감소
-        System.out.println("현재 신고당한 횟수: "+feedOnwer.get().getReportedCnt());
-        System.out.println("피드 번호: "+reportfeed.getId()+"신고자 아이디: "+user.getId());
         Optional <ReportFeed> findReport = reportFeedRepository.findByFeedlistIdAndReporter(reportfeed.getId(),user);//해당 신고내역 찾기
-        System.out.println("찾은 신고 내용: "+findReport.get().getContent());
         reportFeedRepository.deleteByIdAndReporter(findReport.get().getId(),user);//피드신고 삭제
     }
 
