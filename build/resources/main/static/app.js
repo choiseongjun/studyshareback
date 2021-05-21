@@ -19,8 +19,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/noti/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+        stompClient.subscribe('/noti/feedlikes', function (feedList) {
+            showGreeting(JSON.parse(feedList.body));
         });
     });
 }
@@ -35,12 +35,12 @@ function disconnect() {
 
 function sendName() {
     // /app/hello로 JSON 파라미터를 메세지 body로 전송.
-    stompClient.send("/msg/aaa", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/msg/likes", {}, JSON.stringify({'id': $("#id").val()}));
 }
 
-function showGreeting(message) {
+function showGreeting(feedlist) {
     console.log("message in");
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    $("#greetings").append("<tr><td>" + feedlist.content + "</td></tr>");
 }
 
 $(function () {

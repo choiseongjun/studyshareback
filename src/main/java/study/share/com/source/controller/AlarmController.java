@@ -1,6 +1,7 @@
 package study.share.com.source.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.*;
 import study.share.com.source.model.DTO.AlarmHistoryDTO;
+import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.service.AlarmService;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
@@ -32,36 +34,32 @@ public class AlarmController {
     UserService userService;
     @Autowired
     private SimpMessagingTemplate webSocket;
+    @Autowired
+    FeedListRepository feedListRepository;
 
 
     //피드 댓글 알림
     @MessageMapping("/reply")
-    @SendTo("/alert/feedreply")
+    @SendTo("/noti/feedlike")
     public FeedReply alertreply(FeedReply feedReply,long id) throws Exception {
-        System.out.println("Id: "+feedReply.getId());
-        System.out.println("content: "+ feedReply.getContent());
         alarmService.alarmReply(feedReply, id);
+        webSocket.convertAndSend("/noti/feedlike/"+feedReply.getUser().getId(), feedReply);
         return feedReply;
     }
 
     //피드 좋아요 알림
     @MessageMapping("/like")
-    @SendTo("/alert/feedlike")
+    @SendTo("/noti/feedlike")
     public FeedList alertlike(FeedList feedList, User user) throws Exception {
-        System.out.println("Id: "+feedList.getId());
-        System.out.println("user nickname:"+feedList.getUser().getNickname());
-        System.out.println("content: "+ feedList.getContent());
-        webSocket.convertAndSend("/alert/feedlike/"+feedList.getUser().getId(), feedList.getContent()+"내용!@");        
         alarmService.alarmlike(feedList,user);
-        webSocket.convertAndSend("/alert/feedlike/"+feedList.getUser().getId(), feedList.getContent()+"내용!@");
+        webSocket.convertAndSend("/noti/feedlike/"+feedList.getUser().getId(), feedList);
         return feedList;
     }
 
     //유저의 전체 알람 조회
     //@ApiOperation(value="사용자의 알람 조회하기",notes="사용자의 알람 조회하기")
     @MessageMapping("/alarmView")
-    @SendTo("/alert/view")
-    //@GetMapping("/message/alarm")
+    @SendTo("/noti/view")
     public ResponseEntity<?> allalertView(Principal principal) throws Exception {
 
         try {
@@ -76,25 +74,23 @@ public class AlarmController {
                     .forEach( alarmHistory -> {
                         alarmHistoryDTOList.add(new AlarmHistoryDTO(alarmHistory));
              });
+            webSocket.convertAndSend("/noti/view/"+user.get().getId(), alarmHistoryDTOList);
             return new ResponseEntity<>(alarmHistoryDTOList,HttpStatus.OK);
         }catch(Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
         }
     }
+    @MessageMapping("/likes")
+    @SendTo("/noti/feedlikes")
+    public FeedList alertlikes(String id) throws Exception {
 
-   /* @MessageMapping("/aaa")
-    @SendTo("/noti/greetings")
-    public Greeting greeting(HelloMessage message) throws Exception {
-        try
-        {
-            System.out.println(message.getName());
-            return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return new Greeting("error occured");
-        }
-    }*/
+        //webSocket.convertAndSend("/noti/feedlike/"+feedList.getUser().getId(), feedList);
+        System.out.println(id);
+        Optional <FeedList> result= feedListRepository.findById(Long.valueOf(80));
+        System.out.println(result.get().getContent());
+        return result.get();
+    }
+
+
 }
