@@ -10,4 +10,5 @@ import java.util.List;
 public interface AlarmRepository extends JpaRepository<AlarmHistory, Long> {
 
     List<AlarmHistory> findByToUserId(long id);
+    long countByToUserId(long id);
 }

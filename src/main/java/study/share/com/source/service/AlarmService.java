@@ -52,5 +52,10 @@ public class AlarmService {
         return alarmHistoryList;
     }
 
+    public long alarmCount(long id)
+    {
+        long result= alarmRepository.countByToUserId(id);
+        return result;
+    }
 
 }

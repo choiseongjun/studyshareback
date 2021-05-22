@@ -10,6 +10,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.util.HtmlUtils;
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
@@ -90,6 +92,16 @@ public class AlarmController {
         Optional <FeedList> result= feedListRepository.findById(Long.valueOf(80));
         System.out.println(result.get().getContent());
         return result.get();
+    }
+
+    @MessageMapping("/count")
+    @SendTo("/noti/count")
+    public long alertCount(Principal principal) throws Exception {
+        Optional <User> user = userService.findUserNickname(principal.getName());
+        long alarmCount = alarmService.alarmCount(user.get().getId());
+        System.out.println("result: "+alarmCount);
+        webSocket.convertAndSend("//noti/count"+user.get().getId(), alarmCount);
+        return alarmCount;
     }
 
 
