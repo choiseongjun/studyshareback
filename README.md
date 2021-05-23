@@ -41,7 +41,7 @@
 <br>
 
 ### 📔 서비스 구성도
-![image](https://user-images.githubusercontent.com/55472510/119250803-8ea0c700-bbdd-11eb-85dc-b18212ac640b.png)
+![image](https://user-images.githubusercontent.com/55472510/119259099-95443400-bc07-11eb-97b8-8e2477496c6a.png)
 
 ![image](https://user-images.githubusercontent.com/55472510/119251387-42578600-bbe1-11eb-8caf-7d2eb97ba5bd.png)
 
