@@ -237,7 +237,6 @@ public class FeedListService {
 				tagSave.add(extractHashTag);//태그 저장
 			}
 		}
-		content+="<br/><br/>";
 		for (Object object: tagSave)
 		{
 			String tag= (String) object;

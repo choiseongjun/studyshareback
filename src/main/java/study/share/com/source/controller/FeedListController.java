@@ -68,7 +68,6 @@ public class FeedListController {
 			,@RequestParam(name = "content", required = false) String content,Principal principal) throws IOException {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			System.out.println(content);
 
 			String eraseTag=feedListService.remakeTag(content);
 			FeedList feedlist=feedListService.saveFeed(user,eraseTag,file);
@@ -86,7 +85,6 @@ public class FeedListController {
 	}
 	@PostMapping("/testfeed")
 	public void savetestfeed(@RequestPart(name = "content", required = false) String content) {
-		System.out.println(content);
 		List<String> result = hashTagExtract.extractHashTagTest(content);
 		if(!result.isEmpty()) {//해시태그가 있다면..
 			for(int i=0;i<result.size();i++) {
@@ -159,7 +157,6 @@ public class FeedListController {
 			@PathVariable long id,
 			@RequestParam(name = "content", required = false) String content,
 			Principal principal){
-		System.out.println("filetest"+file);
 
 		try {
 //			String content = data.get("content");
