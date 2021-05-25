@@ -190,9 +190,6 @@ public class FeedReplyController {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByFeedReplyIdAndUserId(id,user.get().getId());
-			System.out.println("@#$@#$%@#%#@%#@%");
-			System.out.println(userResult);
-			System.out.println("@#$@#$%@#%#@%#@%");
 			if(userResult.isPresent()) {
 				return new ResponseEntity<>("이미 좋아요를 눌렀습니다.",HttpStatus.BAD_REQUEST);	
 

@@ -95,24 +95,27 @@ public class AuthController extends HttpServlet {
             UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
             String fcmToken = loginRequest.getFcmToken();//Fcm_Token
             
-            Optional <User> otherFcmToken = userService.findFcmToken(fcmToken);
             
             Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());
+            if(fcmToken!=null){
+                Optional <User> otherFcmToken = userService.findFcmToken(fcmToken);
 
-            if(otherFcmToken.isPresent() && otherFcmToken!=null) {
-            	if(otherFcmToken.get().getId()!=user.get().getId()) {//fcm있는 아이디와 로그인한 사람이 같지 않으면 
-                    	userService.deleteFcm(otherFcmToken,fcmToken); 
-                    	user.ifPresent(loginUser -> {
-                        	loginUser.setFcmToken(fcmToken);
-                        	userRepository.save(loginUser);
-                		});
-                    }	
-            }else{
-            	user.ifPresent(loginUser -> {
-                	loginUser.setFcmToken(fcmToken);
-                	userRepository.save(loginUser);
-        		});
+            	 if(otherFcmToken.isPresent() && otherFcmToken!=null) {
+                 	if(otherFcmToken.get().getId()!=user.get().getId()) {//fcm있는 아이디와 로그인한 사람이 같지 않으면 
+                         	userService.deleteFcm(otherFcmToken,fcmToken); 
+                         	user.ifPresent(loginUser -> {
+                             	loginUser.setFcmToken(fcmToken);
+                             	userRepository.save(loginUser);
+                     		});
+                         }	
+                 }else{
+                 	user.ifPresent(loginUser -> {
+                     	loginUser.setFcmToken(fcmToken);
+                     	userRepository.save(loginUser);
+             		});
+                 }
             }
+           
 
     		AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
 	        String jwt = jwtProvider.generateJwtToken(authentication);
@@ -126,7 +129,7 @@ public class AuthController extends HttpServlet {
     		//e.printStackTrace();
     		return new ResponseEntity<>("아이디나 비밀번호를 확인해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
     	}
-    	
+    	 
     }
 
     @ApiOperation(value="외부로그인(소셜)",notes="외부로그인(소셜)")

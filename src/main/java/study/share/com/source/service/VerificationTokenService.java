@@ -54,7 +54,6 @@ public class VerificationTokenService {
        //content+="<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer noopener\">이메일 인증</a>".format("%s", EMAIL_VERIFY_API+token);
         content+="<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer noopener\">이메일 인증</a>".replace("{0}", EMAIL_VERIFY_API+token);
         // TODO: 2020/12/05 Async 처리 필요( 너무 느림 .. )
-        System.out.println(EMAIL_VERIFY_API+token);
         mailService.sendMail(email, title, content);
     }
 

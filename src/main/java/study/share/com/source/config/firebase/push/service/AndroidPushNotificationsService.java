@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class AndroidPushNotificationsService {
-    private static final String firebase_server_key="serverkey";
+    private static final String firebase_server_key="AAAAyyfHZX4:APA91bHwOptNuaVzlQxyDJ6IzBu0OXIoPIhKY0Ylo5xET8S0JfPZtUfbgM0ysFu7fRfR9dhErjwU3HwvXmpSRiAzeJD0VQtkWhp_sDUIZe2MfhjP2kDA8-g5urDFwYKs0t23rtotCP8w";
     private static final String firebase_api_url="https://fcm.googleapis.com/fcm/send";
 
     @Async 
