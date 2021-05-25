@@ -83,7 +83,9 @@ public class AlarmController {
             return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
         }
     }
-    @MessageMapping("/likes")
+
+    //테스트용 코드
+   @MessageMapping("/likes")
     @SendTo("/noti/feedlikes")
     public FeedList alertlikes(String id) throws Exception {
 
@@ -100,7 +102,7 @@ public class AlarmController {
         Optional <User> user = userService.findUserNickname(principal.getName());
         long alarmCount = alarmService.alarmCount(user.get().getId());
         System.out.println("result: "+alarmCount);
-        webSocket.convertAndSend("//noti/count"+user.get().getId(), alarmCount);
+        webSocket.convertAndSend("/noti/count"+user.get().getId(), alarmCount);
         return alarmCount;
     }
 
