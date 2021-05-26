@@ -28,23 +28,21 @@ public class BlockedUserService {
     @Autowired
     BlockedUserRepository blockedUserRepository;
 
-    public int blockedUserSave (User user, long blockeduserId)
+    public BlockedUser blockedUserSave (User user, long blockeduserId)
     {
-
+        BlockedUser blockedUser=new BlockedUser();
         Optional <User> blockeduser = userService.findUserId(blockeduserId);
         //피신고자 정보 가져오기
         Optional<BlockedUser> result=blockedUserRepository.findByUserIdAndBlockedUserId(user.getId(),blockeduser.get().getId());
         if(result.isPresent())
-            return -1;//이미 기록이 존재하는 경우 추가저장 불가
+            blockedUser.setId(-1);//이미존재하는 경우
         else
         {
-            BlockedUser blockedUser=new BlockedUser();
             blockedUser.setUser(user);
             blockedUser.setBlockedUser(blockeduser.get());
             blockedUserRepository.save(blockedUser);
-            return 0;
         }
-
+        return blockedUser;
     }
     public void blockedUserDelete (User user, long blockeduserId)
     {

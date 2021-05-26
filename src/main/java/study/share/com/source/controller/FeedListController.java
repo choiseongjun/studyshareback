@@ -299,9 +299,8 @@ public class FeedListController {
 			int result1 =0,result2=0;
 			if(reportfeed.isPresent()) {
 				result1=reportFeedService.reportFeedSave(reportfeed.get(), content, reporter.get());
-				result2=blockedUserService.blockedUserSave(reporter.get(),reportfeed.get().getUser().getId());
 			}
-				if (result1==0 && result2==0)
+				if (result1==0)
 					return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
 				else
 					return new ResponseEntity<>("이미 신고한 피드 입니다",HttpStatus.BAD_REQUEST);
@@ -315,7 +314,7 @@ public class FeedListController {
 			Optional <User> reporter = userService.findUserNickname(principal.getName());
 			if(reportfeed.isPresent()) {
 				reportFeedService.reportFeedDelete(reportfeed.get(),reporter.get());
-				blockedUserService.blockedUserDelete(reporter.get(),reportfeed.get().getUser().getId());
+
 			}
 			return new ResponseEntity<>("피드 신고 삭제 성공",HttpStatus.OK);
 		}catch(Exception e) {

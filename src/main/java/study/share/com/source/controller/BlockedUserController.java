@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.DTO.AlarmHistoryDTO;
@@ -32,9 +34,32 @@ public class BlockedUserController {
     @Autowired
     BlockedUserService blockedUserService;
 
-    @ApiOperation(value="사용자별 신고내역 조회",notes="사용자별 신고내역 조회")
+    @ApiOperation(value="사용자 차단하기",notes="사용자 차단하기")
+    @GetMapping("/report/user/{id}")
+    public ResponseEntity<?> blockUser(@PathVariable("id")long id, Principal principal){
+
+            Optional<User> reporter = userService.findUserNickname(principal.getName());
+            BlockedUser result=blockedUserService.blockedUserSave(reporter.get(),id);
+            if(result.getId()!=-1)//신고 성공
+            {
+                BlockedUserDTO blockedUserDTO = new BlockedUserDTO(result);
+                return new ResponseEntity<>( blockedUserDTO ,HttpStatus.OK);
+            }
+        return new ResponseEntity<>("사용자 신고 실패",HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value="사용자 차단 취소 하기",notes="사용자 차단 취소")
+    @DeleteMapping("/report/user/{id}")
+    public ResponseEntity<?> blockUserDelete(@PathVariable("id")long id, Principal principal){
+
+        Optional<User> reporter = userService.findUserNickname(principal.getName());
+        blockedUserService.blockedUserDelete(reporter.get(),id);
+        return new ResponseEntity<>("사용자 신고 취소 성공",HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value="사용자별 차단내역 조회",notes="사용자별 차단내역 조회")
     @GetMapping("/report/my")
-    public ResponseEntity<?> reportFeedView(Pageable pageable, Principal principal){
+    public ResponseEntity<?> blockedlistView(Pageable pageable, Principal principal){
         try {
             Optional<User> reporter = userService.findUserNickname(principal.getName());
             int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
