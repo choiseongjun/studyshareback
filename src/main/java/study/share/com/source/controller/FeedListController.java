@@ -25,17 +25,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import study.share.com.source.model.FeedLike;
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.Follow;
-import study.share.com.source.model.UploadFile;
-import study.share.com.source.model.User;
+import study.share.com.source.model.*;
 import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.ReportFeedRepository;
 import study.share.com.source.repository.UserRepository;
+import study.share.com.source.service.BlockedUserService;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.ReportFeedService;
 import study.share.com.source.service.UserService;
@@ -60,6 +57,8 @@ public class FeedListController {
 	ReportFeedRepository reportFeedRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	BlockedUserService blockedUserService;
 
 	
 	@ApiOperation(value="피드리스트 작성",notes="피드리스트 작성")
@@ -68,7 +67,6 @@ public class FeedListController {
 			,@RequestParam(name = "content", required = false) String content,Principal principal) throws IOException {
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			System.out.println(content);
 
 			String eraseTag=feedListService.remakeTag(content);
 			FeedList feedlist=feedListService.saveFeed(user,eraseTag,file);
@@ -86,7 +84,6 @@ public class FeedListController {
 	}
 	@PostMapping("/testfeed")
 	public void savetestfeed(@RequestPart(name = "content", required = false) String content) {
-		System.out.println(content);
 		List<String> result = hashTagExtract.extractHashTagTest(content);
 		if(!result.isEmpty()) {//해시태그가 있다면..
 			for(int i=0;i<result.size();i++) {
@@ -106,6 +103,9 @@ public class FeedListController {
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);	
 		}else {
 			Optional<User> user = userService.findUserNickname(principal.getName());
+			List<BlockedUser> findBlocked =blockedUserService.findReportList(user.get().getId());//차단된 사용자 반환
+
+
 			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 //			Page<FeedList> feedlist = feedListService.listfeed(pageable);
@@ -159,7 +159,6 @@ public class FeedListController {
 			@PathVariable long id,
 			@RequestParam(name = "content", required = false) String content,
 			Principal principal){
-		System.out.println("filetest"+file);
 
 		try {
 //			String content = data.get("content");
@@ -284,11 +283,12 @@ public class FeedListController {
 	,Principal principal){
 			Optional <User> reporter = userService.findUserNickname(principal.getName());
 			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
-			int result =0;
+			int result1 =0,result2=0;
 			if(reportfeed.isPresent()) {
-				result=reportFeedService.reportFeedSave(reportfeed.get(), content, reporter.get());
+				result1=reportFeedService.reportFeedSave(reportfeed.get(), content, reporter.get());
+				result2=blockedUserService.blockedUserSave(reporter.get(),reportfeed.get().getUser().getId());
 			}
-				if (result==0)
+				if (result1==0 && result2==0)
 					return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
 				else
 					return new ResponseEntity<>("이미 신고한 피드 입니다",HttpStatus.BAD_REQUEST);
@@ -302,6 +302,7 @@ public class FeedListController {
 			Optional <User> reporter = userService.findUserNickname(principal.getName());
 			if(reportfeed.isPresent()) {
 				reportFeedService.reportFeedDelete(reportfeed.get(),reporter.get());
+				blockedUserService.blockedUserDelete(reporter.get(),reportfeed.get().getUser().getId());
 			}
 			return new ResponseEntity<>("피드 신고 삭제 성공",HttpStatus.OK);
 		}catch(Exception e) {

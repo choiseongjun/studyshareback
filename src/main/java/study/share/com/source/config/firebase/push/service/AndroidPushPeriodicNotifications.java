@@ -13,7 +13,7 @@ public class AndroidPushPeriodicNotifications {
         LocalDate localDate = LocalDate.now();
 
         String sampleData[] = {"d12ltJnLQ8qmlwCXaq56hQ:APA91bE8GUQGaGO55VLtsSsJSp1pqf-5FJRHkJY2-RduBuulEMQWgulGYg9JCd0l-FGMgxo2xkaD_5W3p0T_sZFGEl2GXJO9Bq2dhNAUFSlYwgHC4ZH8dThYLr1BLl-XPeuJNVhU9K2m"
-        };//디바이스키값 넣기..
+,"fMNbldjTTUa_agyZSA7J6F:APA91bHWRq05nFEyFDFGOlvtmOiDQhImwrMrrzH6SSmBEE4GvER8OTTk4bQBD8lXqRKlcySUiHrXogD7buxYiB3cqrTWD79b9LmaLNk3RVkHiJBqpgcDCGWMMqTy1DpYjh83OZ-jJMaH"};//디바이스키값 넣기..
 
 
         JSONObject body = new JSONObject();
