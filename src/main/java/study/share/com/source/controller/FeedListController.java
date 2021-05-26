@@ -2,6 +2,7 @@ package study.share.com.source.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,17 +103,29 @@ public class FeedListController {
 			Page<FeedList> feedlist = feedListService.listfeed(pageable);
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);	
 		}else {
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			List<BlockedUser> findBlocked =blockedUserService.findReportList(user.get().getId());//차단된 사용자 반환
-
-
 			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
 			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
-//			Page<FeedList> feedlist = feedListService.listfeed(pageable);
-			Page<FeedList> feedMylike = feedListService.feedMylike(pageable,user);
-			
-			//Stream<FeedList> allMyFeedlist = Stream.concat(feedlist.stream(),feedMylike.stream());
-			//return new ResponseEntity<>(feedMylike,HttpStatus.OK);
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			List<BlockedUser> findBlocked =blockedUserService.findReportList(user.get().getId());//차단된 사용자 반환
+			Page<FeedList> feedMylike ;
+			List blocked = new ArrayList <>();
+			if(!findBlocked.isEmpty())
+			{
+				for(BlockedUser object: findBlocked)//차단 사용자 아이디 추출
+				{
+					blocked.add(object.getBlockedUser().getId());
+					System.out.println("차단 된 사용자 조회: " +object.getBlockedUser().getId());
+				}
+				feedMylike=feedListService.feedMylike(pageable,user,blocked);
+			}
+			else {//차단 하는 사용자가 없는 경우
+				feedMylike = feedListService.feedMylikeNotBlock(pageable,user);
+			}
+			List <FeedList> de = feedMylike.getContent();
+			for(FeedList obj : de)
+			{
+				System.out.println("결과물 조회: "+obj.getUser().getId());
+			}
 			return new ResponseEntity<>(feedMylike.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
 		}	 
 //		try {

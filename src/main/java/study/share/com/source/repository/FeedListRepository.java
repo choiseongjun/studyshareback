@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.FeedList;
 import study.share.com.source.model.FeedReply;
 import study.share.com.source.model.User;
@@ -59,8 +60,11 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 	Page<FeedList> findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrFeedlikeUserIdIsNotNullOrderByIdDesc(
 			Pageable pageable, char c, Long id);
 
+	Page<FeedList> findDistinctAllByUserIdNotInAndDeleteynOrFeedlikeUserIdAndFeedlikeUserIdIsNullAndFeedlikeUserIdIsNotNullOrderByIdDesc(
+			Pageable pageable,List UserId, char c,  Long id);//차단하는 유저가 있는 경우
+
 	Page<FeedList> findDistinctAllByDeleteynOrFeedlikeUserIdAndFeedlikeUserIdIsNullAndFeedlikeUserIdIsNotNullOrderByIdDesc(
-			Pageable pageable, char c, Long id);
+			Pageable pageable, char c,  Long id);//차단하는 유저가 없는 경우
 
 	Page<FeedList> findAllByuser_idAndDeleteyn(Pageable pageable, long user_id, char c);
 
