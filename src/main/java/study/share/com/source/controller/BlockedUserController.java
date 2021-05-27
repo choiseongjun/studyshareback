@@ -53,8 +53,11 @@ public class BlockedUserController {
     public ResponseEntity<?> blockUserDelete(@PathVariable("id")long id, Principal principal){
 
         Optional<User> reporter = userService.findUserNickname(principal.getName());
-        blockedUserService.blockedUserDelete(reporter.get(),id);
-        return new ResponseEntity<>("사용자 신고 취소 성공",HttpStatus.BAD_REQUEST);
+        BlockedUser result=blockedUserService.blockedUserDelete(reporter.get(),id);
+        if(result.getId()!=-1)
+            return new ResponseEntity<>("사용자 신고 취소 성공",HttpStatus.OK);
+
+        return new ResponseEntity<>("사용자 신고 취소 실패",HttpStatus.BAD_REQUEST);
     }
 
     @ApiOperation(value="사용자별 차단내역 조회",notes="사용자별 차단내역 조회")
