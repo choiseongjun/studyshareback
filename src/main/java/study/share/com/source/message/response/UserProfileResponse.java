@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
@@ -40,6 +41,9 @@ public class UserProfileResponse {
 	private long followlistsize;
 	
 	private List<Follow> followlist;
+	
+	private List<BlockedUser> blockedUser;
+	
 	public UserProfileResponse(User user,String accessToken,String refreshToken) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
@@ -51,7 +55,7 @@ public class UserProfileResponse {
 		this.setAccessToken(accessToken);
 		this.setRefreshToken(refreshToken);
 	}
-	public UserProfileResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize) {
+	public UserProfileResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,List<BlockedUser> blockUserList) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setIntroduce(user.getIntroduce());
@@ -62,7 +66,20 @@ public class UserProfileResponse {
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
+		this.setBlockedUser(blockUserList);
 		//this.setFollowlist(followlist);
+	}
+	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setIntroduce(user.getIntroduce());
+		this.setSex(user.getSex());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setProfileImage(user.getUserProfileImage().getSrc());		
+		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
 	}
 	
 }

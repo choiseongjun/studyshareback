@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
+import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.service.AuthTokenService;
+import study.share.com.source.service.BlockedUserService;
 import study.share.com.source.service.FeedListService;
 import study.share.com.source.service.UserService;
 
@@ -38,6 +40,8 @@ public class UserController {
 	UserRepository userRepository;
 	@Autowired
     AuthTokenService authTokenService;
+	@Autowired
+	BlockedUserService blockedUserService;
 	
 	@ApiOperation(value="내정보 불러오기",notes="내정보 불러오기")
 	@GetMapping("/api/auth/userinfo")
@@ -49,10 +53,12 @@ public class UserController {
 			long followlistsize = userService.followlist(user).size();
 			List<Follow> followlist = user.get().getFollow();
 			
+			List<BlockedUser> blockUserList=blockedUserService.findBlockUserList(user.get());
+			
 			if(user.get().getUserProfileImage()==null) {//image notfound
-				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
+				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,blockUserList));//유저 프로필이미지가 없는 경우  
 			}else {
-				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
+				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,blockUserList));	//유저 프로필이미지가 있는경우
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

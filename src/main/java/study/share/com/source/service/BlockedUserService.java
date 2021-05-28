@@ -63,5 +63,8 @@ public class BlockedUserService {
     {
         return blockedUserRepository.findAllByUserId(userid);
     }
+	public List<BlockedUser> findBlockUserList(User user) {
+		return blockedUserRepository.findAllByUserId(user.getId());
+	}
 
 }
