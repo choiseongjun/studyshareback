@@ -291,14 +291,14 @@ public class FeedListController {
 		}
 	}
 	@ApiOperation(value="피드 신고",notes="피드 신고")
-	@PostMapping("/report/feed/{id}")
-	public ResponseEntity<?> reportFeeduser(@RequestParam(name = "content", required = false) String content,@PathVariable long id
+	@PostMapping("/report/feed/{id}/{reportId}")
+	public ResponseEntity<?> reportFeeduser(@PathVariable long reportId,@PathVariable long id
 	,Principal principal){
 			Optional <User> reporter = userService.findUserNickname(principal.getName());
 			Optional<FeedList> reportfeed =  feedListRepository.findById(id);
 			int result1 =0,result2=0;
 			if(reportfeed.isPresent()) {
-				result1=reportFeedService.reportFeedSave(reportfeed.get(), content, reporter.get());
+				result1=reportFeedService.reportFeedSave(reportfeed.get(), reportId, reporter.get());
 			}
 				if (result1==0)
 					return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);

@@ -25,7 +25,7 @@ public class ReportFeedReplyService {
     @Autowired
     ReportFeedReplyRepository reportFeedReplyRepository;
 
-    public int reportFeedReplySave(FeedReply reportfeedReply, String content, User user) {
+    public int reportFeedReplySave(FeedReply reportfeedReply, long reportId, User user) {
 
         Optional<User> feedOnwer = userRepository.findById(reportfeedReply.getUser().getId());//사용자 찾기
         Optional <ReportFeedReply> findReportReply = reportFeedReplyRepository.findByFeedreply_idAndReporter(reportfeedReply.getId(),user);
@@ -34,13 +34,13 @@ public class ReportFeedReplyService {
         else
         {
             long value=1L;
-            if(content.equals(ReportConstant.INAPPROPRIATE.getContent()))
+            if(reportId==0)
                 value= ReportConstant.INAPPROPRIATE.getId();
-            else if(content.equals(ReportConstant.ABOMINATION.getContent()))
+            else if(reportId==1)
                 value= ReportConstant.ABOMINATION.getId();
-            else if(content.equals(ReportConstant.ADVERTISEMENT.getContent()))
+            else if(reportId==2)
                 value= ReportConstant.ADVERTISEMENT.getId();
-            else if(content.equals(ReportConstant.BAD_LANGUAGE.getContent()))
+            else if(reportId==3)
                 value= ReportConstant.BAD_LANGUAGE.getId();
             else
                 value= ReportConstant.ETC.getId();

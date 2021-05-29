@@ -28,7 +28,7 @@ public class ReportFeedService {
     @Autowired
     UserRepository userRepository;
 
-    public int reportFeedSave(FeedList reportfeed,String content, User user) {
+    public int reportFeedSave(FeedList reportfeed,long reportId, User user) {
 
         Optional <User> feedOnwer = userRepository.findById(reportfeed.getUser().getId());//사용자 찾기
         Optional <ReportFeed> findReport = reportFeedRepository.findByFeedlistIdAndReporter(reportfeed.getId(),user);
@@ -37,13 +37,13 @@ public class ReportFeedService {
         else//새로운 신고 내역
         {
             long value=1L;
-            if(content.equals(ReportConstant.INAPPROPRIATE.getContent()))
+            if(reportId==0)
                  value= ReportConstant.INAPPROPRIATE.getId();
-            else if(content.equals(ReportConstant.ABOMINATION.getContent()))
+            else if(reportId==1)
                 value= ReportConstant.ABOMINATION.getId();
-            else if(content.equals(ReportConstant.ADVERTISEMENT.getContent()))
+            else if(reportId==2)
                 value= ReportConstant.ADVERTISEMENT.getId();
-            else if(content.equals(ReportConstant.BAD_LANGUAGE.getContent()))
+            else if(reportId==3)
                 value= ReportConstant.BAD_LANGUAGE.getId();
             else
                 value= ReportConstant.ETC.getId();

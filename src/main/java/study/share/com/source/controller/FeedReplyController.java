@@ -236,19 +236,19 @@ public class FeedReplyController {
 	}
 
 	@ApiOperation(value="댓글 신고",notes="댓글 신고")
-	@PostMapping("/report/feedReply/{id}")
-	public ResponseEntity<?> reportFeeduser(@RequestParam(name = "content", required = false) String content,@PathVariable long id
+	@PostMapping("/report/feedReply/{id}/{reportId}")
+	public ResponseEntity<?> reportFeeduser(@PathVariable long reportId,@PathVariable long id
 			,Principal principal){
 		Optional <User> reporter = userService.findUserNickname(principal.getName());
 		Optional<FeedReply> reportfeedReply = feedReplyRepository.findById(id);
 		int result =0;
 		if(reportfeedReply.isPresent()) {
-			result=reportFeedReplyService.reportFeedReplySave(reportfeedReply.get(), content, reporter.get());
+			result=reportFeedReplyService.reportFeedReplySave(reportfeedReply.get(), reportId, reporter.get());
 		}
 		if (result==0)
-			return new ResponseEntity<>("피드 신고 성공><",HttpStatus.OK);
+			return new ResponseEntity<>("피드 신고 성공",HttpStatus.OK);
 		else
-			return new ResponseEntity<>("이미 신고한 피드 입니다><",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("이미 신고한 피드 입니다",HttpStatus.BAD_REQUEST);
 	}
 
 	@ApiOperation(value="댓글 신고 취소",notes="댓글 신고 취소")
