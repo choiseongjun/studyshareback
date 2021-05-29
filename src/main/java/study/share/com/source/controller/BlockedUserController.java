@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.DTO.AlarmHistoryDTO;
@@ -35,7 +36,7 @@ public class BlockedUserController {
     BlockedUserService blockedUserService;
 
     @ApiOperation(value="사용자 차단하기",notes="사용자 차단하기")
-    @GetMapping("/report/user/{id}")
+    @PostMapping("/report/user/{id}")
     public ResponseEntity<?> blockUser(@PathVariable("id")long id, Principal principal){
 
             Optional<User> reporter = userService.findUserNickname(principal.getName());

@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
@@ -32,7 +33,9 @@ public class UserResponse {
 	
 	private List<Follow> followlist;
 	
-	public UserResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize) {
+	private List<BlockedUser> blockedUser;
+	
+	public UserResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,List<BlockedUser> blockUserList) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setSex(user.getSex());
@@ -42,7 +45,20 @@ public class UserResponse {
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
+		this.setBlockedUser(blockUserList);
 		//this.setFollowlist(followlist);
+	}
+
+	public UserResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setSex(user.getSex());
+		this.setIntroduce(user.getIntroduce());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
 	}
 
 }
