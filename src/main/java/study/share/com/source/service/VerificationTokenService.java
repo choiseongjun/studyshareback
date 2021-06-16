@@ -49,7 +49,7 @@ public class VerificationTokenService {
         //String title = messageSource.getMessage("email.auth.title", null, LocaleContextHolder.getLocale());
         String title ="이메일 주소 인증";
        // String content = messageSource.getMessage("email.auth.content", new Object[]{String.format(EMAIL_VERIFY_API, token)}, LocaleContextHolder.getLocale());
-        String content = "<h2>안녕하세요</h2><p>가입해 주셔서 감사합니다! 시작하기 전에, 본인 확인을 해야 해요. 아래를 클릭해서 이메일 주소를 인증하세요:</p>";
+        String content = "<h1>안녕하세요 StudyShare 입니다!</h1><hr><h2>안녕하세요</h2><p>가입해 주셔서 감사합니다! 시작하기 전에, 본인 확인을 해야 해요. 아래를 클릭해서 이메일 주소를 인증하세요:</p>";
         content+="<br /><br /><br />";
        //content+="<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer noopener\">이메일 인증</a>".format("%s", EMAIL_VERIFY_API+token);
         content+="<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer noopener\">이메일 인증</a>".replace("{0}", EMAIL_VERIFY_API+token);
@@ -142,7 +142,7 @@ public class VerificationTokenService {
 
         String title ="비밀번호 변경";
         String content = "<h2>안녕하세요 StudyShare 입니다!</h2><p>비밀번호 변경을 위한 링크를 클릭해 주세요</p><hr>";
-        content+="<a href=\"http://localhost:8080/PwFind/{0}\"" .replace("{0}",email);
+        content+="<a href=\"http://3.36.73.41:9090/PwFind/{0}\"" .replace("{0}",email);
         content+=">비밀번호 변경을 위한 링크</a>";
         content+="<br /><br /><br />";
 

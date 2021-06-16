@@ -1,8 +1,11 @@
 package study.share.com.source.repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,5 +70,9 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 			Pageable pageable, char c,  Long id);//차단하는 유저가 없는 경우
 
 	Page<FeedList> findAllByuser_idAndDeleteyn(Pageable pageable, long user_id, char c);
+
+	Page <FeedList> findAllByuserIdAndUpdatedAtBetween(Pageable pageable, long userId, LocalDateTime startdate, LocalDateTime enddate);
+
+	Optional <FeedList> findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc( long userId, LocalDateTime startdate, LocalDateTime enddate);
 
 }

@@ -1,5 +1,7 @@
 package study.share.com.source.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -183,6 +185,14 @@ public class FeedListService {
 
 	public Page<FeedList> mylistfeed(Pageable pageable, long user_id) {
 		return feedListRepository.findAllByuser_id(pageable, user_id);
+	}
+
+	public Page<FeedList> mylistfeedBydate(Pageable pageable, long user_id, LocalDateTime startdate,LocalDateTime enddate) {
+		return feedListRepository.findAllByuserIdAndUpdatedAtBetween(pageable, user_id,startdate,enddate);
+	}
+
+	public Optional<FeedList> mylistfeedBydateOne( long user_id, LocalDateTime startdate,LocalDateTime enddate) {
+		return feedListRepository.findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc(user_id,startdate,enddate);
 	}
 
 	public Page<FeedList> otherlistfeed(Pageable pageable, long user_id) {

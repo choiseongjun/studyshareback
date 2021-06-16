@@ -2,6 +2,9 @@ package study.share.com.source.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -333,6 +336,41 @@ public class FeedListController {
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@ApiOperation(value="내 피드 날짜 별 조회",notes="내 피드 날짜 별 조회")
+	@GetMapping("/feed/my/date/{dates}")
+	public ResponseEntity<?> mylistfeedByDate(Pageable pageable,Principal principal,@PathVariable("dates")String dates){
+		try {
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+
+			dates+=" 00:00:00";
+			LocalDateTime startdate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//시작시간
+			dates=dates.replaceAll(" 00:00:00"," 23:59:59");//끝시간 설정
+			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
+			Page<FeedList> feedlist = feedListService.mylistfeedBydate(pageable,user.get().getId(),startdate,enddate);
+			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@ApiOperation(value="피드 날짜별 최신 한개 조회",notes="피드 날짜별 최신 한개 조회")
+	@GetMapping("/feed/One/{dates}")
+	public ResponseEntity<?> listfeedByDate(@PathVariable("dates")String dates,Principal principal){
+
+			Optional<User> user = userService.findUserNickname(principal.getName());
+			dates+=" 00:00:00";
+			LocalDateTime startdate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//시작시간
+			dates=dates.replaceAll(" 00:00:00"," 23:59:59");//끝시간 설정
+			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
+
+			Optional <FeedList> feedlist = feedListService.mylistfeedBydateOne(user.get().getId(),startdate,enddate);
+			return new ResponseEntity<>(new FeedListDTO(feedlist.get(),user.get()),HttpStatus.OK);
+			//return new ResponseEntity<>(feedlist.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
+
 	}
 
 
