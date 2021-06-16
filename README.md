@@ -51,7 +51,7 @@
 
 ### 📗 서비스 접속
 - [Android](https://play.google.com/store/apps/details?id=com.studyshare)
-- [ios] 추후 등록 예정 
+- [Ios](https://apps.apple.com/ng/app/%EC%8A%A4%ED%84%B0%EB%94%94%EC%89%90%EC%96%B4/id1567559281?ign-mpt=uo%3D2)
 
 
 ### 📘 Members
