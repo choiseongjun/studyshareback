@@ -1,6 +1,7 @@
 package study.share.com.source.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -20,5 +21,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long>{
 	List<Follow> findByToUserId(Long id);
 
 	List<Follow> findAllByFromUserId(Long id);
+
+	Optional<Follow> findByFromUserIdAndToUserId(Long fromUserId, Long toUserId);
 
 }

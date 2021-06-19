@@ -27,18 +27,18 @@ import lombok.Setter;
 public class Follow {
 
 	// fromUser가 toUser를 following 함.
-	// toUser를 fromUser가 follower 함.
+	// toUser의 follower는 fromUser.
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name="fromUserId")
-	@JsonIgnoreProperties({"roles", "feedlike","follow","todolist"})
+	//@JsonIgnoreProperties({"roles", "feedlike","follow","todolist"})
 	private User fromUser;
 	
 	@ManyToOne
-	@JsonIgnoreProperties({"roles", "feedlike","follow","todolist"})
+	//@JsonIgnoreProperties({"roles", "feedlike","follow","todolist"})
 	@JoinColumn(name="toUserId")
 	private User toUser;
 	
