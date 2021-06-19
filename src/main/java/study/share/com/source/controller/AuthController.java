@@ -1,14 +1,15 @@
 package study.share.com.source.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.html.Option;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
@@ -74,7 +81,7 @@ public class AuthController extends HttpServlet {
     @Autowired
     VerificationTokenService verificationTokenService;
 
-
+    public static String tokenStorage = "";
 
     @ApiOperation(value="로그인",notes="로그인")
     @PostMapping("/signin")
@@ -87,14 +94,14 @@ public class AuthController extends HttpServlet {
                             loginRequest.getPassword()
                     )
             );
-        	
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String ROLE=auth.getAuthorities().toString();
 
             UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
             String fcmToken = loginRequest.getFcmToken();//Fcm_Token
-            
+        	System.out.println("fcmToken===="+fcmToken);
+
             
             Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());
             if(fcmToken!=null){
@@ -286,17 +293,39 @@ public class AuthController extends HttpServlet {
         }
     }
 
+    
 
-//    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
-//    @PostMapping("/change/password")
-//    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq,Principal principal) throws IOException {
-//        try {
-//            Optional<User> result=userService.checkpassword(principal.getName(),passwordChangeReq);
-//            //result.orElseThrow(()->new NoSuchElementException("해당 유저 정보가 존재하지 않습니다"));
+    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
+    @PostMapping("/change/password")
+    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq,Principal principal) throws IOException {
+        try {
+            Optional<User> result=userService.checkpassword(principal.getName(),passwordChangeReq);
+            //result.orElseThrow(()->new NoSuchElementException("해당 유저 정보가 존재하지 않습니다"));
+
+            return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
+        }catch(Exception e) {
+            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/device/token")
+    public String getDeviceToken(@RequestParam String token) throws IOException {
+    	tokenStorage = token;
+		return token;
+    }
+    @GetMapping("/device/set/token")
+    public String setDeviceToken() {
+		return tokenStorage;
+    }
+    @GetMapping("/device/userid")
+    public String getToDeviceUserId(@RequestParam String userid) throws IOException {
+    	
+    	String baseUrl = "http://192.168.0.39:9090/api/auth/device/token";
+
+//    	RestTemplate restTemplate = new RestTemplate();
 //
-//            return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
-//        }catch(Exception e) {
-//            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+//    	ResponseEntity<String> response = restTemplate.getForEntity(baseUrl, String.class);
+//    	System.out.println("response=="+response);
+		return userid;
+    }
 }

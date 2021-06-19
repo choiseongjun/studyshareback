@@ -20,7 +20,7 @@ public class JwtProvider {
     
     private String jwtSecret="JWTSuperSecretKey";
 
-    private int jwtExpiration = 864000;
+    private long jwtExpiration = 8640000000000000000L;
 
     private static String JWT_TOKEN_TYPE_KEY = "token_type";
 
