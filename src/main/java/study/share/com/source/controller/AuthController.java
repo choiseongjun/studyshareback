@@ -307,25 +307,16 @@ public class AuthController extends HttpServlet {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+    @ApiOperation(value="fcm토큰값 담아주기",notes="fcm토큰값 담아주기")
     @GetMapping("/device/token")
     public String getDeviceToken(@RequestParam String token) throws IOException {
     	tokenStorage = token;
 		return token;
     }
+    @ApiOperation(value="fcm토큰값 내려주기",notes="fcm토큰값 내려주기")
     @GetMapping("/device/set/token")
     public String setDeviceToken() {
 		return tokenStorage;
     }
-    @GetMapping("/device/userid")
-    public String getToDeviceUserId(@RequestParam String userid) throws IOException {
-    	
-    	String baseUrl = "http://192.168.0.39:9090/api/auth/device/token";
-
-//    	RestTemplate restTemplate = new RestTemplate();
-//
-//    	ResponseEntity<String> response = restTemplate.getForEntity(baseUrl, String.class);
-//    	System.out.println("response=="+response);
-		return userid;
-    }
+  
 }
