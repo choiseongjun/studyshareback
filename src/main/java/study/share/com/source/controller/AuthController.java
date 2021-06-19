@@ -83,6 +83,33 @@ public class AuthController extends HttpServlet {
 
     public static String tokenStorage = "";
 
+    
+    @ApiOperation(value="fcm토큰값 담아주기",notes="fcm토큰값 담아주기")
+    @GetMapping("/set/token")
+    public String setFcmToken(@RequestParam String token,@RequestParam String userId) throws IOException {
+    	
+    	String fcmToken = token;
+    	Optional<User> user = userService.findUserLoginId(userId);
+        if(fcmToken!=null){
+            Optional <User> otherFcmToken = userService.findFcmToken(fcmToken);
+
+        	 if(otherFcmToken.isPresent() && otherFcmToken!=null) {
+             	if(otherFcmToken.get().getId()!=user.get().getId()) {//fcm있는 아이디와 로그인한 사람이 같지 않으면 
+                     	userService.deleteFcm(otherFcmToken,fcmToken); 
+                     	user.ifPresent(loginUser -> {
+                         	loginUser.setFcmToken(fcmToken);
+                         	userRepository.save(loginUser);
+                 		});
+                     }	
+             }else{
+             	user.ifPresent(loginUser -> {
+                 	loginUser.setFcmToken(fcmToken);
+                 	userRepository.save(loginUser);
+         		});
+             }
+        }
+		return token;
+    }
     @ApiOperation(value="로그인",notes="로그인")
     @PostMapping("/signin")
     public ResponseEntity<?>  authenticateUser(@RequestBody LoginForm loginRequest, HttpServletResponse response) {        
@@ -99,30 +126,8 @@ public class AuthController extends HttpServlet {
             String ROLE=auth.getAuthorities().toString();
 
             UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-            String fcmToken = loginRequest.getFcmToken();//Fcm_Token
-        	System.out.println("fcmToken===="+fcmToken);
-
             
-            Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());
-            if(fcmToken!=null){
-                Optional <User> otherFcmToken = userService.findFcmToken(fcmToken);
-
-            	 if(otherFcmToken.isPresent() && otherFcmToken!=null) {
-                 	if(otherFcmToken.get().getId()!=user.get().getId()) {//fcm있는 아이디와 로그인한 사람이 같지 않으면 
-                         	userService.deleteFcm(otherFcmToken,fcmToken); 
-                         	user.ifPresent(loginUser -> {
-                             	loginUser.setFcmToken(fcmToken);
-                             	userRepository.save(loginUser);
-                     		});
-                         }	
-                 }else{
-                 	user.ifPresent(loginUser -> {
-                     	loginUser.setFcmToken(fcmToken);
-                     	userRepository.save(loginUser);
-             		});
-                 }
-            }
-           
+            Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());           
 
     		AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
 	        String jwt = jwtProvider.generateJwtToken(authentication);
@@ -307,16 +312,16 @@ public class AuthController extends HttpServlet {
             return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @ApiOperation(value="fcm토큰값 담아주기",notes="fcm토큰값 담아주기")
-    @GetMapping("/device/token")
-    public String getDeviceToken(@RequestParam String token) throws IOException {
-    	tokenStorage = token;
-		return token;
-    }
-    @ApiOperation(value="fcm토큰값 내려주기",notes="fcm토큰값 내려주기")
-    @GetMapping("/device/set/token")
-    public String setDeviceToken() {
-		return tokenStorage;
-    }
+//    @ApiOperation(value="fcm토큰값 담아주기",notes="fcm토큰값 담아주기")
+//    @GetMapping("/device/token")
+//    public String getDeviceToken(@RequestParam String token) throws IOException {
+//    	tokenStorage = token;
+//		return token;
+//    }
+//    @ApiOperation(value="fcm토큰값 내려주기",notes="fcm토큰값 내려주기")
+//    @GetMapping("/device/set/token")
+//    public String setDeviceToken() {
+//		return tokenStorage;
+//    }
   
 }
