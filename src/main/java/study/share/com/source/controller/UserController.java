@@ -119,6 +119,8 @@ public class UserController {
 	/*내 팔로잉리스트 불러오기 2020-11-03 choiseongjun
 	 * DTO로 변환필요..
 	 * */
+
+	//내가 팔로우 하는 사람
 	@ApiOperation(value="내 팔로잉리스트 불러오기",notes="내 팔로잉리스트 불러오기")
 	@GetMapping("/user/followinglist/{id}")
 	public ResponseEntity<?> followinglist(@PathVariable long id){
@@ -132,7 +134,7 @@ public class UserController {
 		}
 	}
 	/*id는 팔로잉당하는사람*/
-	@ApiOperation(value="팔로잉당하는사람",notes="팔로잉당하는사람")
+	@ApiOperation(value="팔로우 하기",notes="팔로우 하기")
 	@PostMapping("/user/following/{id}")
 	public ResponseEntity<?> following(@PathVariable long id,Principal principal){
 	

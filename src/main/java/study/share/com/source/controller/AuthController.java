@@ -287,16 +287,16 @@ public class AuthController extends HttpServlet {
     }
 
 
-//    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
-//    @PostMapping("/change/password")
-//    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq,Principal principal) throws IOException {
-//        try {
-//            Optional<User> result=userService.checkpassword(principal.getName(),passwordChangeReq);
-//            //result.orElseThrow(()->new NoSuchElementException("해당 유저 정보가 존재하지 않습니다"));
-//
-//            return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
-//        }catch(Exception e) {
-//            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @ApiOperation(value="비밀번호 변경",notes="비밀번호 변경")
+    @PostMapping("/change/password")
+    public ResponseEntity<?> changepassword(@RequestBody PasswordChangeReq passwordChangeReq,Principal principal) throws IOException {
+        try {
+            Optional<User> result=userService.checkpassword(principal.getName(),passwordChangeReq);
+            //result.orElseThrow(()->new NoSuchElementException("해당 유저 정보가 존재하지 않습니다"));
+
+            return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
+        }catch(Exception e) {
+            return new ResponseEntity<>("서버 오류..새로고침 후 시도해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
