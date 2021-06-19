@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.BlockedUser;
+import study.share.com.source.model.DTO.FollowDTO;
 import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
@@ -103,6 +104,7 @@ public class UserController {
 	/*내 팔로워리스트 불러오기 2020-09-26 choiseongjun
 	 * DTO로 변환필요..
 	 * */
+	//나를 팔로우 하는 사람
 	@ApiOperation(value="내 팔로워리스트 불러오기",notes="내 팔로워리스트 불러오기")
 	@GetMapping("/user/followerlist/{id}")
 	public ResponseEntity<?> followerlist(@PathVariable long id){
@@ -110,7 +112,7 @@ public class UserController {
 			Optional<User> user = userService.findUserId(id);
 //			Optional<User> user = userService.findUserNickname(principal.getName());
 			List<Follow> followlist=userService.followerlist(user);
-			return new ResponseEntity<>(followlist,HttpStatus.OK);
+			return new ResponseEntity<>(followlist.stream().map(FollowDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
@@ -127,7 +129,7 @@ public class UserController {
 		try {
 			Optional<User> user = userService.findUserId(id);
 			List<Follow> followlist=userService.followinglist(user);
-			return new ResponseEntity<>(followlist,HttpStatus.OK);
+			return new ResponseEntity<>(followlist.stream().map(FollowDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
@@ -137,38 +139,27 @@ public class UserController {
 	@ApiOperation(value="팔로우 하기",notes="팔로우 하기")
 	@PostMapping("/user/following/{id}")
 	public ResponseEntity<?> following(@PathVariable long id,Principal principal){
-	
-		try {
-			Optional<User> user = userService.findUserNickname(principal.getName());
-			User users = userService.following(id,user);
-			
-			FeedLike feedlike =new FeedLike();
-				for(Follow f:users.getFollow()) {
-					if(f.getFromUser().getId()==id) {
-						feedlike.setUserkey(id);
-						feedlike.setTempFollow(true);//임시변수로 팔로우한지 안한지 처리
-				}
-			}
 
-			return new ResponseEntity<>(feedlike,HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
-		}
+		Optional<User> user = userService.findUserNickname(principal.getName());
+		Optional <Follow> followResult=userService.findfollowing(id,user.get());//팔로우 정보 조회
+		if(followResult.isPresent())
+			return new ResponseEntity<>("이미 팔로우 하고 있습니다",HttpStatus.BAD_REQUEST);
+		Follow follow = userService.following(id,user.get());
+
+		return new ResponseEntity<>(new FollowDTO(follow),HttpStatus.OK);
+
 	}
 	/*id는 팔로잉삭제*/
 	@ApiOperation(value="팔로잉삭제",notes="팔로잉삭제")
 	@DeleteMapping("/user/following/{id}")
 	public ResponseEntity<?> canclefollowing(@PathVariable long id,Principal principal){
-		
+
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
 			User users =userService.canclefollowing(id,user);
-			
-			FeedLike feedlike =new FeedLike();
-			feedlike.setTempFollow(false);
-			feedlike.setUserkey(id);
-			return new ResponseEntity<>(feedlike,HttpStatus.OK);
+
+
+			return new ResponseEntity<>("삭제 완료",HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("서버 오류입니다.새로고침 후 다시 시도해주세요",HttpStatus.BAD_REQUEST);

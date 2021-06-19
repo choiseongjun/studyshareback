@@ -42,25 +42,36 @@ public class UserService {
 		
 	}
 
-	public User following(long id, Optional<User> user) {
+	public Follow following(long id, User user) {
 		
 		Optional<User> touser = userRepository.findById(id);
 		
 		Follow follow=new Follow();
-		follow.setToUser(user.get());//팔로잉 하는 사람 ->팔로잉 거는사람 
-		follow.setFromUser(touser.get());//팔로잉 당하는 사람 
-		
-		User toUserone = followRepository.save(follow).getToUser();
-		return toUserone;
+
+		follow.setToUser(touser.get());//팔로잉 당하는 사람
+		follow.setFromUser(user);//팔로잉 하는 사람 ->팔로잉 거는사람
+
+		followRepository.save(follow);
+		return follow;
 	}
 
 	public User canclefollowing(long id, Optional<User> user) {
 		
 		Optional<User> touser = userRepository.findById(id);
 		
-		followRepository.deleteByFromUserIdAndToUserId(touser.get().getId(),user.get().getId());
+		followRepository.deleteByFromUserIdAndToUserId(user.get().getId(),touser.get().getId());
 		return touser.get();
 	}
+
+	//팔로우 기록이 있는지 조회
+	public Optional<Follow> findfollowing(long id, User user) {
+
+		Optional<User> touser = userRepository.findById(id);
+
+		Optional <Follow> followresult= followRepository.findByFromUserIdAndToUserId(user.getId(),touser.get().getId());
+		return followresult;
+	}
+
 
 	public List<Follow> followerlist(Optional<User> user) {
 		List<Follow> followlist=followRepository.findAllByToUserId(user.get().getId());
