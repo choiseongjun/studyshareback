@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.HtmlUtils;
+import study.share.com.source.message.request.SignUpForm;
 import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.*;
@@ -106,5 +108,14 @@ public class AlarmController {
         return alarmCount;
     }
 
+
+    //1이면 허용 0이면 거부
+    @ApiOperation(value="알림 수신 허용 여부",notes="알림 수신 허용")
+    @PostMapping("/noti/send/{check}")
+    public ResponseEntity<?> alarmChecked(Principal principal,@PathVariable boolean check) {
+        Optional <User> user = userService.findUserNickname(principal.getName());
+        userService.saveAlarmCheck(user.get(),check);
+        return new ResponseEntity<String>("알람 설정이 변경 되었습니다.", HttpStatus.OK);
+    }
 
 }

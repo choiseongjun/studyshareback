@@ -128,6 +128,7 @@ public class AuthController extends HttpServlet {
             UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
             
             Optional<User> user = userService.findUserLoginId(loginRequest.getUserid());           
+            userService.saveAccessTime(user.get());
 
     		AuthTokenDTO authTokenDTO = authTokenService.createAuthToken(userPrincipal.getUsername());
 	        String jwt = jwtProvider.generateJwtToken(authentication);

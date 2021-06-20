@@ -98,8 +98,12 @@ public class User extends DateAudit{
     
     private String fcmToken;
 
-//    @Column(name="last_access_time")
-//    private LocalDateTime lastaccesstime;
+    @Column(name="last_access_time")
+    private LocalDateTime lastaccesstime;
+
+    @Column(name="alarm_check")
+    @ColumnDefault("0")
+    private boolean alarmCheck;
     
     public User(String userid,String nickname, String email,String sex,String password,String age) {
         this.userid = userid;

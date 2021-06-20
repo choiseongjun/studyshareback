@@ -1,6 +1,7 @@
 package study.share.com.source.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -175,6 +176,19 @@ public class UserService {
 
 	public Optional<User> findUserLoginId(String userid) {
 		return userRepository.findByUserid(userid);
+	}
+
+	//마지막 로그인 시간 저장
+	public void saveAccessTime(User user) {
+		LocalDateTime dateTime= LocalDateTime.now();
+		user.setLastaccesstime(dateTime);
+		userRepository.save(user);
+	}
+
+	//알람 수신 허용 여부 변경
+	public void saveAlarmCheck(User user, boolean check) {
+		user.setAlarmCheck(check);
+		userRepository.save(user);
 	}
 
 	public Optional <User> findFcmToken(String fcmToken) {
