@@ -1,5 +1,6 @@
 package study.share.com.source.model;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -96,6 +97,9 @@ public class User extends DateAudit{
     private long accountSuspend;
     
     private String fcmToken;
+
+//    @Column(name="last_access_time")
+//    private LocalDateTime lastaccesstime;
     
     public User(String userid,String nickname, String email,String sex,String password,String age) {
         this.userid = userid;

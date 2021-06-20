@@ -142,7 +142,7 @@ public class VerificationTokenService {
 
         String title ="비밀번호 변경";
         String content = "<h2>안녕하세요 StudyShare 입니다!</h2><p>비밀번호 변경을 위한 링크를 클릭해 주세요</p><hr>";
-        content+="<a href=\"http://3.35.255.192:9090//PwFind/{0}\"" .replace("{0}",email);
+        content+="<a href=\"http://3.35.255.192:9090/PwFind/{0}\"" .replace("{0}",email);
         content+=">비밀번호 변경을 위한 링크</a>";
         content+="<br /><br /><br />";
 
