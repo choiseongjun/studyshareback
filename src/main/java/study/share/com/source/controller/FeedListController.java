@@ -343,14 +343,16 @@ public class FeedListController {
 	public ResponseEntity<?> mylistfeedByDate(Pageable pageable,Principal principal,@PathVariable("dates")String dates){
 		try {
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 
-			dates+=" 00:00:00";
+			StringBuffer sb = new StringBuffer(dates);//-문자 추가
+			sb.insert(4,"-");
+			sb.insert(7,"-");
+			dates=sb.toString();//string으로 변환
+			dates+=" 00:00:00";//시작 시간 설정
 			LocalDateTime startdate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//시작시간
 			dates=dates.replaceAll(" 00:00:00"," 23:59:59");//끝시간 설정
 			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
-			Page<FeedList> feedlist = feedListService.mylistfeedBydate(pageable,user.get().getId(),startdate,enddate);
+			List<FeedList> feedlist = feedListService.mylistfeedBydate(pageable,user.get().getId(),startdate,enddate);
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
@@ -362,13 +364,17 @@ public class FeedListController {
 	public ResponseEntity<?> listfeedByDate(@PathVariable("dates")String dates,Principal principal){
 
 			Optional<User> user = userService.findUserNickname(principal.getName());
+			StringBuffer sb = new StringBuffer(dates);//-문자 추가
+			sb.insert(4,"-");
+			sb.insert(7,"-");
+			dates=sb.toString();//string으로 변환
 			dates+=" 00:00:00";
 			LocalDateTime startdate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//시작시간
 			dates=dates.replaceAll(" 00:00:00"," 23:59:59");//끝시간 설정
 			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
 
 			Optional <FeedList> feedlist = feedListService.mylistfeedBydateOne(user.get().getId(),startdate,enddate);
-			return new ResponseEntity<>(new FeedListDTO(feedlist.get(),user.get()),HttpStatus.OK);
+			return new ResponseEntity<>(new FeedListDTO(feedlist.get()),HttpStatus.OK);
 			//return new ResponseEntity<>(feedlist.stream().map(t->new FeedListDTO(t,user.get())),HttpStatus.OK);
 
 	}
