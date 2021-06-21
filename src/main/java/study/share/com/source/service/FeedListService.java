@@ -187,8 +187,8 @@ public class FeedListService {
 		return feedListRepository.findAllByuser_id(pageable, user_id);
 	}
 
-	public List<FeedList> mylistfeedBydate(Pageable pageable, long user_id, LocalDateTime startdate,LocalDateTime enddate) {
-		return feedListRepository.findAllByuserIdAndUpdatedAtBetween(pageable, user_id,startdate,enddate);
+	public List<FeedList> mylistfeedBydate( long user_id, LocalDateTime startdate,LocalDateTime enddate) {
+		return feedListRepository.findAllByuserIdAndUpdatedAtBetween(user_id,startdate,enddate);
 	}
 
 	public Optional<FeedList> mylistfeedBydateOne( long user_id, LocalDateTime startdate,LocalDateTime enddate) {

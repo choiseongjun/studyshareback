@@ -71,7 +71,7 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 
 	Page<FeedList> findAllByuser_idAndDeleteyn(Pageable pageable, long user_id, char c);
 
-	List <FeedList> findAllByuserIdAndUpdatedAtBetween(Pageable pageable, long userId, LocalDateTime startdate, LocalDateTime enddate);
+	List <FeedList> findAllByuserIdAndUpdatedAtBetween( long userId, LocalDateTime startdate, LocalDateTime enddate);
 
 	Optional <FeedList> findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc( long userId, LocalDateTime startdate, LocalDateTime enddate);
 
