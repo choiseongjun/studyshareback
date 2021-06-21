@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import study.share.com.source.model.User;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedReply;
 
@@ -71,5 +72,9 @@ public interface FeedListRepository extends JpaRepository<FeedList, Long>{
 	List <FeedList> findAllByuserIdAndUpdatedAtBetween( long userId, LocalDateTime startdate, LocalDateTime enddate);
 
 	Optional <FeedList> findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc( long userId, LocalDateTime startdate, LocalDateTime enddate);
+
+	long countByUser(User user);
+
+	List<FeedList> findByUser(User user);
 
 }

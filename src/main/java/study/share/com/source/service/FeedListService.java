@@ -18,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import study.share.com.source.model.*;
+import study.share.com.source.model.Tag;
+import study.share.com.source.model.UploadFile;
+import study.share.com.source.model.User;
 import study.share.com.source.model.feed.FeedLike;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedTag;
@@ -276,6 +278,10 @@ public class FeedListService {
 
 	public Page<FeedList> feedMylikeNotBlock(Pageable pageable, Optional<User> user) {
 		return feedListRepository.findDistinctAllByDeleteynOrFeedlikeUserIdAndFeedlikeUserIdIsNullAndFeedlikeUserIdIsNotNullOrderByIdDesc(pageable,'N',user.get().getId());
+	}
+
+	public List<FeedList> FindFeedUser(User user) {
+		return feedListRepository.findByUser(user);
 	}
 
 }

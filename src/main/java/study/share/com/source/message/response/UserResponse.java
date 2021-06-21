@@ -35,7 +35,9 @@ public class UserResponse {
 	
 	private List<BlockedUser> blockedUser;
 	
-	public UserResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,List<BlockedUser> blockUserList) {
+	private long feedTotalCnt;
+	
+	public UserResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,List<BlockedUser> blockUserList, long feedTotalCnt) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setSex(user.getSex());
@@ -46,6 +48,7 @@ public class UserResponse {
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
 		this.setBlockedUser(blockUserList);
+		this.setFeedTotalCnt(feedTotalCnt);
 		//this.setFollowlist(followlist);
 	}
 
