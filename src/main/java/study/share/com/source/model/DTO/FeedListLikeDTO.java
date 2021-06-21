@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import study.share.com.source.model.FeedLike;
-import study.share.com.source.model.FeedList;
+import study.share.com.source.model.feed.FeedLike;
+import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.User;
 
 @Data

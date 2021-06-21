@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import study.share.com.source.model.common.DateAudit;
+import study.share.com.source.model.feed.FeedTag;
 
 @Entity
 @Table(name = "tag")

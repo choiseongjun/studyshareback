@@ -20,7 +20,6 @@ import study.share.com.source.message.response.UserProfileResponse;
 import study.share.com.source.message.response.UserResponse;
 import study.share.com.source.model.BlockedUser;
 import study.share.com.source.model.DTO.FollowDTO;
-import study.share.com.source.model.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.AuthTokenDTO;

@@ -1,7 +1,7 @@
 package study.share.com.source.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import study.share.com.source.model.FeedReplyLike;
+import study.share.com.source.model.feed.FeedReplyLike;
 
 import java.util.Optional;
 

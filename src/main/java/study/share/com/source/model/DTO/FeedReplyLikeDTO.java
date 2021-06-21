@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import study.share.com.source.model.FeedReplyLike;
+import study.share.com.source.model.feed.FeedReplyLike;
 
 @Getter
 @Setter

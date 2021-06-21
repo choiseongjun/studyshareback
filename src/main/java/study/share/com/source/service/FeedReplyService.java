@@ -1,23 +1,21 @@
 package study.share.com.source.service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import study.share.com.source.model.*;
-import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedReplyLikeDTO;
+import study.share.com.source.model.feed.FeedList;
+import study.share.com.source.model.feed.FeedReply;
+import study.share.com.source.model.feed.FeedReplyLike;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.FeedReplyLikeRepository;
 import study.share.com.source.repository.FeedReplyRepository;

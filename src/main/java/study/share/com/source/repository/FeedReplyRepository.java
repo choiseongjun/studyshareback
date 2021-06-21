@@ -11,9 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.FeedReply;
-import study.share.com.source.model.User;
+import study.share.com.source.model.feed.FeedReply;
 
 public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 

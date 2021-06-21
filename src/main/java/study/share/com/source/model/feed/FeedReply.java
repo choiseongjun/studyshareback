@@ -1,4 +1,4 @@
-package study.share.com.source.model;
+package study.share.com.source.model.feed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
 
 @Entity

@@ -6,9 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import study.share.com.source.message.request.TodoCommentReq;
 import study.share.com.source.message.request.TodoListReq;
-import study.share.com.source.model.FeedList;
 import study.share.com.source.model.TodoComment;
 import study.share.com.source.model.TodoDate;
 import study.share.com.source.model.TodoList;

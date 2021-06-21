@@ -2,7 +2,6 @@ package study.share.com.source.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +29,8 @@ import io.swagger.annotations.ApiOperation;
 import study.share.com.source.model.*;
 import study.share.com.source.model.DTO.FeedListDTO;
 import study.share.com.source.model.DTO.FeedListLikeDTO;
+import study.share.com.source.model.feed.FeedLike;
+import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.ReportFeedRepository;

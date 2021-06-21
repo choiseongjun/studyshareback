@@ -18,13 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.FeedReply;
-import study.share.com.source.model.FeedReplyLike;
+import study.share.com.source.model.feed.FeedReply;
+import study.share.com.source.model.feed.FeedReplyLike;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.FeedReplyDTO;
 import study.share.com.source.model.DTO.FeedReplyLikeDTO;
-import study.share.com.source.model.report.ReportFeed;
 import study.share.com.source.model.report.ReportFeedReply;
 import study.share.com.source.repository.FeedReplyLikeRepository;
 import study.share.com.source.repository.FeedReplyRepository;

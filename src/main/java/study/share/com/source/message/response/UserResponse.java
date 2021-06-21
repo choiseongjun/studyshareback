@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import study.share.com.source.model.BlockedUser;
-import study.share.com.source.model.FeedLike;
+import study.share.com.source.model.feed.FeedLike;
 import study.share.com.source.model.Follow;
 import study.share.com.source.model.User;
 

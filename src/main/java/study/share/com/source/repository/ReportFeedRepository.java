@@ -2,8 +2,6 @@ package study.share.com.source.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import study.share.com.source.model.FeedList;
-import study.share.com.source.model.Report;
 import study.share.com.source.model.User;
 import study.share.com.source.model.report.ReportFeed;
 

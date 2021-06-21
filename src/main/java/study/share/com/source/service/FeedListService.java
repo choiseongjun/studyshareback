@@ -1,6 +1,5 @@
 package study.share.com.source.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import study.share.com.source.model.*;
+import study.share.com.source.model.feed.FeedLike;
+import study.share.com.source.model.feed.FeedList;
+import study.share.com.source.model.feed.FeedTag;
 import study.share.com.source.repository.FeedLikeRepository;
 import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.repository.FeedReplyRepository;

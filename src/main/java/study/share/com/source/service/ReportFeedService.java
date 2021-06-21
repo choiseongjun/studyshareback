@@ -1,12 +1,11 @@
 package study.share.com.source.service;
 
-import com.google.firebase.database.core.Repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import study.share.com.source.model.FeedList;
+import study.share.com.source.model.feed.FeedList;
 
 import study.share.com.source.model.User;
 import study.share.com.source.model.report.ReportFeed;

@@ -10,6 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import study.share.com.source.model.*;
+import study.share.com.source.model.feed.FeedLike;
+import study.share.com.source.model.feed.FeedList;
+import study.share.com.source.model.feed.FeedReply;
+import study.share.com.source.model.feed.FeedTag;
 
 @Getter
 @Setter

@@ -1,15 +1,15 @@
-package study.share.com.source.model;
+package study.share.com.source.model.feed;
 
 import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import study.share.com.source.model.Tag;
+import study.share.com.source.model.feed.FeedList;
 
 @Entity
 @Table(name = "feed_tag")

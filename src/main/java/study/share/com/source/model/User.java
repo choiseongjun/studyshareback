@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import study.share.com.source.model.common.DateAudit;
+import study.share.com.source.model.feed.FeedLike;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {

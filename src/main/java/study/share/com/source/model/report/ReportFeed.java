@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import study.share.com.source.model.FeedList;
+import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
 

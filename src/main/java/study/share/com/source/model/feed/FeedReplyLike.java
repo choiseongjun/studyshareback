@@ -1,14 +1,14 @@
-package study.share.com.source.model;
+package study.share.com.source.model.feed;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
+import study.share.com.source.model.feed.FeedReply;
 
 import javax.persistence.*;
 

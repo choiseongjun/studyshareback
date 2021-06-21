@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import study.share.com.source.model.FeedReply;
-import study.share.com.source.model.FeedReplyLike;
+import study.share.com.source.model.feed.FeedReply;
+import study.share.com.source.model.feed.FeedReplyLike;
 import study.share.com.source.model.User;
 
 @Getter
