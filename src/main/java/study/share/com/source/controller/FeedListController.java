@@ -353,8 +353,6 @@ public class FeedListController {
 			dates=dates.replaceAll(" 00:00:00"," 23:59:59");//끝시간 설정
 			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
 			List<FeedList> feedlist = feedListService.mylistfeedBydate(user.get().getId(),startdate,enddate);
-			if(feedlist.isEmpty())
-				return new ResponseEntity<>("해당 사용자의 날짜별 조회 내역이 존재하지 않습니다",HttpStatus.OK);
 			return new ResponseEntity<>(feedlist.stream().map(FeedListDTO::new),HttpStatus.OK);
 
 	}
@@ -375,8 +373,6 @@ public class FeedListController {
 			dates=dates.replaceAll(" 00:00:00"," 23:59:59");//끝시간 설정
 			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
 			Optional <FeedList> feedlist = feedListService.mylistfeedBydateOne(user.get().getId(),startdate,enddate);
-			if(!feedlist.isPresent())
-				return new ResponseEntity<>("해당 사용자의 날짜별 조회 내역이 존재하지 않습니다",HttpStatus.OK);
 			return new ResponseEntity<>(new FeedListDTO(feedlist.get()),HttpStatus.OK);
 	}
 
