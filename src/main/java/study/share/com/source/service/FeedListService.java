@@ -1,7 +1,9 @@
 package study.share.com.source.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -10,6 +12,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -283,5 +286,25 @@ public class FeedListService {
 	public List<FeedList> FindFeedUser(User user) {
 		return feedListRepository.findByUser(user);
 	}
+
+	public String getenddate(String date)
+	{
+
+		int year= Integer.parseInt(date.substring(0,4));
+		int month=0;
+		if(date.charAt(4)=='0')//10보다 작은 경우
+			month=date.charAt(5)-'0';
+		else
+			month=Integer.parseInt(date.substring(4,6));
+		Calendar cal = Calendar.getInstance();
+		cal.set(year,month-1,1);
+		int endday=cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+		LocalDateTime localDateTime= LocalDateTime.of(year,month,endday,23,59,59);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String reuslt= localDateTime.format(formatter);
+		return reuslt;
+	}
+
 
 }

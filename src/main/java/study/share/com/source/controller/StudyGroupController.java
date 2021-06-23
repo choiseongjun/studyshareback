@@ -29,8 +29,8 @@ public class StudyGroupController {
     @PostMapping("/group")
     public ResponseEntity<?> savegroup(@RequestBody StudyGroupReq groupReq, Principal principal) throws IOException {
         try {
-            Optional<User> Onwer= userService.findUserNickname(principal.getName());
-            StudyGroup group = groupService.savegroup(groupReq,Onwer.get());
+            Optional<User> Owner= userService.findUserNickname(principal.getName());
+            StudyGroup group = groupService.savegroup(groupReq,Owner.get());
             return new ResponseEntity<>("그룹이 생성되었습니다", HttpStatus.OK);
         }catch(Exception e) {
             e.printStackTrace();
@@ -40,7 +40,7 @@ public class StudyGroupController {
 
     @ApiOperation(value="그룹 조회",notes="그룹 조회")
     @GetMapping("/group/{groupid}")
-    public ResponseEntity<?> savegroup(@PathVariable long groupid) throws IOException {
+    public ResponseEntity<?> findgroup(@PathVariable long groupid) throws IOException {
             Optional<StudyGroup> group = groupService.findgroup(groupid);
             if(group.isPresent())
                 return new ResponseEntity<>(new StudyGroupDTO(group.get()), HttpStatus.OK);
@@ -52,10 +52,10 @@ public class StudyGroupController {
     @DeleteMapping("/group/{groupid}")
     public ResponseEntity<?> deletegroup(@PathVariable long groupid,Principal principal) throws IOException {
         Optional<StudyGroup> group = groupService.findgroup(groupid);
-        Optional <User> Onwer= userService.findUserNickname(principal.getName());
+        Optional <User> Owner= userService.findUserNickname(principal.getName());
         if(!group.isPresent())
             return new ResponseEntity<>("해당 그룹이 존재하지 않습니다", HttpStatus.OK);
-        if(group.get().getOwner().getId()==Onwer.get().getId())//그룹장인 경우에만 삭제
+        if(group.get().getOwner().getId()==Owner.get().getId())//그룹장인 경우에만 삭제
         {
             groupService.deletegroup(groupid);
             return new ResponseEntity<>("그룹 "+groupid+"번이 삭제 되었습니다", HttpStatus.OK);
@@ -67,14 +67,24 @@ public class StudyGroupController {
     @PatchMapping("/group/{groupid}")
     public ResponseEntity<?> modifygroup(@RequestBody StudyGroupReq groupReq,@PathVariable long groupid,Principal principal) throws IOException {
         Optional<StudyGroup> group = groupService.findgroup(groupid);
-        Optional <User> Onwer= userService.findUserNickname(principal.getName());
+        Optional <User> Owner= userService.findUserNickname(principal.getName());
         if(!group.isPresent())
             return new ResponseEntity<>("해당 그룹이 존재하지 않습니다", HttpStatus.OK);
-        if(group.get().getOwner().getId()==Onwer.get().getId())//그룹장인 경우에만 삭제
+        if(group.get().getOwner().getId()==Owner.get().getId())//그룹장인 경우에만 삭제
         {
             StudyGroup studyGroup=groupService.modifygroup(groupid,groupReq);
             return new ResponseEntity<>(new StudyGroupDTO(studyGroup), HttpStatus.OK);
         }
         return new ResponseEntity<>("그룹을 삭제할 수 있는 권한이 없습니다", HttpStatus.OK);
     }
+
+//    @ApiOperation(value="그룹 전체 조회",notes="그룹 전체 조회")
+//    @GetMapping("/group")
+//    public ResponseEntity<?> findAllgroup() throws IOException {
+//        Optional<StudyGroup> group = groupService.findgroup();
+//        if(group.isPresent())
+//            return new ResponseEntity<>(new StudyGroupDTO(group.get()), HttpStatus.OK);
+//        else
+//            return new ResponseEntity<>("해당 그룹이 존재하지 않습니다", HttpStatus.OK);
+//    }
 }

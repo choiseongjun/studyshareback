@@ -2,12 +2,12 @@ package study.share.com.source.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -343,7 +343,7 @@ public class FeedListController {
 
 			Optional<User> user = userService.findUserId(user_id);
 			if(!user.isPresent())
-				return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.OK);
+				return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
 			StringBuffer sb = new StringBuffer(dates);//-문자 추가
 			sb.insert(4,"-");
 			sb.insert(7,"-");
@@ -363,7 +363,7 @@ public class FeedListController {
 
 			Optional<User> user = userService.findUserId(user_id);
 			if(!user.isPresent())
-				return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.OK);
+				return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
 			StringBuffer sb = new StringBuffer(dates);//-문자 추가
 			sb.insert(4,"-");
 			sb.insert(7,"-");
@@ -374,6 +374,49 @@ public class FeedListController {
 			LocalDateTime enddate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
 			Optional <FeedList> feedlist = feedListService.mylistfeedBydateOne(user.get().getId(),startdate,enddate);
 			return new ResponseEntity<>(new FeedListDTO(feedlist.get()),HttpStatus.OK);
+	}
+
+	@ApiOperation(value="피드 날짜 존재 여부 조회",notes="피드 날짜 존재 여부 조회")
+	@GetMapping("/feed/{user_id}/check/{dates}")
+	public ResponseEntity<?> feedlistByDate(@PathVariable("user_id")long user_id,@PathVariable("dates")String dates){
+
+		Optional<User> user = userService.findUserId(user_id);
+		if(!user.isPresent())
+			return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
+		String enddates=feedListService.getenddate(dates);//끝시간 설정
+
+		StringBuffer sb = new StringBuffer(dates);//-문자 추가
+		sb.insert(4,"-");
+		dates=sb.toString();//string으로 변환
+		dates+="-01 00:00:00";//시작 시간 설정
+
+		LocalDateTime startdate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//시작시간
+		LocalDateTime enddate=LocalDateTime.parse(enddates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
+		List<FeedList> feedlist = feedListService.mylistfeedBydate(user.get().getId(),startdate,enddate);
+		HashMap<String,Integer> result = new HashMap<String,Integer>();//글의 갯수, 날짜
+		ArrayList <String> saveDate = new ArrayList<>();
+		for(int i=0 ; i<feedlist.size(); i++)//시간 단위 지우기
+		{
+			LocalDate localDate = feedlist.get(i).getUpdatedAt().toLocalDate();
+			saveDate.add(localDate.toString());//string 으로 변환 하여 저장
+		}
+		//날짜별 글 수 세기
+		for(int i=0; i<saveDate.size();i++)
+		{
+			if(result.containsKey(saveDate.get(i)))//key가 존재하는 경우
+				result.put(saveDate.get(i),result.get(saveDate.get(i))+1);
+			else//존재하지 않는 경우
+				result.put(saveDate.get(i),1);
+		}
+		//날짜별로 오름차순 정렬
+		TreeMap <String, Integer> treeMap =new TreeMap<String,Integer>(result);
+		Iterator<String> treeMapIter = treeMap.keySet().iterator();
+
+		while( treeMapIter.hasNext()) {
+			String key = treeMapIter.next();
+			Integer value = treeMap.get( key );
+		}
+		return new ResponseEntity<>(treeMap,HttpStatus.OK);
 	}
 
 
