@@ -22,11 +22,9 @@ public class StudyGroupMember extends DateAudit {
     @ManyToOne(optional = false)
     @JoinColumn(name = "group_id")
     private StudyGroup studyGroup;
-    @Column(name = "owner_check")
-    //@ColumnDefault("n")
+    @Column(name = "owner_check",columnDefinition = "char(1) default 'N'")
     private char ownerCheck;
-    @Column(name = "join_condition")
-   // @ColumnDefault("n")
+    @Column(name = "join_condition",columnDefinition = "char(1) default 'N'")
     private char joinCondition;
 
 }

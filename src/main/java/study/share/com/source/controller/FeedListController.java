@@ -398,7 +398,7 @@ public class FeedListController {
 		for(int i=0 ; i<feedlist.size(); i++)//시간 단위 지우기
 		{
 			LocalDate localDate = feedlist.get(i).getUpdatedAt().toLocalDate();
-			saveDate.add(localDate.toString());//string 으로 변환 하여 저장
+			saveDate.add(localDate.toString().replaceAll("-",""));//string 으로 변환 하여 저장
 		}
 		//날짜별 글 수 세기
 		for(int i=0; i<saveDate.size();i++)
