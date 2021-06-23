@@ -11,6 +11,7 @@ import study.share.com.source.model.User;
 import study.share.com.source.repository.StudyGroupRepository;
 import study.share.com.source.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,5 +56,9 @@ public class StudyGroupService {
         studyGroupRepository.save(group.get());
         return group.get();
     }
+
+    public List<StudyGroup> findAllgroup()
+    { return studyGroupRepository.findAll(); }
+
 
 }

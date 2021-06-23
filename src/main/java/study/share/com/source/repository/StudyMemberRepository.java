@@ -1,11 +1,20 @@
 package study.share.com.source.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.stereotype.Repository;
+import study.share.com.source.model.StudyGroup;
 import study.share.com.source.model.StudyGroupMember;
+import study.share.com.source.model.User;
 
+import java.util.List;
+import java.util.Optional;
 
+@Repository
 public interface StudyMemberRepository extends JpaRepository<StudyGroupMember,Long> {
 
-
+    List<StudyGroupMember> findAllByStudyGroup(StudyGroup studyGroup);
+    Optional<StudyGroupMember> findByStudyGroupAndMember(StudyGroup studyGroup, User user);
+    void deleteByStudyGroupAndMember(StudyGroup studyGroup, User user);
 }
+

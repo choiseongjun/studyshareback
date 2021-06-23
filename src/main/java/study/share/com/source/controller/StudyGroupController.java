@@ -11,10 +11,12 @@ import study.share.com.source.model.DTO.StudyGroupDTO;
 import study.share.com.source.model.StudyGroup;
 import study.share.com.source.model.User;
 import study.share.com.source.service.StudyGroupService;
+import study.share.com.source.service.StudyMemberService;
 import study.share.com.source.service.UserService;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +26,8 @@ public class StudyGroupController {
     UserService userService;
     @Autowired
     StudyGroupService groupService;
+    @Autowired
+    StudyMemberService studyMemberService;
 
     @ApiOperation(value="그룹 생성",notes="그룹 생성")
     @PostMapping("/group")
@@ -31,6 +35,7 @@ public class StudyGroupController {
         try {
             Optional<User> Owner= userService.findUserNickname(principal.getName());
             StudyGroup group = groupService.savegroup(groupReq,Owner.get());
+            studyMemberService.savemember(Owner.get(),group,'n');//그룹장 그룹의 회원으로 가입
             return new ResponseEntity<>("그룹이 생성되었습니다", HttpStatus.OK);
         }catch(Exception e) {
             e.printStackTrace();
@@ -78,13 +83,13 @@ public class StudyGroupController {
         return new ResponseEntity<>("그룹을 삭제할 수 있는 권한이 없습니다", HttpStatus.OK);
     }
 
-//    @ApiOperation(value="그룹 전체 조회",notes="그룹 전체 조회")
-//    @GetMapping("/group")
-//    public ResponseEntity<?> findAllgroup() throws IOException {
-//        Optional<StudyGroup> group = groupService.findgroup();
-//        if(group.isPresent())
-//            return new ResponseEntity<>(new StudyGroupDTO(group.get()), HttpStatus.OK);
-//        else
-//            return new ResponseEntity<>("해당 그룹이 존재하지 않습니다", HttpStatus.OK);
-//    }
+    @ApiOperation(value="그룹 전체 조회",notes="그룹 전체 조회")
+    @GetMapping("/group")
+    public ResponseEntity<?> findAllgroup() throws IOException {
+        List<StudyGroup> grouplist = groupService.findAllgroup();
+        if(!grouplist.isEmpty())
+            return new ResponseEntity<>(grouplist.stream().map(StudyGroupDTO::new), HttpStatus.OK);
+        else
+            return new ResponseEntity<>("그룹이 존재하지 않습니다", HttpStatus.OK);
+    }
 }
