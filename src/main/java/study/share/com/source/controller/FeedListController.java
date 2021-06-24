@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +31,7 @@ import study.share.com.source.model.DTO.FeedListLikeDTO;
 import study.share.com.source.model.feed.FeedLike;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.report.ReportFeed;
-import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.feed.FeedListRepository;
 import study.share.com.source.repository.ReportFeedRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.service.BlockedUserService;

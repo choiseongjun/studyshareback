@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import study.share.com.source.model.StudyGroup;
-import study.share.com.source.model.User;
-
-import javax.persistence.*;
+import study.share.com.source.model.studygroup.StudyGroup;
 
 @Getter
 @Setter

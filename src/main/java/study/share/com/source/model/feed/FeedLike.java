@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
+import study.share.com.source.model.studygroup.StudyFeedList;
 
 @Entity
 @Table(name = "feedlike")
@@ -36,6 +37,7 @@ public class FeedLike extends DateAudit{
 	@JoinColumn(name = "user_id")
 	@JsonIgnoreProperties({"feedlike","todolist","follow","roles"})	
 	private User user;
+
 	
 	private long userkey;
 	@Transient

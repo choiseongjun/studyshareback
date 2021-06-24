@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 
 
 import study.share.com.source.message.request.StudyGroupReq;
-import study.share.com.source.model.StudyGroup;
+import study.share.com.source.model.studygroup.StudyGroup;
 import study.share.com.source.model.User;
 
-import study.share.com.source.repository.StudyGroupRepository;
+import study.share.com.source.repository.study.StudyGroupRepository;
 import study.share.com.source.repository.UserRepository;
 
 import java.util.List;

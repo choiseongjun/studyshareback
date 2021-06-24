@@ -14,7 +14,7 @@ import study.share.com.source.model.*;
 import study.share.com.source.model.DTO.AlarmHistoryDTO;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedReply;
-import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.feed.FeedListRepository;
 import study.share.com.source.service.AlarmService;
 import study.share.com.source.service.UserService;
 

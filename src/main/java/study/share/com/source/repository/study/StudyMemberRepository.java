@@ -1,10 +1,10 @@
-package study.share.com.source.repository;
+package study.share.com.source.repository.study;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;
-import study.share.com.source.model.StudyGroup;
-import study.share.com.source.model.StudyGroupMember;
+import study.share.com.source.model.studygroup.StudyGroup;
+import study.share.com.source.model.studygroup.StudyGroupMember;
 import study.share.com.source.model.User;
 
 import java.util.List;

@@ -1,8 +1,9 @@
-package study.share.com.source.model;
+package study.share.com.source.model.studygroup;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
 
 import javax.persistence.*;
@@ -22,11 +23,9 @@ public class StudyGroup extends DateAudit {
     private String title;
     @Column(name = "introduce")
     private String introduce;
-    @Column(name = "join_verified")
-    @ColumnDefault("1")
+    @Column(name = "join_verified",columnDefinition = "boolean default false")
     private boolean joinVerified;
-    @Column(name = "recruit_status")
-    @ColumnDefault("1")
+    @Column(name = "recruit_status",columnDefinition = "boolean default true")
     private boolean recruitStatus;
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id")

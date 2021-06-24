@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import study.share.com.source.message.request.StudyGroupReq;
 import study.share.com.source.model.DTO.StudyGroupDTO;
-import study.share.com.source.model.StudyGroup;
+import study.share.com.source.model.studygroup.StudyGroup;
 import study.share.com.source.model.User;
 import study.share.com.source.service.StudyGroupService;
 import study.share.com.source.service.StudyMemberService;
@@ -53,6 +53,8 @@ public class StudyGroupController {
                 return new ResponseEntity<>("해당 그룹이 존재하지 않습니다", HttpStatus.OK);
     }
 
+
+    ///외래키 때문에 삭제불가 수정 필요 -> 지금 안됨
     @ApiOperation(value="그룹 삭제",notes="그룹 삭제")
     @DeleteMapping("/group/{groupid}")
     public ResponseEntity<?> deletegroup(@PathVariable long groupid,Principal principal) throws IOException {

@@ -9,7 +9,7 @@ import study.share.com.source.model.feed.FeedList;
 
 import study.share.com.source.model.User;
 import study.share.com.source.model.report.ReportFeed;
-import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.feed.FeedListRepository;
 import study.share.com.source.repository.ReportFeedRepository;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.utils.ReportConstant;

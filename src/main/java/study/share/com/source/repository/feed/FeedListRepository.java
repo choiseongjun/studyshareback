@@ -1,4 +1,4 @@
-package study.share.com.source.repository;
+package study.share.com.source.repository.feed;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

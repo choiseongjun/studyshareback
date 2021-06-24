@@ -1,9 +1,11 @@
-package study.share.com.source.model;
+package study.share.com.source.model.studygroup;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
+import study.share.com.source.model.studygroup.StudyGroup;
 
 import javax.persistence.*;
 

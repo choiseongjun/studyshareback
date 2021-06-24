@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,10 +26,10 @@ import study.share.com.source.model.User;
 import study.share.com.source.model.feed.FeedLike;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedTag;
-import study.share.com.source.repository.FeedLikeRepository;
-import study.share.com.source.repository.FeedListRepository;
-import study.share.com.source.repository.FeedReplyRepository;
-import study.share.com.source.repository.FeedTagRepository;
+import study.share.com.source.repository.feed.FeedLikeRepository;
+import study.share.com.source.repository.feed.FeedListRepository;
+import study.share.com.source.repository.feed.FeedReplyRepository;
+import study.share.com.source.repository.feed.FeedTagRepository;
 import study.share.com.source.repository.TagRepository;
 import study.share.com.source.repository.UploadFileRepository;
 

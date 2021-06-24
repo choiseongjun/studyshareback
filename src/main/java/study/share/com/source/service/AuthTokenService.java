@@ -1,6 +1,5 @@
 package study.share.com.source.service;
 
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,10 +9,7 @@ import study.share.com.source.model.DTO.AuthTokenDTO;
 import study.share.com.source.model.exception.GeneralErrorException;
 import study.share.com.source.model.exception.TokenAuthenticationException;
 import study.share.com.source.repository.AuthTokenRepository;
-import study.share.com.source.repository.FeedListRepository;
 import study.share.com.source.security.jwt.JwtProvider;
-
-import java.util.Optional;
 
 @Service
 @Transactional

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import study.share.com.source.model.Tag;
 import study.share.com.source.model.feed.FeedList;
+import study.share.com.source.model.studygroup.StudyFeedList;
 
 @Entity
 @Table(name = "feed_tag")
@@ -29,4 +30,5 @@ public class FeedTag{
 	@JoinColumn(name = "tag_id")
 	@JsonIgnore
 	private Tag tag;
+
 }

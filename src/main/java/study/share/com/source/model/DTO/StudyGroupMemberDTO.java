@@ -4,12 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
-import study.share.com.source.model.StudyGroup;
-import study.share.com.source.model.StudyGroupMember;
-import study.share.com.source.model.User;
-
-import javax.persistence.*;
+import study.share.com.source.model.studygroup.StudyGroupMember;
 
 @Getter
 @Setter

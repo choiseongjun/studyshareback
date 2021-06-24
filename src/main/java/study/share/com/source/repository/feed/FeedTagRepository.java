@@ -1,4 +1,4 @@
-package study.share.com.source.repository;
+package study.share.com.source.repository.feed;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import study.share.com.source.model.feed.FeedTag;

@@ -16,9 +16,9 @@ import study.share.com.source.model.DTO.FeedReplyLikeDTO;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedReply;
 import study.share.com.source.model.feed.FeedReplyLike;
-import study.share.com.source.repository.FeedListRepository;
-import study.share.com.source.repository.FeedReplyLikeRepository;
-import study.share.com.source.repository.FeedReplyRepository;
+import study.share.com.source.repository.feed.FeedListRepository;
+import study.share.com.source.repository.feed.FeedReplyLikeRepository;
+import study.share.com.source.repository.feed.FeedReplyRepository;
 
 @Service
 public class FeedReplyService {

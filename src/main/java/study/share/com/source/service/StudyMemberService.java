@@ -2,10 +2,10 @@ package study.share.com.source.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import study.share.com.source.model.StudyGroup;
-import study.share.com.source.model.StudyGroupMember;
+import study.share.com.source.model.studygroup.StudyGroup;
+import study.share.com.source.model.studygroup.StudyGroupMember;
 import study.share.com.source.model.User;
-import study.share.com.source.repository.StudyMemberRepository;
+import study.share.com.source.repository.study.StudyMemberRepository;
 import study.share.com.source.repository.UserRepository;
 
 import java.util.List;

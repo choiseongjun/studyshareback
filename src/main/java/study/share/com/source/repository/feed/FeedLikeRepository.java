@@ -1,4 +1,4 @@
-package study.share.com.source.repository;
+package study.share.com.source.repository.feed;
 
 import java.util.List;
 

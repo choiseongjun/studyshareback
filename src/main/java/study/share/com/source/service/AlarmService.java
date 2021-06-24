@@ -7,7 +7,7 @@ import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedReply;
 import study.share.com.source.model.User;
 import study.share.com.source.repository.AlarmRepository;
-import study.share.com.source.repository.FeedListRepository;
+import study.share.com.source.repository.feed.FeedListRepository;
 import study.share.com.source.repository.UserRepository;
 
 import java.util.List;
