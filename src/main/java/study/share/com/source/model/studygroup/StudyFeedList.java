@@ -32,16 +32,16 @@ public class StudyFeedList extends DateAudit {
     private String ipaddress;
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
-    private StudyGroupMember studyGroupMember;
+    private User user;
     @ManyToOne(optional = false)
     @JoinColumn(name = "group_id")
     private StudyGroup studyGroup;
-//    @OneToMany(orphanRemoval=true,mappedBy = "study_feedlist")
-//    private List<StudyUploadFile> uploadfile=new ArrayList<StudyUploadFile>();
+    @OneToMany(orphanRemoval=true,mappedBy = "studyFeedList")
+    private List<StudyUploadFile> uploadfile=new ArrayList<StudyUploadFile>();
     @OneToMany(orphanRemoval=true,mappedBy = "studyFeedList")
     private List<StudyFeedLike> studyfeedlike=new ArrayList<StudyFeedLike>();
     @OneToMany(orphanRemoval=true,mappedBy = "studyFeedList")
     private List<StudyFeedReply> studyfeedreply=new ArrayList<StudyFeedReply>();
-//    @OneToMany(orphanRemoval=true,mappedBy = "study_feedlist")
-//    private List<StudyFeedTag> studyfeedtag;
+    @OneToMany(orphanRemoval=true,mappedBy = "studyFeedList")
+    private List<StudyFeedTag> studyfeedtag;
 }
