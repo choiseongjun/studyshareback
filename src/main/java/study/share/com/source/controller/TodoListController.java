@@ -1,11 +1,10 @@
 package study.share.com.source.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +26,10 @@ import study.share.com.source.model.TodoDate;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.TodoListDTO;
+import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.repository.TodoCommentRepository;
 import study.share.com.source.repository.TodoDateRepository;
-import study.share.com.source.service.TodoCommentService;
-import study.share.com.source.service.TodoDateService;
-import study.share.com.source.service.TodoListService;
-import study.share.com.source.service.UserService;
+import study.share.com.source.service.*;
 
 @RestController
 public class TodoListController {
@@ -49,6 +46,8 @@ public class TodoListController {
 	TodoDateRepository todoDateRepository;
 	@Autowired
 	TodoCommentRepository todoCommentRepository;
+	@Autowired
+	FeedListService feedListService;
 	
 	@ApiOperation(value="내 투두리스트 작성",notes="내 투두리스트 작성")
 	@PostMapping(path="/user/todo")
@@ -220,6 +219,72 @@ public class TodoListController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@ApiOperation(value="투두리스트 월별 달성률 조회",notes="투두리스트 월별 달성률 조회")
+	@GetMapping("/todo/{user_id}/monthly/achievement/{dates}")
+	public ResponseEntity<?> feedlistByDate(@PathVariable("user_id")long user_id,@PathVariable("dates")String dates){
+
+		Optional<User> user = userService.findUserId(user_id);
+		if(!user.isPresent())
+			return new ResponseEntity<>("해당 사용자가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
+		String enddates=feedListService.getenddate(dates);//끝시간 설정
+		StringBuffer sb = new StringBuffer(dates);//-문자 추가
+		sb.insert(4,"-");
+		dates=sb.toString();//string으로 변환
+		dates+="-01 00:00:00";//시작 시간 설정
+
+		LocalDateTime startdate=LocalDateTime.parse(dates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//시작시간
+		LocalDateTime enddate=LocalDateTime.parse(enddates, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//끝시간
+		List<TodoList> todolist = todoListService.mylistfeedBydate(user.get().getId(),startdate,enddate);
+		HashMap<String,Integer> result = new HashMap<String,Integer>();//날짜, 글의 갯수
+		HashMap<String,Integer> temp = new HashMap<String,Integer>();//날짜, 달성 확인
+		HashMap<String,Double> value = new HashMap<String,Double>();//최종 결과
+		ArrayList <String> saveDate = new ArrayList<>();
+		ArrayList <Character> saveCheck = new ArrayList<>();
+
+
+		for(int i=0 ; i<todolist.size(); i++)//시간 단위 지우기
+		{
+			LocalDate localDate = todolist.get(i).getUpdatedAt().toLocalDate();
+			saveDate.add(localDate.toString().replaceAll("-",""));//string 으로 변환 하여 저장
+			saveCheck.add(todolist.get(i).getChecked());//달성 여부 저장
+		}
+		//temp에 default 값 0으로 설정
+		for(int i=0; i<saveDate.size();i++)
+			temp.put(saveDate.get(i),0);
+
+		//날짜별 글 수 세기 (일별 전체 투두리스트 수 세기)
+		for(int i=0; i<saveDate.size();i++)
+		{
+			if(result.containsKey(saveDate.get(i)))//key가 존재하는 경우
+			{
+				result.put(saveDate.get(i),result.get(saveDate.get(i))+1);
+				if(saveCheck.get(i)=='C')//달성한 목표이면 갯수 세기
+					temp.put(saveDate.get(i),temp.get(saveDate.get(i))+1);
+			}
+			else//한개만 존재하는 경우
+			{
+				result.put(saveDate.get(i),1);
+				if(saveCheck.get(i)=='C')//한개가 달성한 목표이면 갯수 세기
+					temp.put(saveDate.get(i),1);
+			}
+		}
+
+//		for(String date : result.keySet())
+//		{
+//			System.out.println("날짜 "+date);
+//			System.out.println("총 갯수 출력 "+result.get(date));
+//			System.out.println("총 달성 갯수 "+temp.get(date));
+//			float m=((float)temp.get(date)/(float)result.get(date))*100;
+//			System.out.println("결과물 "+m);
+//		}
+
+		for(String date : result.keySet())//달성률 계산
+			value.put(date,Math.floor(((float)temp.get(date)/(float)result.get(date))*100));
+
+		return new ResponseEntity<>(value,HttpStatus.OK);
+	}
+
 	/*
 //	@ApiOperation(value="투두 컬러 조회",notes="투두 컬러 조회")
 //	@GetMapping(path="/todo/color")

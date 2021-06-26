@@ -107,9 +107,15 @@ public class AlarmController {
     @ApiOperation(value="알림 수신 허용 여부",notes="알림 수신 허용")
     @PostMapping("/noti/send/{check}")
     public ResponseEntity<?> alarmChecked(Principal principal,@PathVariable boolean check) {
-        Optional <User> user = userService.findUserNickname(principal.getName());
-        userService.saveAlarmCheck(user.get(),check);
-        return new ResponseEntity<String>("알람 설정이 변경 되었습니다.", HttpStatus.OK);
+        try {
+            Optional<User> user = userService.findUserNickname(principal.getName());
+            userService.saveAlarmCheck(user.get(), check);
+            Optional<User> result = userService.findUserId(user.get().getId());
+            int value =(result.get().isAlarmCheck())?1:0;
+            return new ResponseEntity<>(value, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("실패하였습니다.새로고침후 시도해주세요", HttpStatus.BAD_REQUEST);
+        }
     }
-
 }

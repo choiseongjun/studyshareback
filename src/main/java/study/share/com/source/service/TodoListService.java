@@ -1,5 +1,6 @@
 package study.share.com.source.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import study.share.com.source.model.TodoComment;
 import study.share.com.source.model.TodoDate;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
+import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.repository.TodoCommentRepository;
 import study.share.com.source.repository.TodoDateRepository;
 import study.share.com.source.repository.TodoListRepository;
@@ -96,6 +98,10 @@ public class TodoListService {
 
 	public TodoComment MyTodoComment(String savedDate, User user) {
 		return todoCommentRepository.findAllByTodoDateSavedDateAndUser(savedDate,user);
+	}
+
+	public List<TodoList> mylistfeedBydate(long user_id, LocalDateTime startdate, LocalDateTime enddate) {
+		return todoListRepository.findAllByuserIdAndUpdatedAtBetween(user_id,startdate,enddate);
 	}
 
 

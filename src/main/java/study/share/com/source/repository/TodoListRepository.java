@@ -3,6 +3,7 @@ package study.share.com.source.repository;
 import study.share.com.source.model.TodoList;
 import study.share.com.source.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,4 +29,6 @@ public interface TodoListRepository extends JpaRepository<TodoList,Long>{
     long countByuser_id(long user_id);
 
 	List<TodoList> findAllByTodoListsSavedDateAndUser(String savedDate, User user);
+
+	List<TodoList> findAllByuserIdAndUpdatedAtBetween(long userId, LocalDateTime startdate, LocalDateTime enddate);
 }
