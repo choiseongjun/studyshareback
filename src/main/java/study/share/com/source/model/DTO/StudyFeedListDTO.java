@@ -9,7 +9,7 @@ import study.share.com.source.model.feed.FeedLike;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedReply;
 import study.share.com.source.model.feed.FeedTag;
-import study.share.com.source.model.studygroup.StudyFeedList;
+import study.share.com.source.model.studygroup.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,18 +36,18 @@ public class StudyFeedListDTO {
 
     private UserProfileImage userProfileImage;
 
-    private List<UploadFile> uploadfile;
+    private List<StudyUploadFile> uploadfile;
 
-    private List<FeedLike> feedlike;
+    private List<StudyFeedLike> feedlike;
 
-    private Stream<FeedLike> myFeedlike;
+    private Stream<StudyFeedLike> myFeedlike;
 
 
-    private List<FeedReply> feedreply=new ArrayList<FeedReply>();
+    private List<StudyFeedReply> feedreply=new ArrayList<StudyFeedReply>();
 
-    private List<FeedTag> feedTagList =new ArrayList<>();
+    private List<StudyFeedTag> feedTagList =new ArrayList<>();
 
-    private List<Tag> tagList= new ArrayList<>();
+    private List<StudyTag> tagList= new ArrayList<>();
 
     private long feedreplysize;
     private LocalDateTime createdAt;
@@ -58,13 +58,13 @@ public class StudyFeedListDTO {
 
     public StudyFeedListDTO(StudyFeedList feedlist) {
         this.setId(feedlist.getId());
- //       this.setUserKey(feedlist.getUser().getId());
+    //    this.setUserKey(feedlist.getStudyGroupMember().getMember().getId());
         this.setContent(feedlist.getContent());
-   //     this.setTotallike(feedlist.getFeedlike().size());
- //       this.setUploadfile(feedlist.getUploadfile());
-//        this.setNickname(feedlist.getUser().getNickname());
- //       this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
-  //      this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
+    //    this.setTotallike(feedlist.getFeedlike().size());
+        this.setUploadfile(feedlist.getUploadfile());
+    //    this.setNickname(feedlist.getUser().getNickname());
+   //     this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
+    //    this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
         //this.setFeedlike(feedlist.getFeedlike());
         this.setFeedreply(feedreply);
         this.setCreatedAt(feedlist.getCreatedAt());

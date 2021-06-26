@@ -19,61 +19,38 @@ public interface StudyFeedListRepository extends JpaRepository<StudyFeedList,Lon
 
     @Query("SELECT IFNULL(MAX(id),0)+1 FROM StudyFeedList")
     long selectmaxid();
-
-    //long countByFeedlikeId(long id);
-
-    //List<StudyFeedList> findAllByDeleteyn(char c);
-
+//
+//    //long countByFeedlikeId(long id);
+//
+//    //List<StudyFeedList> findAllByDeleteyn(char c);
+//
     Page<StudyFeedList> findAllByDeleteynOrderByIdDesc(Pageable pageable, char c);
-//    @Query("SELECT IFNULL(MAX(totallike),0)+1 FROM StudyFeedList")
-//    long selectmaxtotalLiekid();
 
-    //List<StudyFeedReply> findByIdAndFeedreplyDeleteyn(long id, char c);
-
-    Page <StudyFeedList> findAllByUserId(Pageable pageable,long userId);
-
-   // Page<StudyFeedList> findAllByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
-
-    Optional<StudyFeedList> findByIdAndStudyfeedlikeUserId(long id, Long id2);
-
-   // Page<StudyFeedList> findAllByDeleteynAndFeedlikeUserIdInOrderByIdDesc(Pageable pageable, char c, Collection<Long> userId);
-
-   // Page<StudyFeedList> findByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
-
-   // Page<StudyFeedList> findByIdAndFeedlikeUserId(Pageable pageable, char c, Long id);
-
-
-   // Page<StudyFeedList> findAllByDeleteynAndFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable, char c,
-     //                                                                                    Long id);
-
-   // Page<StudyFeedList> findAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable, char c,
-    //                                                                                    Long id);
+////    @Query("SELECT IFNULL(MAX(totallike),0)+1 FROM StudyFeedList")
+////    long selectmaxtotalLiekid();
 //
-//    Page<StudyFeedList> findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrderByIdDesc(Pageable pageable,
-//                                                                                                char c, Long id);
+//    //List<StudyFeedReply> findByIdAndFeedreplyDeleteyn(long id, char c);
 //
-//    List<StudyFeedList> findDistinctByIdOrFeedlikeUserIdOrFeedlikeUserIdIsNull(Long id, Long id2);
+//    Page <StudyFeedList> findAllByMemberId(Pageable pageable,long memberId);
 //
-//    List<StudyFeedList> findByIdAndFeedlikeUserIdOrFeedlikeUserIdIsNull(long id, Long id2);
+//   // Page<StudyFeedList> findAllByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
 //
-//    Page<StudyFeedList> findDistinctAllByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
+//    Optional<StudyFeedList> findByIdAndStudyfeedlikeUserId(long id, Long id2);
 //
-//    Page<StudyFeedList> findDistinctAllByDeleteynOrFeedlikeUserIdOrFeedlikeUserIdIsNullOrFeedlikeUserIdIsNotNullOrderByIdDesc(
-//            Pageable pageable, char c, Long id);
-
-    Page<StudyFeedList> findDistinctAllByUserIdNotInAndDeleteynOrStudyfeedlikeUserIdAndStudyfeedlikeUserIdIsNullAndStudyfeedlikeUserIdIsNotNullOrderByIdDesc(
-            Pageable pageable,List UserId, char c,  Long id);//차단하는 유저가 있는 경우
-
-    Page<StudyFeedList> findDistinctAllByDeleteynOrStudyfeedlikeUserIdAndStudyfeedlikeUserIdIsNullAndStudyfeedlikeUserIdIsNotNullOrderByIdDesc(
-            Pageable pageable, char c,  Long id);//차단하는 유저가 없는 경우
-
-    Page<StudyFeedList> findAllByUserIdAndDeleteyn(Pageable pageable, long user_id, char c);
-
-    List <StudyFeedList> findAllByuserIdAndUpdatedAtBetween(long userId, LocalDateTime startdate, LocalDateTime enddate);
-
-    Optional <StudyFeedList> findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc( long userId, LocalDateTime startdate, LocalDateTime enddate);
-
-    long countByUser(User user);
-
-    List<StudyFeedList> findByUser(User user);
+//
+////    Page<StudyFeedList> findDistinctAllByUserIdNotInAndDeleteynOrStudyfeedlikeUserIdAndStudyfeedlikeUserIdIsNullAndStudyfeedlikeUserIdIsNotNullOrderByIdDesc(
+////            Pageable pageable,List UserId, char c,  Long id);//차단하는 유저가 있는 경우
+////
+////    Page<StudyFeedList> findDistinctAllByDeleteynOrStudyfeedlikeUserIdAndStudyfeedlikeUserIdIsNullAndStudyfeedlikeUserIdIsNotNullOrderByIdDesc(
+////            Pageable pageable, char c,  Long id);//차단하는 유저가 없는 경우
+//
+//    Page<StudyFeedList> findAllByMemberIdAndDeleteyn(Pageable pageable, long member_id, char c);
+//
+//    List <StudyFeedList> findAllByuserIdAndUpdatedAtBetween(long userId, LocalDateTime startdate, LocalDateTime enddate);
+//
+//    Optional <StudyFeedList> findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc( long userId, LocalDateTime startdate, LocalDateTime enddate);
+//
+// //   long countByUser(User user);
+//
+////    List<StudyFeedList> findByUser(User user);
 }

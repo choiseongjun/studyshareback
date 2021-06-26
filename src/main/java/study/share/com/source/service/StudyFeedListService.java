@@ -55,14 +55,14 @@ public class StudyFeedListService {
      *  addAll을 하여 방금 넣은 이미지를 리스트형식으로 하여 담아준다.
      *  그러면 리턴할떄 방금 넣은이미지가 그대로 뿌려진다.
      * */
-    public StudyFeedList saveFeed( String content, String file, StudyGroup studyGroup, StudyGroupMember studyGroupMember) {
+    public StudyFeedList saveFeed(User user, String content, String file, StudyGroup studyGroup) {
         HttpServletRequest request = // 5
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         long feedid = studyFeedListRepository.selectmaxid();
         StudyFeedList feedList = new StudyFeedList();
         feedList.setId(feedid);
         feedList.setContent(content);
-       // feedList.setStudyGroupMember(studyGroupMember);
+        feedList.setUser(user);
         feedList.setDeleteyn('N');
         feedList.setTotallike(0);
         feedList.setIpaddress(request.getRemoteAddr());
