@@ -64,4 +64,18 @@ public class UserResponse {
 		this.setFollowlistsize(followlistsize);
 	}
 
+	public UserResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize,
+			long feedTotalCnt) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setSex(user.getSex());
+		this.setIntroduce(user.getIntroduce());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
+		this.setFeedTotalCnt(feedTotalCnt);
+	}
+
 }

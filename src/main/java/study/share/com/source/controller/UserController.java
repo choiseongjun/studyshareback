@@ -94,11 +94,14 @@ public class UserController {
 			long followerlistsize=userService.followerlist(user).size();
 			long followlistsize = userService.followlist(user).size();
 			List<Follow> followlist = user.get().getFollow();
+			
+			List<FeedList> feedList = feedListService.FindFeedUser(user.get());
+			long feedTotalCnt = feedList.stream().filter(value->value.getDeleteyn()=='N').count();
 
 			if(user.get().getUserProfileImage()==null) {//image notfound
-				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize));//유저 프로필이미지가 없는 경우  
+				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt));//유저 프로필이미지가 없는 경우  
 			}else {
-				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize));	//유저 프로필이미지가 있는경우
+				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt));	//유저 프로필이미지가 있는경우
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

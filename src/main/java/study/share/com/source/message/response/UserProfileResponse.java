@@ -84,5 +84,19 @@ public class UserProfileResponse {
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
 	}
+	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize,
+			long feedTotalCnt) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setIntroduce(user.getIntroduce());
+		this.setSex(user.getSex());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setProfileImage(user.getUserProfileImage().getSrc());		
+		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
+		this.setFeedTotalCnt(feedTotalCnt);
+	}
 	
 }
