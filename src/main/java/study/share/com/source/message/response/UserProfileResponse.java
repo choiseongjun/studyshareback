@@ -45,6 +45,8 @@ public class UserProfileResponse {
 	private List<BlockedUser> blockedUser;
 	
 	private long feedTotalCnt;
+
+	private long followCheck;
 	
 	public UserProfileResponse(User user,String accessToken,String refreshToken) {
 		this.setId(user.getId());
@@ -72,7 +74,7 @@ public class UserProfileResponse {
 		this.setFeedTotalCnt(feedTotalCnt);
 		//this.setFollowlist(followlist);
 	}
-	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize) {
+	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize,long followCheck) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setIntroduce(user.getIntroduce());
@@ -83,6 +85,7 @@ public class UserProfileResponse {
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
+		this.setFollowCheck(followCheck);
 	}
 	
 }
