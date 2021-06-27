@@ -58,42 +58,33 @@ public class StudyFeedListDTO {
 
     public StudyFeedListDTO(StudyFeedList feedlist) {
         this.setId(feedlist.getId());
-    //    this.setUserKey(feedlist.getStudyGroupMember().getMember().getId());
+        this.setUserKey(feedlist.getUser().getId());
         this.setContent(feedlist.getContent());
-    //    this.setTotallike(feedlist.getFeedlike().size());
+        this.setTotallike(feedlist.getStudyfeedlike().size());
         this.setUploadfile(feedlist.getUploadfile());
-    //    this.setNickname(feedlist.getUser().getNickname());
-   //     this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
-    //    this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
-        //this.setFeedlike(feedlist.getFeedlike());
+        this.setNickname(feedlist.getUser().getNickname());
+        this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
+        this.setFeedreplysize(feedlist.getStudyfeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
+        this.setFeedlike(feedlist.getStudyfeedlike());
         this.setFeedreply(feedreply);
         this.setCreatedAt(feedlist.getCreatedAt());
-
-//		for(int i=0;i<feedlist.getFeedlike().size();i++) {
-//			this.setFeedlikeuser(feedlist.getFeedlike().get(i).getUser());
-//		}
-
-        //this.setFeedlike(feedlist.getFeedlike());
-//		if(feedlist.getFeedlike() != null) {
-//			this.setFeedlike(new ArrayList<FeedLikeDTO>());
-//		}
     }
 
-//    public StudyFeedListDTO(StudyFeedList feedlist, User user) {
-//
-//        this.setId(feedlist.getId());
-//  //      this.setUserKey(feedlist.getUser().getId());
-//        this.setContent(feedlist.getContent());
-//  //      this.setTotallike(feedlist.getFeedlike().size());
-// //       this.setUploadfile(feedlist.getUploadfile());
-// //       this.setNickname(feedlist.getUser().getNickname());
-// //       this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
-// //       this.setFeedreplysize(feedlist.getFeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
-////			this.setFeedlike(feedlist.getFeedlike());
-// //       this.setMyFeedlike(feedlist.getFeedlike().stream().filter(t->t.getUser().getId()==user.getId()));
-//        this.setFeedreply(feedreply);
-//        this.setCreatedAt(feedlist.getCreatedAt());
-//        this.setFollwer(user.getFollow());
-//    }
+    public StudyFeedListDTO(StudyFeedList feedlist, User user) {
+
+        this.setId(feedlist.getId());
+        this.setUserKey(feedlist.getUser().getId());
+        this.setContent(feedlist.getContent());
+        this.setTotallike(feedlist.getStudyfeedlike().size());
+        this.setUploadfile(feedlist.getUploadfile());
+        this.setNickname(feedlist.getUser().getNickname());
+        this.setUserProfileImage(feedlist.getUser().getUserProfileImage());
+        this.setFeedreplysize(feedlist.getStudyfeedreply().stream().filter(t->t.getDeleteyn()=='N').count());
+        this.setFeedlike(feedlist.getStudyfeedlike());
+        this.setMyFeedlike(feedlist.getStudyfeedlike().stream().filter(t->t.getUser().getId()==user.getId()));
+        this.setFeedreply(feedreply);
+        this.setCreatedAt(feedlist.getCreatedAt());
+        this.setFollwer(user.getFollow());
+    }
 
 }

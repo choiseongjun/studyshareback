@@ -103,95 +103,78 @@ public class StudyFeedListService {
         });
     }
 
-//    public Optional<StudyFeedList> updatefeed(long id, String content, String file) {
-//        System.out.println("service id===="+id);
-//        Optional<StudyFeedList> feedlist = studyFeedListRepository.findById(id);
-//        feedlist.ifPresent(selectList -> {
-//            selectList.setContent(content);
-//            System.out.println("id===="+id);
-//            studyFeedListRepository.save(selectList);
-//        });
-//        List<StudyUploadFile> fileone2 = studyUploadFileRepository.findByFeedlistId(id);
-//        if (file != null) {//파일이 있는경우
-//            String[] f = file.split(",");
-//            for (int i = 0; i < f.length; i++) {
-//                UploadFile fileone = studyUploadFileRepository.findBySrc(f[i]);
-//
-//                fileone.setFeedlist(feedlist.get());
-//                String src =studyUploadFileRepository.save(fileone).getSrc();//파일리스트에 키 업데이트
-//
-////				for(int deleteIdx=0;deleteIdx<fileone2.size();deleteIdx++) {
-////					System.out.println("check@#$@$"+f[i]+"=="+fileone2.get(deleteIdx).getSrc());
-////					if(!(f[i].equals(fileone2.get(deleteIdx).getSrc()))) {
-////						System.out.println("file@#$@$"+file);
-////						fileone2.get(deleteIdx).setFeedlist(null);
-////						studyUploadFileRepository.save(fileone2.get(deleteIdx));
-////					}
-////				}
-//            }
-//
-//        }
-//
-//
-//        return studyFeedListRepository.findById(id);
-//    }
-//
-//    public Optional<StudyFeedList> likefeed(Optional<User> user, long id) {
-//
-//
-//
-//
-//
-//        StudyFeedList feedList = new FeedList();
-//        feedList.setId(id);
-//
-//        FeedLike feedLike = new FeedLike();
-//        feedLike.setUser(user.get());
-//        feedLike.setFeedlist(feedList);
-//        feedLike.setUserkey(user.get().getId());
-//        feedLikeRepository.save(feedLike);
-//
-//        //Optional<FeedList> feed = studyFeedListRepository.findById(id);
-//        Optional<FeedList> feed = studyFeedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
-//
-////		feed.ifPresent(selectList -> {
-////			selectList.setTotallike(feed.get().getTotallike()+1);
-////			feedListRepository.save(selectList);
-////		});
-//        return feed;
-//    }
-//
-//    public Optional<StudyFeedList> dislikefeed(Optional<User> user, long id) {
-//        StudyFeedList feedlist = new FeedList();
-//        feedlist.setId(id);
-//
-//        long feedlikeno = feedLikeRepository.findlikeno(user.get(), feedlist);
-//        feedLikeRepository.deleteById(feedlikeno);
-//
-//        Optional<FeedList> feed = studyFeedListRepository.findById(id);
-////		feed.ifPresent(selectList -> {
-////			selectList.setTotallike(feed.get().getTotallike()-1);
-////			feedListRepository.save(selectList);
-////		});
-//        return feed;
-//    }
-//
+    public Optional<StudyFeedList> updatefeed(long id, String content, String file) {
+        System.out.println("service id===="+id);
+        Optional<StudyFeedList> feedlist = studyFeedListRepository.findById(id);
+        feedlist.ifPresent(selectList -> {
+            selectList.setContent(content);
+            System.out.println("id===="+id);
+            studyFeedListRepository.save(selectList);
+        });
+        List<StudyUploadFile> fileone2 = studyUploadFileRepository.findByStudyFeedListId(id);
+        if (file != null) {//파일이 있는경우
+            String[] f = file.split(",");
+            for (int i = 0; i < f.length; i++) {
+                StudyUploadFile fileone = studyUploadFileRepository.findBySrc(f[i]);
+
+                fileone.setStudyFeedList(feedlist.get());
+                String src =studyUploadFileRepository.save(fileone).getSrc();//파일리스트에 키 업데이트
+            }
+        }
+        return studyFeedListRepository.findById(id);
+    }
+
+    public Optional<StudyFeedList> likefeed(Optional<User> user, long id) {
+
+        StudyFeedList feedList = new StudyFeedList();
+        feedList.setId(id);
+        StudyFeedLike feedLike = new StudyFeedLike();
+        feedLike.setUser(user.get());
+        feedLike.setStudyFeedList(feedList);
+        feedLike.setUserkey(user.get().getId());
+        studyFeedLikeRepository.save(feedLike);
+
+        //Optional<FeedList> feed = studyFeedListRepository.findById(id);
+        Optional<StudyFeedList> feed = studyFeedListRepository.findByIdAndStudyfeedlikeUserId(id,user.get().getId());
+
+//		feed.ifPresent(selectList -> {
+//			selectList.setTotallike(feed.get().getTotallike()+1);
+//			feedListRepository.save(selectList);
+//		});
+        return feed;
+    }
+
+    public Optional<StudyFeedList> dislikefeed(Optional<User> user, long id) {
+        StudyFeedList feedlist = new StudyFeedList();
+        feedlist.setId(id);
+
+        long feedlikeno = studyFeedLikeRepository.findlikeno(user.get(), feedlist);
+        studyFeedLikeRepository.deleteById(feedlikeno);
+
+        Optional<StudyFeedList> feed = studyFeedListRepository.findById(id);
+//		feed.ifPresent(selectList -> {
+//			selectList.setTotallike(feed.get().getTotallike()-1);
+//			feedListRepository.save(selectList);
+//		});
+        return feed;
+    }
+
 //    public Optional<StudyFeedList> selectOne(long feedid) {
 //        return studyFeedListRepository.findById(feedid);
 //    }
 //
-//    public List<FeedLike> selectFeedlikelist(long id) {
-//        List<FeedLike> feedlike = feedLikeRepository.findByfeedlistId(id);
-//        return feedlike;
-//    }
-//
-//    public StudyFeedList listfeedDetail(long id) {
-//        return studyFeedListRepository.findById(id).get();
-//    }
-//
-//    public Page<StudyFeedList> mylistfeed(Pageable pageable, long user_id) {
-//        return studyFeedListRepository.findAllByuser_id(pageable, user_id);
-//    }
+    public List<StudyFeedLike> selectFeedlikelist(long id) {
+        List<StudyFeedLike> feedlike = studyFeedLikeRepository.findByStudyFeedListId(id);
+        return feedlike;
+    }
+
+    public Optional<StudyFeedList> listfeedDetail(long id) {
+        return studyFeedListRepository.findById(id);
+    }
+
+    public Page<StudyFeedList> mylistfeed(Pageable pageable, long user_id) {
+        return studyFeedListRepository.findAllByUserId(pageable, user_id);
+    }
 //
 //    public List<StudyFeedList> mylistfeedBydate(long user_id, LocalDateTime startdate, LocalDateTime enddate) {
 //        return studyFeedListRepository.findAllByuserIdAndUpdatedAtBetween(user_id,startdate,enddate);
@@ -201,9 +184,9 @@ public class StudyFeedListService {
 //        return studyFeedListRepository.findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc(user_id,startdate,enddate);
 //    }
 //
-//    public Page<StudyFeedList> otherlistfeed(Pageable pageable, long user_id) {
-//        return studyFeedListRepository.findAllByuser_idAndDeleteyn(pageable, user_id,'N');
-//    }
+    public Page<StudyFeedList> otherlistfeed(Pageable pageable, long user_id) {
+        return studyFeedListRepository.findAllByUserIdAndDeleteyn(pageable, user_id,'N');
+    }
 //
     public void extractHashTag(String content,StudyFeedList feedList) {//해시태그 검출을 위한 함수
         Pattern p = Pattern.compile("\\#([0-9a-zA-Z가-힣]*)");
@@ -268,15 +251,15 @@ public class StudyFeedListService {
 //        return studyFeedListRepository.findDistinctAllByUserIdNotInAndDeleteynOrFeedlikeUserIdAndFeedlikeUserIdIsNullAndFeedlikeUserIdIsNotNullOrderByIdDesc(pageable, UserId ,'N',user.get().getId());
 //    }
 //
-//    public Optional<StudyFeedList> listMyFeedLikeFeedDetail(long id, Optional<User> user) {
-//        Optional<StudyFeedList> existsMyFeedlike= studyFeedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
-//
-//        if(existsMyFeedlike.isPresent()) {
-//            return studyFeedListRepository.findByIdAndFeedlikeUserId(id,user.get().getId());
-//        }else {
-//            return studyFeedListRepository.findById(id);
-//        }
-//    }
+    public Optional<StudyFeedList> listMyFeedLikeFeedDetail(long id, Optional<User> user) {
+        Optional<StudyFeedList> existsMyFeedlike= studyFeedListRepository.findByIdAndStudyfeedlikeUserId(id,user.get().getId());
+
+        if(existsMyFeedlike.isPresent()) {
+            return studyFeedListRepository.findByIdAndStudyfeedlikeUserId(id,user.get().getId());
+        }else {
+            return studyFeedListRepository.findById(id);
+        }
+    }
 //
 //    public Page<StudyFeedList> feedMylikeNotBlock(Pageable pageable, Optional<User> user) {
 //        return studyFeedListRepository.findDistinctAllByDeleteynOrFeedlikeUserIdAndFeedlikeUserIdIsNullAndFeedlikeUserIdIsNotNullOrderByIdDesc(pageable,'N',user.get().getId());

@@ -31,11 +31,11 @@ public interface StudyFeedListRepository extends JpaRepository<StudyFeedList,Lon
 //
 //    //List<StudyFeedReply> findByIdAndFeedreplyDeleteyn(long id, char c);
 //
-//    Page <StudyFeedList> findAllByMemberId(Pageable pageable,long memberId);
+    Page <StudyFeedList> findAllByUserId(Pageable pageable,long userId);
 //
 //   // Page<StudyFeedList> findAllByDeleteynAndFeedlikeUserIdOrderByIdDesc(Pageable pageable, char c, Long id);
 //
-//    Optional<StudyFeedList> findByIdAndStudyfeedlikeUserId(long id, Long id2);
+    Optional<StudyFeedList> findByIdAndStudyfeedlikeUserId(long id, Long id2);
 //
 //
 ////    Page<StudyFeedList> findDistinctAllByUserIdNotInAndDeleteynOrStudyfeedlikeUserIdAndStudyfeedlikeUserIdIsNullAndStudyfeedlikeUserIdIsNotNullOrderByIdDesc(
@@ -44,7 +44,7 @@ public interface StudyFeedListRepository extends JpaRepository<StudyFeedList,Lon
 ////    Page<StudyFeedList> findDistinctAllByDeleteynOrStudyfeedlikeUserIdAndStudyfeedlikeUserIdIsNullAndStudyfeedlikeUserIdIsNotNullOrderByIdDesc(
 ////            Pageable pageable, char c,  Long id);//차단하는 유저가 없는 경우
 //
-//    Page<StudyFeedList> findAllByMemberIdAndDeleteyn(Pageable pageable, long member_id, char c);
+    Page<StudyFeedList> findAllByUserIdAndDeleteyn(Pageable pageable, long user_id, char c);
 //
 //    List <StudyFeedList> findAllByuserIdAndUpdatedAtBetween(long userId, LocalDateTime startdate, LocalDateTime enddate);
 //
