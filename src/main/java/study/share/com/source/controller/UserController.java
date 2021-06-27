@@ -89,26 +89,46 @@ public class UserController {
 	@GetMapping("/user/otheruserInfo/{id}")
 		public ResponseEntity<?> otheruserInfo(@PathVariable long id,Principal principal) {
 		try {
-			Optional<User> fromUser = userService.findUserNickname(principal.getName());//내 계정 조회
-			Optional<User> user = userService.findUserId(id);//다른사람 계정 조회
-			if(!user.isPresent())//찾고자 하는 유저가 존재하지 않는 경우
-				return new ResponseEntity<>("해당 유저가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
-			long followerlistsize=userService.followerlist(user).size();
-			long followlistsize = userService.followlist(user).size();
-			List<Follow> followlist = user.get().getFollow();
-			long followCheck = 0;
-			Optional <Follow> followResult=userService.findfollowing(id,fromUser.get());//팔로우 정보 조회
-			if(followResult.isPresent())
-				followCheck =1;
+			if(principal==null) {
+				Optional<User> user = userService.findUserId(id);//다른사람 계정 조회
+	
+				long followerlistsize=userService.followerlist(user).size();
+				long followlistsize = userService.followlist(user).size();
+				List<Follow> followlist = user.get().getFollow();
+				long followCheck = 0;
+			
 
-			List<FeedList> feedList = feedListService.FindFeedUser(user.get());
-			long feedTotalCnt = feedList.stream().filter(value->value.getDeleteyn()=='N').count();
+				List<FeedList> feedList = feedListService.FindFeedUser(user.get());
+				long feedTotalCnt = feedList.stream().filter(value->value.getDeleteyn()=='N').count();
 
-			if(user.get().getUserProfileImage()==null) {//image notfound
-				return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));//유저 프로필이미지가 없는 경우
+				if(user.get().getUserProfileImage()==null) {//image notfound
+					return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));//유저 프로필이미지가 없는 경우
+				}else {
+					return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));	//유저 프로필이미지가 있는경우
+				}	
 			}else {
-				return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));	//유저 프로필이미지가 있는경우
+				Optional<User> fromUser = userService.findUserNickname(principal.getName());//내 계정 조회
+				Optional<User> user = userService.findUserId(id);//다른사람 계정 조회
+				if(!user.isPresent())//찾고자 하는 유저가 존재하지 않는 경우
+					return new ResponseEntity<>("해당 유저가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
+				long followerlistsize=userService.followerlist(user).size();
+				long followlistsize = userService.followlist(user).size();
+				List<Follow> followlist = user.get().getFollow();
+				long followCheck = 0;
+				Optional <Follow> followResult=userService.findfollowing(id,fromUser.get());//팔로우 정보 조회
+				if(followResult.isPresent())
+					followCheck =1;
+
+				List<FeedList> feedList = feedListService.FindFeedUser(user.get());
+				long feedTotalCnt = feedList.stream().filter(value->value.getDeleteyn()=='N').count();
+
+				if(user.get().getUserProfileImage()==null) {//image notfound
+					return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));//유저 프로필이미지가 없는 경우
+				}else {
+					return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));	//유저 프로필이미지가 있는경우
+				}	
 			}
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
