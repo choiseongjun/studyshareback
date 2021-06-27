@@ -59,7 +59,8 @@ public class UserProfileResponse {
 		this.setAccessToken(accessToken);
 		this.setRefreshToken(refreshToken);
 	}
-	public UserProfileResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,List<BlockedUser> blockUserList,long feedTotalCnt) {
+	public UserProfileResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,
+							   List<BlockedUser> blockUserList,long feedTotalCnt,long followCheck) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setIntroduce(user.getIntroduce());
@@ -73,8 +74,25 @@ public class UserProfileResponse {
 		this.setBlockedUser(blockUserList);
 		this.setFeedTotalCnt(feedTotalCnt);
 		//this.setFollowlist(followlist);
+		this.setFollowCheck(followCheck);
 	}
-	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize,long followCheck) {
+	public UserProfileResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,
+							   List<BlockedUser> blockUserList,long feedTotalCnt) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setIntroduce(user.getIntroduce());
+		this.setSex(user.getSex());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setProfileImage(user.getUserProfileImage().getSrc());
+		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
+		this.setBlockedUser(blockUserList);
+		this.setFeedTotalCnt(feedTotalCnt);
+		//this.setFollowlist(followlist);
+	}
+	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize) {
 		this.setId(user.getId());
 		this.setNickname(user.getNickname());
 		this.setIntroduce(user.getIntroduce());
@@ -85,7 +103,22 @@ public class UserProfileResponse {
 		this.setFeedlike(user.getFeedlike());
 		this.setFollowerlistsize(followerlistsize);
 		this.setFollowlistsize(followlistsize);
-		this.setFollowCheck(followCheck);
+
+	}
+	public UserProfileResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize,
+			long feedTotalCnt,long followCheck) {
+		this.setId(user.getId());
+		this.setNickname(user.getNickname());
+		this.setIntroduce(user.getIntroduce());
+		this.setSex(user.getSex());
+		this.setAge(user.getAge());
+		this.setEmail(user.getEmail());
+		this.setProfileImage(user.getUserProfileImage().getSrc());		
+		this.setFeedlike(user.getFeedlike());
+		this.setFollowerlistsize(followerlistsize);
+		this.setFollowlistsize(followlistsize);
+		this.setFeedTotalCnt(feedTotalCnt);
+		this.setFollowlistsize(followlistsize);
 	}
 	
 }
