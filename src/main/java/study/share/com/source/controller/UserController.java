@@ -27,7 +27,7 @@ import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.repository.UserRepository;
 import study.share.com.source.service.AuthTokenService;
 import study.share.com.source.service.BlockedUserService;
-import study.share.com.source.service.FeedListService;
+import study.share.com.source.service.feed.FeedListService;
 import study.share.com.source.service.UserService;
 
 @RestController

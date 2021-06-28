@@ -23,7 +23,6 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
-import study.share.com.source.model.studygroup.StudyFeedList;
 
 @Entity
 @Table(name = "feedreply")

@@ -15,7 +15,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import study.share.com.source.model.common.DateAudit;
 import study.share.com.source.model.feed.FeedList;
-import study.share.com.source.model.studygroup.StudyFeedList;
 
 @Entity
 @Table(name = "uploadfile")

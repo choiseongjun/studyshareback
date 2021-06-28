@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import study.share.com.source.model.feed.FeedReply;
-import study.share.com.source.model.studygroup.StudyFeedReply;
+import study.share.com.source.model.study.StudyFeedReply;
 
 import java.util.List;
 import java.util.Optional;

@@ -2,7 +2,7 @@ package study.share.com.source.model.DTO;
 
 import lombok.Getter;
 import lombok.Setter;
-import study.share.com.source.model.TodoList;
+import study.share.com.source.model.todo.TodoList;
 import study.share.com.source.model.User;
 
 @Getter

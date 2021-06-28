@@ -5,19 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.share.com.source.message.request.TodoListReq;
 import study.share.com.source.model.DTO.ReportDTO;
 import study.share.com.source.model.Report;
-import study.share.com.source.model.TodoDate;
-import study.share.com.source.model.TodoList;
-import study.share.com.source.model.User;
-import study.share.com.source.repository.UserRepository;
-import study.share.com.source.service.FeedListService;
-import study.share.com.source.service.ReportService;
-import study.share.com.source.service.UserService;
-
-import java.security.Principal;
-import java.util.Optional;
+import study.share.com.source.service.report.ReportService;
 
 @RestController
 public class ReportController {

@@ -4,10 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.share.com.source.model.User;
-import study.share.com.source.model.feed.FeedLike;
 
-import study.share.com.source.model.studygroup.StudyFeedLike;
-import study.share.com.source.model.studygroup.StudyFeedList;
+import study.share.com.source.model.study.StudyFeedLike;
+import study.share.com.source.model.study.StudyFeedList;
 
 import java.util.List;
 

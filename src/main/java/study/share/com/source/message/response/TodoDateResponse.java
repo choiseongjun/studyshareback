@@ -3,13 +3,11 @@ package study.share.com.source.message.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.xml.bind.v2.TODO;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import study.share.com.source.model.TodoComment;
-import study.share.com.source.model.TodoDate;
-import study.share.com.source.model.TodoList;
+import study.share.com.source.model.todo.TodoComment;
+import study.share.com.source.model.todo.TodoDate;
+import study.share.com.source.model.todo.TodoList;
 import study.share.com.source.model.User;
 
 @Data

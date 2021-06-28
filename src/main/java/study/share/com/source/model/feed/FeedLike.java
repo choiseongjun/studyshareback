@@ -17,7 +17,6 @@ import lombok.Getter;
 import lombok.Setter;
 import study.share.com.source.model.User;
 import study.share.com.source.model.common.DateAudit;
-import study.share.com.source.model.studygroup.StudyFeedList;
 
 @Entity
 @Table(name = "feedlike")

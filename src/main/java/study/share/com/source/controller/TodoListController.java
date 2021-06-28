@@ -21,15 +21,18 @@ import io.swagger.annotations.ApiOperation;
 import study.share.com.source.message.request.TodoCommentReq;
 import study.share.com.source.message.request.TodoListReq;
 import study.share.com.source.message.response.TodoDateResponse;
-import study.share.com.source.model.TodoComment;
-import study.share.com.source.model.TodoDate;
-import study.share.com.source.model.TodoList;
+import study.share.com.source.model.todo.TodoComment;
+import study.share.com.source.model.todo.TodoDate;
+import study.share.com.source.model.todo.TodoList;
 import study.share.com.source.model.User;
 import study.share.com.source.model.DTO.TodoListDTO;
-import study.share.com.source.model.feed.FeedList;
-import study.share.com.source.repository.TodoCommentRepository;
-import study.share.com.source.repository.TodoDateRepository;
+import study.share.com.source.repository.todo.TodoCommentRepository;
+import study.share.com.source.repository.todo.TodoDateRepository;
 import study.share.com.source.service.*;
+import study.share.com.source.service.feed.FeedListService;
+import study.share.com.source.service.todo.TodoCommentService;
+import study.share.com.source.service.todo.TodoDateService;
+import study.share.com.source.service.todo.TodoListService;
 
 @RestController
 public class TodoListController {
@@ -47,7 +50,7 @@ public class TodoListController {
 	@Autowired
 	TodoCommentRepository todoCommentRepository;
 	@Autowired
-	FeedListService feedListService;
+    FeedListService feedListService;
 	
 	@ApiOperation(value="내 투두리스트 작성",notes="내 투두리스트 작성")
 	@PostMapping(path="/user/todo")

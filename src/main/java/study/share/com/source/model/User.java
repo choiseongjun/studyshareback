@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import study.share.com.source.model.common.DateAudit;
 import study.share.com.source.model.feed.FeedLike;
+import study.share.com.source.model.todo.TodoList;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {

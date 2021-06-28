@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import study.share.com.source.model.UploadFile;
-import study.share.com.source.model.UserProfileImage;
-import study.share.com.source.repository.UploadFileRepository;
+import study.share.com.source.repository.feed.UploadFileRepository;
 
 @Service
 public class UploadFileService {
