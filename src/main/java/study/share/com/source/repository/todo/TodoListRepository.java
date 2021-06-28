@@ -29,4 +29,6 @@ public interface TodoListRepository extends JpaRepository<TodoList,Long>{
 	List<TodoList> findAllByTodoListsSavedDateAndUser(String savedDate, User user);
 
 	List<TodoList> findAllByuserIdAndUpdatedAtBetween(long userId, LocalDateTime startdate, LocalDateTime enddate);
+
+    List<TodoList> findAllByuserIdAndTodoListsSavedDateContaining(long userId, String saveDate);
 }

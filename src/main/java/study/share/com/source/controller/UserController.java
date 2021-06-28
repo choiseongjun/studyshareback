@@ -107,6 +107,7 @@ public class UserController {
 					return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));	//유저 프로필이미지가 있는경우
 				}	
 			}else {
+
 				Optional<User> fromUser = userService.findUserNickname(principal.getName());//내 계정 조회
 				Optional<User> user = userService.findUserId(id);//다른사람 계정 조회
 				if(!user.isPresent())//찾고자 하는 유저가 존재하지 않는 경우
@@ -116,12 +117,12 @@ public class UserController {
 				List<Follow> followlist = user.get().getFollow();
 				long followCheck = 0;
 				Optional <Follow> followResult=userService.findfollowing(id,fromUser.get());//팔로우 정보 조회
+				//System.out.println("팔로우 당함: "+followResult.get().getToUser().getId()+"팔로우 함: "+followResult.get().getFromUser().getId());
 				if(followResult.isPresent())
-					followCheck =1;
+					followCheck =1L;
 
 				List<FeedList> feedList = feedListService.FindFeedUser(user.get());
 				long feedTotalCnt = feedList.stream().filter(value->value.getDeleteyn()=='N').count();
-
 				if(user.get().getUserProfileImage()==null) {//image notfound
 					return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));//유저 프로필이미지가 없는 경우
 				}else {

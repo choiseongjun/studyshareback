@@ -99,8 +99,8 @@ public class TodoListService {
 		return todoCommentRepository.findAllByTodoDateSavedDateAndUser(savedDate,user);
 	}
 
-	public List<TodoList> mylistfeedBydate(long user_id, LocalDateTime startdate, LocalDateTime enddate) {
-		return todoListRepository.findAllByuserIdAndUpdatedAtBetween(user_id,startdate,enddate);
+	public List<TodoList> mylistfeedBydate(long user_id, String dates) {
+		return todoListRepository.findAllByuserIdAndTodoListsSavedDateContaining(user_id,dates);
 	}
 
 

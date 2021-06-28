@@ -119,6 +119,7 @@ public class UserProfileResponse {
 		this.setFollowlistsize(followlistsize);
 		this.setFeedTotalCnt(feedTotalCnt);
 		this.setFollowlistsize(followlistsize);
+		this.setFollowCheck(followCheck);
 	}
 	
 }
