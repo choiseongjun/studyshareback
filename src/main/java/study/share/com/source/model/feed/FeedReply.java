@@ -60,5 +60,11 @@ public class FeedReply extends DateAudit{
 	@OneToMany(orphanRemoval=true,mappedBy = "feedReply")
 	private List<FeedReplyLike> feedReplylike=new ArrayList<FeedReplyLike>();
 
+//	public void addfeedreplylike(FeedReplyLike feedReplyLike){
+//		feedReplylike.add(feedReplyLike);
+//		feedReplyLike.setFeedReply(this);
+//	}
+
+
 
 }

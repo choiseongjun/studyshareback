@@ -1,6 +1,7 @@
 package study.share.com.source.model.DTO.feed;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -40,12 +41,16 @@ public class FeedReplyDTO {
     
     private String userProfileImage;
     
-    private List<FeedReplyLike> feedReplyLike;
+    private List<FeedReplyLikeDTO> feedReplyLikeList = new ArrayList<FeedReplyLikeDTO>();
     
     private Stream<FeedReplyLike> myFeedReplyLike;
     
     private long feedReplyLikeSize=0;
-    
+
+    public void addreplylike(FeedReplyLike feedReplyLike){
+        feedReplyLikeList.add(new FeedReplyLikeDTO(feedReplyLike));
+    }
+
 
     public FeedReplyDTO (FeedReply feedReply)
     {
@@ -58,9 +63,17 @@ public class FeedReplyDTO {
         this.nickname=feedReply.getUser().getNickname();
         this.likeCnt = feedReply.getFeedReplylike().size();
 		this.createdAt = feedReply.getCreatedAt();
-		this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
-		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
+
+        List<FeedReplyLike> feedReplyLikeList = feedReply.getFeedReplylike();
+        for(FeedReplyLike feedReplyLike: feedReplyLikeList)
+            this.addreplylike(feedReplyLike);
+        this.feedReplyLikeSize = feedReplyLikeList.size();
+        if(feedReply.getUser().getUserProfileImage()!=null)//유저 프로필 이미지가 있을때만
+            this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
+        else
+            this.userProfileImage =null;
     }
+
     public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2) {
 
     	this.id=feedReply.getId();	

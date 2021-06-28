@@ -47,5 +47,7 @@ public class FeedList extends DateAudit{
 	private List<FeedReply> feedreply=new ArrayList<FeedReply>();
 	@OneToMany(orphanRemoval=true,mappedBy = "feedlist")
 	private List<FeedTag> feedtag;
-	
+
+
+
 }
