@@ -16,6 +16,7 @@ import study.share.com.source.model.DTO.feed.FeedReplyLikeDTO;
 import study.share.com.source.model.feed.FeedList;
 import study.share.com.source.model.feed.FeedReply;
 import study.share.com.source.model.feed.FeedReplyLike;
+import study.share.com.source.model.study.StudyFeedReply;
 import study.share.com.source.repository.feed.FeedListRepository;
 import study.share.com.source.repository.feed.FeedReplyLikeRepository;
 import study.share.com.source.repository.feed.FeedReplyRepository;
@@ -124,20 +125,29 @@ public class FeedReplyService {
 		FeedList feedList=new FeedList();
 		feedList.setId(feedId);
 
-		Optional<FeedReply> feedReplyonelist=feedReplyRepository.findById(id);
-		feedReplyonelist.orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 존재하지 않습니다"));
-
 		FeedReply feedReply=new FeedReply();
 		feedReply.setUser(user.get());
 		feedReply.setContent(content);
 		feedReply.setFeedlist(feedList);
 		feedReply.setDeleteyn('N');
 		feedReply.setOriginNo(id);
-		feedReply.setGroupOrd(feedReplyonelist.get().getGroupOrd()+1);
+
+		Optional<FeedReply> feedReplyonelist= feedReplyRepository.findTop1ByFeedlist_idAndOriginNoAndDeleteynOrderByGroupOrdDesc(feedId,id,'N');
+		long groupOrd=1L;
+		if(feedReplyonelist.isPresent())//이미 대댓글이 있는 경우
+		{
+			feedReply.setGroupOrd(feedReplyonelist.get().getGroupOrd()+1);
+			groupOrd=feedReplyonelist.get().getGroupOrd()+1;
+		}
+		else//대댓글이 없는 경우
+		{
+			feedReply.setGroupOrd(1);
+			Optional<FeedReply> feedReplyOnwer= feedReplyRepository.findById(id);
+			feedReplyOnwer.get().setOriginNo(id);
+		}
 		feedReplyRepository.save(feedReply);
 
-		int replyid = feedReplyRepository.updateorder(id,feedReplyonelist.get().getGroupOrd());
-		FeedReply returnFeedReply = feedReplyRepository.findByOriginNoAndGroupOrd(id,2);
+		FeedReply returnFeedReply =  feedReplyRepository.findByOriginNoAndGroupOrd(id,groupOrd);
 		return returnFeedReply;
 	}
 

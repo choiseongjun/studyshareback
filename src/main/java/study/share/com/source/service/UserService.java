@@ -21,6 +21,8 @@ import study.share.com.source.model.UserProfileImage;
 import study.share.com.source.repository.FollowRepository;
 import study.share.com.source.repository.UserProfileImageRepository;
 import study.share.com.source.repository.UserRepository;
+import study.share.com.source.utils.UserGrade;
+import study.share.com.source.utils.UserPoint;
 
 @Service
 @Transactional
@@ -214,5 +216,22 @@ public class UserService {
 			userRepository.save(deleteFcm);
 		});
 	}
+
+	public void updateUserGrade(User user)
+	{
+		long current = user.getGrade()+1;//승급할 등급
+		user.setGrade(current);//등급 업그레이드
+		//포인트 업그레이드
+		if(current== UserGrade.NEWBIE.getId())
+			user.setPoint(user.getPoint()+ UserPoint.NEWBIE.getId());
+		else if(current==UserGrade.SHORTPENCIL.getId())
+			user.setPoint(user.getPoint()+UserPoint.SHORTPENCIL.getId());
+		else if(current==UserGrade.LONGPENCIL.getId())
+			user.setPoint(user.getPoint()+UserPoint.LONGPENCIL.getId());
+		else if(current==UserGrade.FOUNTAINPEN.getId())
+			user.setPoint(user.getPoint()+UserPoint.FOUNTAINPEN.getId());
+		userRepository.save(user);
+	}
+
 
 }

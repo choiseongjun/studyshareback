@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import study.share.com.source.model.feed.FeedReply;
+import study.share.com.source.model.study.StudyFeedReply;
 
 public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 
@@ -47,4 +48,8 @@ public interface FeedReplyRepository extends JpaRepository<FeedReply,Long>{
 
 	Page<FeedReply> findByFeedlist_idAndDeleteynOrFeedReplylikeUserIdAndFeedReplylikeUserIdIsNullAndFeedReplylikeUserIdIsNotNullOrderByGroupOrdDesc(
 			Pageable pageable, Long id, char c, Long id2);
+
+	Optional <FeedReply> findTop1ByFeedlist_idAndOriginNoAndDeleteynOrderByGroupOrdDesc
+			(long studyfeedlistid, long originNo,char c);
+
 }

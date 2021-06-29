@@ -15,12 +15,12 @@ public class StudyFeedReplyLikeDTO {
 
     private long id;
     private long userId;
-    private long replyId;
+    private long studyReplyId;
 
     public StudyFeedReplyLikeDTO (StudyFeedReplyLike feedReplyLike)
     {
         this.id= feedReplyLike.getId();
         this.userId=feedReplyLike.getUser().getId();
-        this.replyId=feedReplyLike.getStudyFeedReply().getId();
+        this.studyReplyId=feedReplyLike.getStudyFeedReply().getId();
     }
 }

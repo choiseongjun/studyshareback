@@ -113,13 +113,10 @@ public class StudyFeedReplyService {
         return feedReplyLikeDTO;
     }
 
-    public  StudyFeedReply addfeedcommentReply(long feedId, long id, Optional<User> user, String content) {
+    public StudyFeedReply addfeedcommentReply(long feedId, long id, Optional<User> user, String content) {
 
         StudyFeedList feedList=new StudyFeedList();
         feedList.setId(feedId);
-
-        Optional< StudyFeedReply> feedReplyonelist= studyFeedReplyRepository.findById(id);
-        feedReplyonelist.orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 존재하지 않습니다"));
 
         StudyFeedReply feedReply=new  StudyFeedReply();
         feedReply.setUser(user.get());
@@ -127,9 +124,24 @@ public class StudyFeedReplyService {
         feedReply.setStudyFeedList(feedList);
         feedReply.setDeleteyn('N');
         feedReply.setOriginNo(id);
-        feedReply.setGroupOrd(feedReplyonelist.get().getGroupOrd()+1);
-        int replyid =  studyFeedReplyRepository.updateorder(id,feedReplyonelist.get().getGroupOrd());
-        StudyFeedReply returnFeedReply =  studyFeedReplyRepository.findByOriginNoAndGroupOrd(id,2);
+
+        Optional<StudyFeedReply> feedReplyonelist= studyFeedReplyRepository.findTop1ByStudyFeedListIdAndOriginNoAndDeleteynOrderByGroupOrdDesc(feedId,id,'N');
+        long groupOrd=1L;
+        if(feedReplyonelist.isPresent())//이미 대댓글이 있는 경우
+        {
+            feedReply.setGroupOrd(feedReplyonelist.get().getGroupOrd()+1);
+            groupOrd=feedReplyonelist.get().getGroupOrd()+1;
+        }
+        else//대댓글이 없는 경우
+        {
+            feedReply.setGroupOrd(1);
+            Optional<StudyFeedReply> feedReplyOnwer= studyFeedReplyRepository.findById(id);//원글 업데이트
+            feedReplyOnwer.get().setOriginNo(id);
+        }
+
+        studyFeedReplyRepository.save(feedReply);
+       // int replyid =  studyFeedReplyRepository.updateorder(id,feedReplyonelist.get().getGroupOrd());
+        StudyFeedReply returnFeedReply =  studyFeedReplyRepository.findByOriginNoAndGroupOrd(id,groupOrd);
         return returnFeedReply;
     }
 

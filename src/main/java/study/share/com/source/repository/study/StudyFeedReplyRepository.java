@@ -45,4 +45,7 @@ public interface StudyFeedReplyRepository extends JpaRepository<StudyFeedReply,L
 
     Page<StudyFeedReply> findByStudyFeedListIdAndDeleteynOrStudyfeedReplylikeUserIdAndStudyfeedReplylikeUserIdIsNullAndStudyfeedReplylikeUserIdIsNotNullOrderByGroupOrdDesc(
             Pageable pageable, Long id, char c, Long id2);
+
+    Optional <StudyFeedReply> findTop1ByStudyFeedListIdAndOriginNoAndDeleteynOrderByGroupOrdDesc
+            (long studyfeedlistid, long originNo,char c);
 }

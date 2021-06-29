@@ -35,7 +35,7 @@ public class FeedReplyDTO {
     
     private long replyCnt;
     
-    private List<FeedReply> feedreReply;
+    private List<FeedReplyDTO> feedreReply = new ArrayList<FeedReplyDTO>();
     
     private LocalDateTime createdAt;
     
@@ -64,6 +64,8 @@ public class FeedReplyDTO {
         this.likeCnt = feedReply.getFeedReplylike().size();
 		this.createdAt = feedReply.getCreatedAt();
 
+
+        //피드 댓글 좋아요
         List<FeedReplyLike> feedReplyLikeList = feedReply.getFeedReplylike();
         for(FeedReplyLike feedReplyLike: feedReplyLikeList)
             this.addreplylike(feedReplyLike);
@@ -74,53 +76,53 @@ public class FeedReplyDTO {
             this.userProfileImage =null;
     }
 
-    public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2) {
-
-    	this.id=feedReply.getId();	
-    	this.content=feedReply.getContent();
-        this.feedId=feedReply.getFeedlist().getId();
-        this.userId=feedReply.getUser().getId();
-        this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
-        this.originNo=feedReply.getOriginNo();
-        this.groupOrd=feedReply.getGroupOrd();
-        this.nickname=feedReply.getUser().getNickname();
-        this.likeCnt = feedReply.getFeedReplylike().size();
-        	for(int i=0;i<feedReply2.size();i++) {
-        		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
-        			this.feedreReply = feedReply2;		
-        		}
-       
-        	}	
-        
-    	this.createdAt = feedReply.getCreatedAt();
-		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
-    	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
-    }
-    public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2,User user) {
-
-    	this.id=feedReply.getId();	
-    	this.content=feedReply.getContent();
-        this.feedId=feedReply.getFeedlist().getId();
-        this.userId=feedReply.getUser().getId();
-        this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
-        this.originNo=feedReply.getOriginNo();
-        this.groupOrd=feedReply.getGroupOrd();
-        this.nickname=feedReply.getUser().getNickname();
-        this.likeCnt = feedReply.getFeedReplylike().size();
-        if(feedReply2.size()>0) {
-        	for(int i=0;i<feedReply2.size();i++) {
-        		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
-        			this.feedreReply = feedReply2;		
-        		}
-       
-        	}	
-        }
-    	
-    	this.createdAt = feedReply.getCreatedAt();
-		this.myFeedReplyLike = feedReply.getFeedReplylike().stream().filter(t->t.getUser().getId()==user.getId());
-		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
-    	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
-    }
+//    public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2) {
+//
+//    	this.id=feedReply.getId();
+//    	this.content=feedReply.getContent();
+//        this.feedId=feedReply.getFeedlist().getId();
+//        this.userId=feedReply.getUser().getId();
+//        this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
+//        this.originNo=feedReply.getOriginNo();
+//        this.groupOrd=feedReply.getGroupOrd();
+//        this.nickname=feedReply.getUser().getNickname();
+//        this.likeCnt = feedReply.getFeedReplylike().size();
+//        	for(int i=0;i<feedReply2.size();i++) {
+//        		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
+//        			this.feedreReply = feedReply2;
+//        		}
+//
+//        	}
+//
+//    	this.createdAt = feedReply.getCreatedAt();
+//		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
+//    	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
+//    }
+//    public FeedReplyDTO (FeedReply feedReply,List<FeedReply> feedReply2,User user) {
+//
+//    	this.id=feedReply.getId();
+//    	this.content=feedReply.getContent();
+//        this.feedId=feedReply.getFeedlist().getId();
+//        this.userId=feedReply.getUser().getId();
+//        this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
+//        this.originNo=feedReply.getOriginNo();
+//        this.groupOrd=feedReply.getGroupOrd();
+//        this.nickname=feedReply.getUser().getNickname();
+//        this.likeCnt = feedReply.getFeedReplylike().size();
+//        if(feedReply2.size()>0) {
+//        	for(int i=0;i<feedReply2.size();i++) {
+//        		if(feedReply.getId()==feedReply2.get(i).getOriginNo()) {
+//        			this.feedreReply = feedReply2;
+//        		}
+//
+//        	}
+//        }
+//
+//    	this.createdAt = feedReply.getCreatedAt();
+//		this.myFeedReplyLike = feedReply.getFeedReplylike().stream().filter(t->t.getUser().getId()==user.getId());
+//		this.userProfileImage = feedReply.getUser().getUserProfileImage().getSrc();
+//    	this.feedReplyLikeSize = feedReply.getFeedReplylike().size();
+//    }
 	public FeedReplyDTO(FeedReply feedReply, User user) {
 		this.id=feedReply.getId();
         this.content=feedReply.getContent();

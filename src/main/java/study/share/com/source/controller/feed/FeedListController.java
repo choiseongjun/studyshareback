@@ -76,8 +76,10 @@ public class FeedListController {
 			if(eraseTag!=null)
 				feedListService.extractHashTag(content,feedlist);//해시태그 검출 및 저장-> 테이블 사용시 다시
 
-			//long feedid =feedListService.saveFeed(user,content,file);
-			//Optional<FeedList> feedlist = feedListService.selectOne(feedid); 
+			long totalFeedNum=feedListService.CountTotalFeed(user.get());//총 피드수를 세고 등급 갱신
+			if(totalFeedNum==7 ||totalFeedNum==30 || totalFeedNum==100 || totalFeedNum==400)
+				userService.updateUserGrade(user.get());
+
 			return new ResponseEntity<>(new FeedListDTO(feedlist),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

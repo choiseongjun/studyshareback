@@ -106,6 +106,14 @@ public class User extends DateAudit{
     @Column(name="alarm_check")
     @ColumnDefault("0")
     private boolean alarmCheck;
+
+    @Column(name="grade")
+    @ColumnDefault("0")
+    private long grade;
+
+    @Column(name="point")
+    @ColumnDefault("0")
+    private long point;
     
     public User(String userid,String nickname, String email,String sex,String password,String age) {
         this.userid = userid;

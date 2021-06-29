@@ -305,5 +305,11 @@ public class FeedListService {
 		return reuslt;
 	}
 
+	public long CountTotalFeed(User user)
+	{
+		return feedListRepository.countByUser(user);
+	}
+
+
 
 }
