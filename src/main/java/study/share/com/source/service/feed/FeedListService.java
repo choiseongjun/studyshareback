@@ -194,11 +194,11 @@ public class FeedListService {
 	}
 
 	public List<FeedList> mylistfeedBydate( long user_id, LocalDateTime startdate,LocalDateTime enddate) {
-		return feedListRepository.findAllByuserIdAndUpdatedAtBetween(user_id,startdate,enddate);
+		return feedListRepository.findAllByuserIdAndDeleteynAndUpdatedAtBetween(user_id,'N',startdate,enddate);
 	}
 
 	public Optional<FeedList> mylistfeedBydateOne( long user_id, LocalDateTime startdate,LocalDateTime enddate) {
-		return feedListRepository.findTop1ByuserIdAndUpdatedAtBetweenOrderByUpdatedAtDesc(user_id,startdate,enddate);
+		return feedListRepository.findTop1ByuserIdAndDeleteynAndUpdatedAtBetweenOrderByUpdatedAtDesc(user_id,'N',startdate,enddate);
 	}
 
 	public Page<FeedList> otherlistfeed(Pageable pageable, long user_id) {

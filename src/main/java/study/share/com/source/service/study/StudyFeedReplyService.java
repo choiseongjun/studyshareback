@@ -103,7 +103,6 @@ public class StudyFeedReplyService {
 //		Optional<FeedReplyLike> userResult=feedReplyLikeRepository.findByuser_idAndId(user.get().getId(),id);
 //		userResult.orElseThrow(()-> new NoSuchElementException("해당 유저가 좋아요를 나타낸 정보가 이미 존재합니다"));
 
-
         StudyFeedReplyLike feedReplyLike = StudyFeedReplyLike
                 .builder()
                 .user(user.get())

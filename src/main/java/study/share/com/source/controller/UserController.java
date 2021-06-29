@@ -124,8 +124,10 @@ public class UserController {
 				List<FeedList> feedList = feedListService.FindFeedUser(user.get());
 				long feedTotalCnt = feedList.stream().filter(value->value.getDeleteyn()=='N').count();
 				if(user.get().getUserProfileImage()==null) {//image notfound
+					System.out.println("값 확인 사진 없음 : "+followCheck);
 					return ResponseEntity.ok(new UserResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));//유저 프로필이미지가 없는 경우
 				}else {
+					System.out.println("값 확인: "+followCheck);
 					return ResponseEntity.ok(new UserProfileResponse(user.get(),followlist,followerlistsize,followlistsize,feedTotalCnt,followCheck));	//유저 프로필이미지가 있는경우
 				}	
 			}
