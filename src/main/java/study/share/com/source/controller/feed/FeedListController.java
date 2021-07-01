@@ -248,10 +248,12 @@ public class FeedListController {
 	/*게시글별 좋아요리스트 조회*/
 	@ApiOperation(value="게시글별 좋아요리스트 조회",notes="게시글별 좋아요리스트 조회")
 	@GetMapping("/feed/likefeedlist/{id}")
-	public ResponseEntity<?> likefeedlist(@PathVariable long id,Principal principal){
+	public ResponseEntity<?> likefeedlist(@PathVariable long id,Principal principal,Pageable pageable){
 		try {
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			List<FeedLike> feedlike=feedListService.selectFeedlikelist(id);
+			Page<FeedLike> feedlike=feedListService.selectFeedlikelist(id,pageable);
 			for(FeedLike feedlikefollow : feedlike) {
 				for(Follow f:feedlikefollow.getUser().getFollow()) {
 					if(f.getFromUser().getId()==user.get().getId()) {

@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,12 +78,12 @@ public class UserService {
 	}
 
 
-	public List<Follow> followerlist(Optional<User> user) {
-		List<Follow> followlist=followRepository.findAllByToUserId(user.get().getId());
+	public Page<Follow> followerlist(Optional<User> user, Pageable pageable) {
+		Page<Follow> followlist=followRepository.findAllByToUserId(user.get().getId(),pageable);
 		return followlist;
 	}
-	public List<Follow> followlist(Optional<User> user) {
-		List<Follow> followlist=followRepository.findAllByFromUserId(user.get().getId());
+	public Page<Follow> followlist(Optional<User> user,Pageable pageable) {
+		Page<Follow> followlist=followRepository.findAllByFromUserId(user.get().getId(),pageable);
 		return followlist;
 	}
 
@@ -126,8 +128,8 @@ public class UserService {
 		userProfileImageRepository.save(userProfileImage);
 	}
 
-	public List<Follow> followinglist(Optional<User> user) {
-		List<Follow> followlist=followRepository.findAllByFromUserId(user.get().getId());
+	public Page<Follow> followinglist(Optional<User> user,Pageable pageable) {
+		Page<Follow> followlist=followRepository.findAllByFromUserId(user.get().getId(),pageable);
 		return followlist;
 	}
 

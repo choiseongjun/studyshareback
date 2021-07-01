@@ -149,9 +149,8 @@ public class StudyFeedListService {
 //        return studyFeedListRepository.findById(feedid);
 //    }
 //
-    public List<StudyFeedLike> selectFeedlikelist(long id) {
-        List<StudyFeedLike> feedlike = studyFeedLikeRepository.findByStudyFeedListId(id);
-        return feedlike;
+    public Page <StudyFeedLike> selectFeedlikelist(long id,Pageable pageable) {
+       return studyFeedLikeRepository.findByStudyFeedListId(id,pageable);
     }
 
     public Optional<StudyFeedList> listfeedDetail(long id) {

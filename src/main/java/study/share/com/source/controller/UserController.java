@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,12 +50,14 @@ public class UserController {
 	
 	@ApiOperation(value="내정보 불러오기",notes="내정보 불러오기")
 	@GetMapping("/api/auth/userinfo")
-	public ResponseEntity<?> userAccess(Principal principal) {
-		
-		try {			
+	public ResponseEntity<?> userAccess(Principal principal,Pageable pageable) {
+		try {
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+
 			Optional<User> user = userService.findUserNickname(principal.getName());
-			long followerlistsize=userService.followerlist(user).size();
-			long followlistsize = userService.followlist(user).size();
+			long followerlistsize=userService.followerlist(user,pageable).getTotalElements();
+			long followlistsize = userService.followlist(user,pageable).getTotalElements();
 			List<Follow> followlist = user.get().getFollow();
 			
 			List<FeedList> feedList = feedListService.FindFeedUser(user.get());
@@ -87,13 +93,13 @@ public class UserController {
 	/*다른사람 정보불러오기*/
 	@ApiOperation(value="다른사람 정보불러오기",notes="다른사람 정보불러오기")
 	@GetMapping("/user/otheruserInfo/{id}")
-		public ResponseEntity<?> otheruserInfo(@PathVariable long id,Principal principal) {
+		public ResponseEntity<?> otheruserInfo(@PathVariable long id,Principal principal,Pageable pageable) {
 		try {
 			if(principal==null) {
 				Optional<User> user = userService.findUserId(id);//다른사람 계정 조회
 	
-				long followerlistsize=userService.followerlist(user).size();
-				long followlistsize = userService.followlist(user).size();
+				long followerlistsize=userService.followerlist(user,pageable).getTotalElements();
+				long followlistsize = userService.followlist(user,pageable).getTotalElements();
 				List<Follow> followlist = user.get().getFollow();
 				long followCheck = 0;
 			
@@ -112,8 +118,8 @@ public class UserController {
 				Optional<User> user = userService.findUserId(id);//다른사람 계정 조회
 				if(!user.isPresent())//찾고자 하는 유저가 존재하지 않는 경우
 					return new ResponseEntity<>("해당 유저가 존재하지 않습니다",HttpStatus.BAD_REQUEST);
-				long followerlistsize=userService.followerlist(user).size();
-				long followlistsize = userService.followlist(user).size();
+				long followerlistsize=userService.followerlist(user,pageable).getTotalElements();
+				long followlistsize = userService.followlist(user,pageable).getTotalElements();
 				List<Follow> followlist = user.get().getFollow();
 				long followCheck = 0;
 				Optional <Follow> followResult=userService.findfollowing(id,fromUser.get());//팔로우 정보 조회
@@ -143,11 +149,12 @@ public class UserController {
 	//나를 팔로우 하는 사람
 	@ApiOperation(value="내 팔로워리스트 불러오기",notes="내 팔로워리스트 불러오기")
 	@GetMapping("/user/followerlist/{id}")
-	public ResponseEntity<?> followerlist(@PathVariable long id){
+	public ResponseEntity<?> followerlist(@PathVariable long id, Pageable pageable){
 		try {
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 			Optional<User> user = userService.findUserId(id);
-//			Optional<User> user = userService.findUserNickname(principal.getName());
-			List<Follow> followlist=userService.followerlist(user);
+			Page<Follow> followlist=userService.followerlist(user,pageable);
 			return new ResponseEntity<>(followlist.stream().map(FollowDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -161,10 +168,12 @@ public class UserController {
 	//내가 팔로우 하는 사람
 	@ApiOperation(value="내 팔로잉리스트 불러오기",notes="내 팔로잉리스트 불러오기")
 	@GetMapping("/user/followinglist/{id}")
-	public ResponseEntity<?> followinglist(@PathVariable long id){
+	public ResponseEntity<?> followinglist(@PathVariable long id,Pageable pageable){
 		try {
+			int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+			pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
 			Optional<User> user = userService.findUserId(id);
-			List<Follow> followlist=userService.followinglist(user);
+			Page<Follow> followlist=userService.followinglist(user,pageable);
 			return new ResponseEntity<>(followlist.stream().map(FollowDTO::new),HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

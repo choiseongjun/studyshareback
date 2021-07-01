@@ -29,7 +29,7 @@ public class FeedLike extends DateAudit{
 	@Column(name = "ID")
 	private long id;
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "feedlistId")
+	@JoinColumn(name = "feedlist_id")
 	@JsonIgnore
 	private FeedList feedlist;
 	@ManyToOne(optional = false)  

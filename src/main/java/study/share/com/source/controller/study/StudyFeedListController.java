@@ -192,10 +192,14 @@ public class StudyFeedListController {
 
     @ApiOperation(value="스터디 게시글별 좋아요리스트 조회",notes="스터디 게시글별 좋아요리스트 조회")
     @GetMapping("/study/feed/likefeedlist/{id}")
-    public ResponseEntity<?> likefeedlist(@PathVariable long id,Principal principal){
+    public ResponseEntity<?> likefeedlist(@PathVariable long id,Principal principal,Pageable pageable){
         try {
             Optional<User> user = userService.findUserNickname(principal.getName());
-            List<StudyFeedLike> feedlike=studyFeedListService.selectFeedlikelist(id);
+
+            int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+            pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");// 내림차순으로 정렬한다
+
+            Page <StudyFeedLike> feedlike=studyFeedListService.selectFeedlikelist(id,pageable);
             for(StudyFeedLike feedlikefollow : feedlike) {
                 for(Follow f:feedlikefollow.getUser().getFollow()) {
                     if(f.getFromUser().getId()==user.get().getId()) {

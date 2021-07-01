@@ -1,5 +1,7 @@
 package study.share.com.source.repository.study;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,5 +17,5 @@ public interface StudyFeedLikeRepository extends JpaRepository<StudyFeedLike,Lon
     @Query("SELECT id FROM StudyFeedLike WHERE studyFeedList=(:studyfeedlist) AND user=(:user) ")
     long findlikeno(@Param("user") User user, @Param("studyfeedlist") StudyFeedList studyfeedlist);
 
-    List<StudyFeedLike> findByStudyFeedListId(long id);
+    Page<StudyFeedLike> findByStudyFeedListId(long id, Pageable pageable);
 }

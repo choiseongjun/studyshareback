@@ -180,9 +180,8 @@ public class FeedListService {
 		return feedListRepository.findById(feedid);
 	}
 
-	public List<FeedLike> selectFeedlikelist(long id) {
-		List<FeedLike> feedlike = feedLikeRepository.findByfeedlistId(id);
-		return feedlike;
+	public Page<FeedLike> selectFeedlikelist(long id, Pageable pageable) {
+		return feedLikeRepository.findByFeedlistId(id,pageable);
 	}
 
 	public FeedList listfeedDetail(long id) {
