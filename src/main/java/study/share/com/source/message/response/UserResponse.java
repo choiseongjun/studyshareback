@@ -38,6 +38,10 @@ public class UserResponse {
 	private long feedTotalCnt;
 
 	private long followerCheck;
+
+	private long grade;
+
+	private long point;
 	
 	public UserResponse(User user,List<Follow> followlist, long followerlistsize, long followlistsize,List<BlockedUser> blockUserList, long feedTotalCnt) {
 		this.setId(user.getId());
@@ -52,6 +56,8 @@ public class UserResponse {
 		this.setBlockedUser(blockUserList);
 		this.setFeedTotalCnt(feedTotalCnt);
 		//this.setFollowlist(followlist);
+		this.setGrade(user.getGrade());
+		this.setPoint(user.getPoint());
 	}
 
 	public UserResponse(User user, List<Follow> followlist, long followerlistsize, long followlistsize) {
@@ -80,6 +86,8 @@ public class UserResponse {
 		this.setFollowlistsize(followlistsize);
 		this.setFeedTotalCnt(feedTotalCnt);
 		this.setFollowerCheck(followCheck);
+		this.setGrade(user.getGrade());
+		this.setPoint(user.getPoint());
 	}
 
 }
