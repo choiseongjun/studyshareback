@@ -50,6 +50,10 @@ public class FeedListDTO {
 	
 	private List<Follow> follwer = new ArrayList<Follow>();
 
+	private long grade;
+
+	private long point;
+
 	
 	
 	public FeedListDTO(FeedList feedlist) {
@@ -64,6 +68,8 @@ public class FeedListDTO {
 		//this.setFeedlike(feedlist.getFeedlike());
 		this.setFeedreply(feedreply);
 		this.setCreatedAt(feedlist.getCreatedAt());
+		this.setGrade(feedlist.getUser().getGrade());
+		this.setPoint(feedlist.getUser().getPoint());
 
 //		for(int i=0;i<feedlist.getFeedlike().size();i++) {
 //			this.setFeedlikeuser(feedlist.getFeedlike().get(i).getUser());	
@@ -89,7 +95,9 @@ public class FeedListDTO {
 			this.setMyFeedlike(feedlist.getFeedlike().stream().filter(t->t.getUser().getId()==user.getId()));
 			this.setFeedreply(feedreply);
 			this.setCreatedAt(feedlist.getCreatedAt());
-			this.setFollwer(user.getFollow());	
+			this.setFollwer(user.getFollow());
+			this.setGrade(user.getGrade());
+			this.setPoint(user.getPoint());
 	}
 	public FeedListDTO(List<FeedList> feedlist,List<FeedList> feedlist2,User user) {
 		
